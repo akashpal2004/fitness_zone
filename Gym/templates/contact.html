@@ -5,7 +5,6 @@
 
 {% block extra_css %}
 <style>
-    /* Contact Page Styles */
     .contact-page {
         padding: 120px 0 80px;
         background: var(--bg-primary);
@@ -59,7 +58,7 @@
     .contact-subtitle {
         font-size: 1.25rem;
         color: var(--text-secondary);
-        max-width: 600px;
+        max-width: 680px;
         margin: 0 auto;
         line-height: 1.7;
     }
@@ -87,22 +86,13 @@
     }
 
     .contact-image-container:hover .contact-image {
-        transform: scale(1.05);
+        transform: scale(1.04);
     }
 
     .contact-image-overlay {
         position: absolute;
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        background: linear-gradient(45deg, rgba(102, 126, 234, 0.2), rgba(118, 75, 162, 0.2));
-        opacity: 0;
-        transition: opacity 0.4s ease;
-    }
-
-    .contact-image-container:hover .contact-image-overlay {
-        opacity: 1;
+        inset: 0;
+        background: linear-gradient(45deg, rgba(102, 126, 234, 0.18), rgba(118, 75, 162, 0.2));
     }
 
     .contact-form-container {
@@ -124,7 +114,7 @@
         right: 0;
         height: 4px;
         background: var(--primary-gradient);
-        opacity: 0.8;
+        opacity: 0.85;
     }
 
     .form-header {
@@ -158,7 +148,7 @@
         font-size: 0.95rem;
     }
 
-    .form-control {
+    .contact-form-container .form-control {
         background: rgba(255, 255, 255, 0.05);
         border: 1px solid var(--border-color);
         border-radius: 0.875rem;
@@ -166,45 +156,31 @@
         color: var(--text-primary);
         font-size: 1rem;
         width: 100%;
-        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-        position: relative;
+        transition: all 0.3s ease;
     }
 
-    .form-control:focus {
+    .contact-form-container .form-control:focus {
         outline: none;
         border-color: var(--accent-primary);
-        box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.12);
         background: rgba(255, 255, 255, 0.08);
-        transform: translateY(-2px);
     }
 
-    .form-control::placeholder {
+    .contact-form-container .form-control::placeholder {
         color: var(--text-muted);
-        transition: color 0.3s ease;
-    }
-
-    .form-control:focus::placeholder {
-        color: transparent;
     }
 
     .message-box {
-        min-height: 130px;
+        min-height: 150px;
         resize: vertical;
-        font-family: inherit;
     }
 
     .form-icon {
         position: absolute;
         right: 1rem;
-        top: 50%;
-        transform: translateY(-50%);
+        top: 3.2rem;
         color: var(--text-muted);
-        transition: color 0.3s ease;
         pointer-events: none;
-    }
-
-    .form-group:focus-within .form-icon {
-        color: var(--accent-primary);
     }
 
     .submit-button {
@@ -214,29 +190,12 @@
         border: none;
         border-radius: 2rem;
         font-weight: 700;
-        font-size: 1.125rem;
+        font-size: 1.05rem;
         cursor: pointer;
-        transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        transition: all 0.3s ease;
         width: 100%;
         text-transform: uppercase;
         letter-spacing: 0.5px;
-        position: relative;
-        overflow: hidden;
-    }
-
-    .submit-button::before {
-        content: '';
-        position: absolute;
-        top: 0;
-        left: -100%;
-        width: 100%;
-        height: 100%;
-        background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
-        transition: left 0.6s;
-    }
-
-    .submit-button:hover::before {
-        left: 100%;
     }
 
     .submit-button:hover {
@@ -245,12 +204,56 @@
     }
 
     .submit-button:disabled {
-        opacity: 0.7;
-        cursor: not-allowed;
+        opacity: 0.8;
+        cursor: wait;
         transform: none;
     }
 
-    /* Contact Info Cards */
+    .form-message {
+        padding: 1rem 1.25rem;
+        border-radius: 0.875rem;
+        margin-bottom: 1rem;
+        font-weight: 600;
+    }
+
+    .form-message.success {
+        background: rgba(46, 213, 115, 0.12);
+        border: 1px solid rgba(46, 213, 115, 0.35);
+        color: var(--accent-success);
+    }
+
+    .form-message.error {
+        background: rgba(255, 71, 87, 0.12);
+        border: 1px solid rgba(255, 71, 87, 0.35);
+        color: #ff8f98;
+    }
+
+    .form-message.warning {
+        background: rgba(255, 165, 2, 0.12);
+        border: 1px solid rgba(255, 165, 2, 0.35);
+        color: var(--accent-warning);
+    }
+
+    .field-error {
+        color: #ff8f98;
+        font-size: 0.9rem;
+        margin-top: 0.5rem;
+    }
+
+    .helper-text {
+        margin-top: 0.75rem;
+        color: var(--text-muted);
+        font-size: 0.9rem;
+    }
+
+    .char-counter {
+        display: block;
+        text-align: right;
+        color: var(--text-muted);
+        font-size: 0.8rem;
+        margin-top: 0.5rem;
+    }
+
     .contact-info-section {
         margin-top: 6rem;
         padding-top: 4rem;
@@ -259,7 +262,7 @@
 
     .contact-info-grid {
         display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
         gap: 2rem;
         margin-top: 3rem;
     }
@@ -271,31 +274,12 @@
         border-radius: 1.5rem;
         padding: 2rem;
         text-align: center;
-        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-        position: relative;
-        overflow: hidden;
-    }
-
-    .info-card::before {
-        content: '';
-        position: absolute;
-        top: 0;
-        left: 0;
-        right: 0;
-        height: 3px;
-        background: var(--primary-gradient);
-        opacity: 0;
-        transition: opacity 0.3s ease;
+        transition: all 0.3s ease;
     }
 
     .info-card:hover {
         transform: translateY(-8px);
         box-shadow: var(--shadow-lg);
-        border-color: var(--border-hover);
-    }
-
-    .info-card:hover::before {
-        opacity: 1;
     }
 
     .info-icon {
@@ -309,11 +293,6 @@
         font-size: 1.5rem;
         color: white;
         margin: 0 auto 1.5rem;
-        transition: transform 0.3s ease;
-    }
-
-    .info-card:hover .info-icon {
-        transform: scale(1.1);
     }
 
     .info-title {
@@ -333,70 +312,39 @@
         color: var(--accent-primary);
         text-decoration: none;
         font-weight: 600;
-        transition: color 0.3s ease;
     }
 
-    .info-link:hover {
-        color: var(--accent-secondary);
+    .section-badge {
+        display: inline-block;
+        background: rgba(79, 172, 254, 0.12);
+        color: #73b9ff;
+        padding: 0.45rem 1rem;
+        border-radius: 999px;
+        font-size: 0.8rem;
+        font-weight: 700;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
     }
 
-    /* Success/Error Messages */
-    .form-message {
-        padding: 1rem 1.5rem;
-        border-radius: 0.875rem;
-        margin-bottom: 1.5rem;
-        font-weight: 600;
-        display: none;
-        animation: slideInDown 0.5s ease;
+    .section-title {
+        margin-top: 1rem;
+        color: var(--text-primary);
     }
 
-    .form-message.success {
-        background: rgba(46, 213, 115, 0.1);
-        border: 1px solid rgba(46, 213, 115, 0.3);
-        color: var(--accent-success);
+    .section-description {
+        color: var(--text-secondary);
+        max-width: 560px;
+        margin: 0.75rem auto 0;
     }
 
-    .form-message.error {
-        background: rgba(255, 71, 87, 0.1);
-        border: 1px solid rgba(255, 71, 87, 0.3);
-        color: var(--accent-danger);
-    }
-
-    /* Animations */
-    @keyframes slideInDown {
-        from {
-            opacity: 0;
-            transform: translateY(-20px);
-        }
-        to {
-            opacity: 1;
-            transform: translateY(0);
-        }
-    }
-
-    @keyframes shake {
-        0%, 100% { transform: translateX(0); }
-        25% { transform: translateX(-5px); }
-        75% { transform: translateX(5px); }
-    }
-
-    .shake {
-        animation: shake 0.5s ease-in-out;
-    }
-
-    /* Responsive Design */
     @media (max-width: 992px) {
         .contact-main {
             grid-template-columns: 1fr;
             gap: 3rem;
         }
 
-        .contact-form-container {
-            padding: 2rem;
-        }
-
         .contact-image {
-            min-height: 400px;
+            min-height: 360px;
         }
     }
 
@@ -406,145 +354,113 @@
         }
 
         .contact-form-container {
-            padding: 1.5rem;
-        }
-
-        .form-title {
-            font-size: 1.75rem;
+            padding: 1.75rem;
         }
 
         .contact-title {
             font-size: 2.5rem;
         }
-
-        .contact-info-grid {
-            grid-template-columns: 1fr;
-        }
-    }
-
-    @media (max-width: 576px) {
-        .contact-main {
-            gap: 2rem;
-        }
-
-        .submit-button {
-            padding: 0.875rem 2rem;
-        }
-
-        .info-card {
-            padding: 1.5rem;
-        }
-    }
-
-    /* Loading state */
-    .loading {
-        position: relative;
-        pointer-events: none;
-    }
-
-    .loading::after {
-        content: '';
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        width: 20px;
-        height: 20px;
-        margin: -10px 0 0 -10px;
-        border: 2px solid transparent;
-        border-top: 2px solid white;
-        border-radius: 50%;
-        animation: spin 1s linear infinite;
-    }
-
-    @keyframes spin {
-        0% { transform: rotate(0deg); }
-        100% { transform: rotate(360deg); }
     }
 </style>
 {% endblock %}
 
 {% block content %}
-
 <section class="contact-page">
     <div class="container">
         <div class="contact-hero" data-aos="fade-up">
             <span class="contact-badge">Get In Touch</span>
             <h1 class="contact-title">Contact FitnessPro</h1>
             <p class="contact-subtitle">
-                Ready to transform your life? Our expert team is here to guide you on your fitness journey. 
-                Reach out today and take the first step towards a healthier, stronger you.
+                Share your question, feedback, or membership enquiry with our team.
+                Every message is reviewed and we aim to respond within one business day.
             </p>
         </div>
 
-        <!-- Main Contact Section -->
-        <div class="contact-main" data-aos="fade-up" data-aos-delay="200">
-            <!-- Contact Image -->
+        <div class="contact-main" data-aos="fade-up" data-aos-delay="150">
             <div class="contact-image-container">
-                <img src="{% static 'images/contact-img.jpg' %}" alt="FitnessPro Contact" class="contact-image">
+                <img src="{% static 'images/contact-img.jpg' %}" alt="FitnessPro contact team" class="contact-image">
                 <div class="contact-image-overlay"></div>
             </div>
 
-            <!-- Contact Form -->
             <div class="contact-form-container">
                 <div class="form-header">
                     <h2 class="form-title">Send Us a Message</h2>
                     <p class="form-description">
-                        Fill out the form below and we'll get back to you within 24 hours. 
-                        Let's discuss how we can help you achieve your fitness goals.
+                        Use the form below and we will store your message securely, notify the admin team,
+                        and follow up as soon as possible.
                     </p>
                 </div>
 
-                <!-- Form Messages -->
-                <div id="form-message" class="form-message"></div>
+                {% if messages %}
+                    {% for message in messages %}
+                        <div class="form-message {{ message.tags }}">{{ message }}</div>
+                    {% endfor %}
+                {% endif %}
 
-                <form id="contact-form" method="POST" action="https://formspree.io/f/myzdvnzn">
+                {% if form.non_field_errors %}
+                    {% for error in form.non_field_errors %}
+                        <div class="form-message error">{{ error }}</div>
+                    {% endfor %}
+                {% endif %}
+
+                <form id="contact-form" method="post" action="{% url 'contact' %}" novalidate>
                     {% csrf_token %}
+                    {{ form.website }}
+
                     <div class="form-group">
-                        <label class="form-label" for="name">Full Name *</label>
-                        <input type="text" id="name" name="name" class="form-control" placeholder="Enter your full name" required>
+                        <label class="form-label" for="{{ form.name.id_for_label }}">Full Name *</label>
+                        {{ form.name }}
                         <i class="fas fa-user form-icon"></i>
+                        {% for error in form.name.errors %}
+                            <div class="field-error">{{ error }}</div>
+                        {% endfor %}
                     </div>
 
                     <div class="form-group">
-                        <label class="form-label" for="email">Email Address *</label>
-                        <input type="email" id="email" name="email" class="form-control" placeholder="Enter your email address" required>
+                        <label class="form-label" for="{{ form.email.id_for_label }}">Email Address *</label>
+                        {{ form.email }}
                         <i class="fas fa-envelope form-icon"></i>
+                        {% for error in form.email.errors %}
+                            <div class="field-error">{{ error }}</div>
+                        {% endfor %}
                     </div>
 
                     <div class="form-group">
-                        <label class="form-label" for="phone">Phone Number</label>
-                        <input type="tel" id="phone" name="phone" class="form-control" placeholder="Enter your phone number">
-                        <i class="fas fa-phone form-icon"></i>
-                    </div>
-
-                    <div class="form-group">
-                        <label class="form-label" for="subject">Subject</label>
-                        <input type="text" id="subject" name="subject" class="form-control" placeholder="What is this regarding?">
+                        <label class="form-label" for="{{ form.subject.id_for_label }}">Subject *</label>
+                        {{ form.subject }}
                         <i class="fas fa-tag form-icon"></i>
+                        {% for error in form.subject.errors %}
+                            <div class="field-error">{{ error }}</div>
+                        {% endfor %}
                     </div>
 
                     <div class="form-group">
-                        <label class="form-label" for="message">Message *</label>
-                        <textarea id="message" name="message" class="form-control message-box" placeholder="Tell us about your fitness goals, questions, or how we can help you..." required></textarea>
-                        <i class="fas fa-comment-dots form-icon"></i>
+                        <label class="form-label" for="{{ form.message.id_for_label }}">Message *</label>
+                        {{ form.message }}
+                        {% for error in form.message.errors %}
+                            <div class="field-error">{{ error }}</div>
+                        {% endfor %}
+                        <small id="message-counter" class="char-counter">0 characters</small>
                     </div>
 
-                    <button type="submit" class="submit-button">
+                    <button type="submit" class="submit-button" id="submit-button">
                         <i class="fas fa-paper-plane me-2"></i>
-                        <span class="button-text">Send Message</span>
+                        <span id="submit-button-text">Send Message</span>
                     </button>
+
+                    <p class="helper-text">
+                        Please avoid sharing passwords or sensitive payment information in this form.
+                    </p>
                 </form>
             </div>
         </div>
 
-
-        <!-- Contact Information Cards -->
         <div class="contact-info-section">
             <div class="section-header text-center" data-aos="fade-up">
                 <span class="section-badge">Contact Information</span>
-                <h2 class="section-title">Get In Touch With Us</h2>
+                <h2 class="section-title">Reach Us Directly</h2>
                 <p class="section-description">
-                    Multiple ways to reach us. Choose the method that works best for you.
+                    If you prefer, you can also connect with our team using the details below.
                 </p>
             </div>
 
@@ -555,9 +471,8 @@
                     </div>
                     <h3 class="info-title">Visit Our Gym</h3>
                     <p class="info-text">
-                        123 Fitness Street<br>
-                        Gym City, GC 12345<br>
-                        <a href="#" class="info-link">Get Directions</a>
+                        Dehradun, Uttarakhand, India<br>
+                        <a href="#" class="info-link">Plan your visit</a>
                     </p>
                 </div>
 
@@ -567,8 +482,8 @@
                     </div>
                     <h3 class="info-title">Call Us</h3>
                     <p class="info-text">
-                        <a href="tel:+15551234567" class="info-link">+1 (555) 123-4567</a><br>
-                        <small class="text-muted">Mon-Sun: 5:00 AM - 11:00 PM</small>
+                        <a href="tel:+919193961014" class="info-link">+91 9193961014</a><br>
+                        5:00 AM - 11:00 PM
                     </p>
                 </div>
 
@@ -578,8 +493,8 @@
                     </div>
                     <h3 class="info-title">Email Us</h3>
                     <p class="info-text">
-                        <a href="mailto:info@fitnesspro.com" class="info-link">info@fitnesspro.com</a><br>
-                        <small class="text-muted">We'll respond within 24 hours</small>
+                        <a href="mailto:pal68675@gmail.com" class="info-link">pal68675@gmail.com</a><br>
+                        Response within one business day
                     </p>
                 </div>
 
@@ -587,11 +502,10 @@
                     <div class="info-icon">
                         <i class="fas fa-clock"></i>
                     </div>
-                    <h3 class="info-title">Operating Hours</h3>
+                    <h3 class="info-title">Hours</h3>
                     <p class="info-text">
-                        <strong>Monday - Sunday</strong><br>
-                        5:00 AM - 11:00 PM<br>
-                        <small class="text-muted">7 days a week</small>
+                        Monday - Saturday<br>
+                        5:00 AM - 11:00 PM
                     </p>
                 </div>
             </div>
@@ -604,194 +518,31 @@
 <script>
 document.addEventListener('DOMContentLoaded', function() {
     const contactForm = document.getElementById('contact-form');
-    const formMessage = document.getElementById('form-message');
-    const submitButton = contactForm.querySelector('.submit-button');
-    const buttonText = submitButton.querySelector('.button-text');
+    const submitButton = document.getElementById('submit-button');
+    const submitButtonText = document.getElementById('submit-button-text');
+    const messageField = document.getElementById('{{ form.message.id_for_label }}');
+    const messageCounter = document.getElementById('message-counter');
 
-    // Form validation
-    function validateForm() {
-        const name = document.getElementById('name').value.trim();
-        const email = document.getElementById('email').value.trim();
-        const message = document.getElementById('message').value.trim();
-        
-        if (!name || !email || !message) {
-            showMessage('Please fill in all required fields.', 'error');
-            return false;
-        }
-        
-        if (!isValidEmail(email)) {
-            showMessage('Please enter a valid email address.', 'error');
-            return false;
-        }
-        
-        return true;
-    }
-
-    function isValidEmail(email) {
-        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        return emailRegex.test(email);
-    }
-
-    function showMessage(message, type) {
-        formMessage.textContent = message;
-        formMessage.className = `form-message ${type}`;
-        formMessage.style.display = 'block';
-        
-        // Scroll to message
-        formMessage.scrollIntoView({ behavior: 'smooth', block: 'center' });
-        
-        // Auto hide after 5 seconds
-        setTimeout(() => {
-            formMessage.style.display = 'none';
-        }, 5000);
-    }
-
-    function setButtonLoading(loading) {
-        if (loading) {
-            submitButton.disabled = true;
-            submitButton.classList.add('loading');
-            buttonText.textContent = 'Sending Message...';
-        } else {
-            submitButton.disabled = false;
-            submitButton.classList.remove('loading');
-            buttonText.textContent = 'Send Message';
-        }
-    }
-
-    // Form submission
-    contactForm.addEventListener('submit', function(e) {
-        e.preventDefault();
-        
-        // Hide previous messages
-        formMessage.style.display = 'none';
-        
-        if (!validateForm()) {
+    function updateCounter() {
+        if (!messageField || !messageCounter) {
             return;
         }
-        
-        // Set loading state
-        setButtonLoading(true);
-        
-        // Simulate form submission (replace with actual form handling)
-        setTimeout(() => {
-            // Success simulation
-            showMessage('Thank you for your message! We\'ll get back to you within 24 hours.', 'success');
-            setButtonLoading(false);
-            contactForm.reset();
-            
-            // Add success animation to button
-            submitButton.innerHTML = '<i class="fas fa-check me-2"></i><span class="button-text">Message Sent!</span>';
-            submitButton.style.background = 'var(--accent-success)';
-            
-            setTimeout(() => {
-                submitButton.innerHTML = '<i class="fas fa-paper-plane me-2"></i><span class="button-text">Send Message</span>';
-                submitButton.style.background = 'var(--primary-gradient)';
-            }, 3000);
-            
-        }, 2000);
-    });
 
-    // Real-time form validation
-    const inputs = contactForm.querySelectorAll('input, textarea');
-    inputs.forEach(input => {
-        input.addEventListener('blur', function() {
-            if (this.hasAttribute('required') && !this.value.trim()) {
-                this.style.borderColor = 'var(--accent-danger)';
-                this.classList.add('shake');
-                setTimeout(() => this.classList.remove('shake'), 500);
-            } else if (this.type === 'email' && this.value && !isValidEmail(this.value)) {
-                this.style.borderColor = 'var(--accent-danger)';
-                this.classList.add('shake');
-                setTimeout(() => this.classList.remove('shake'), 500);
-            } else {
-                this.style.borderColor = 'var(--border-color)';
-            }
+        const length = messageField.value.trim().length;
+        messageCounter.textContent = `${length} character${length === 1 ? '' : 's'}`;
+    }
+
+    updateCounter();
+
+    if (messageField) {
+        messageField.addEventListener('input', updateCounter);
+    }
+
+    if (contactForm) {
+        contactForm.addEventListener('submit', function() {
+            submitButton.disabled = true;
+            submitButtonText.textContent = 'Sending...';
         });
-        
-        input.addEventListener('focus', function() {
-            this.style.borderColor = 'var(--accent-primary)';
-        });
-    });
-
-    // Character counter for message
-    const messageField = document.getElementById('message');
-    const messageGroup = messageField.closest('.form-group');
-    
-    const charCounter = document.createElement('small');
-    charCounter.className = 'char-counter';
-    charCounter.style.cssText = `
-        position: absolute;
-        bottom: -20px;
-        right: 0;
-        color: var(--text-muted);
-        font-size: 0.8rem;
-    `;
-    messageGroup.style.position = 'relative';
-    messageGroup.appendChild(charCounter);
-    
-    messageField.addEventListener('input', function() {
-        const length = this.value.length;
-        charCounter.textContent = `${length}/500`;
-        
-        if (length > 500) {
-            charCounter.style.color = 'var(--accent-danger)';
-        } else if (length > 400) {
-            charCounter.style.color = 'var(--accent-warning)';
-        } else {
-            charCounter.style.color = 'var(--text-muted)';
-        }
-    });
-
-    // Smooth focus animations
-    inputs.forEach(input => {
-        input.addEventListener('focus', function() {
-            this.parentElement.style.transform = 'translateY(-2px)';
-        });
-        
-        input.addEventListener('blur', function() {
-            this.parentElement.style.transform = 'translateY(0)';
-        });
-    });
-
-    // Auto-resize textarea
-    messageField.addEventListener('input', function() {
-        this.style.height = 'auto';
-        this.style.height = Math.min(this.scrollHeight, 200) + 'px';
-    });
-});
-document.getElementById("contact-form").addEventListener("submit", async function(e) {
-    e.preventDefault();
-
-    const form = e.target;
-    const formData = new FormData(form);
-    const messageBox = document.getElementById("form-message");
-
-    messageBox.textContent = "Sending...";
-    messageBox.style.color = "#555";
-
-    try {
-        const response = await fetch(form.action, {
-            method: form.method,
-            body: formData,
-            headers: { 'Accept': 'application/json' }
-        });
-
-        if (response.ok) {
-            messageBox.textContent = "✅ Your message has been sent successfully!";
-            messageBox.style.color = "green";
-            form.reset();
-        } else {
-            const data = await response.json();
-            if (data.errors) {
-                messageBox.textContent = "❌ " + data.errors.map(err => err.message).join(", ");
-            } else {
-                messageBox.textContent = "❌ Oops! Something went wrong. Please try again.";
-            }
-            messageBox.style.color = "red";
-        }
-    } catch (error) {
-        messageBox.textContent = "⚠️ Network error. Please check your connection.";
-        messageBox.style.color = "red";
     }
 });
 </script>

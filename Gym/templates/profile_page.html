@@ -58,6 +58,7 @@
         display: inline-block;
         margin-bottom: 2rem;
         cursor: pointer;
+        outline: none;
     }
 
     .profile-avatar {
@@ -77,6 +78,11 @@
         box-shadow: 0 0 0 4px rgba(255, 255, 255, 0.2), var(--shadow-glow);
     }
 
+    .profile-avatar-container:focus-visible .profile-avatar {
+        transform: scale(1.05);
+        box-shadow: 0 0 0 4px rgba(255, 255, 255, 0.28), 0 0 0 10px rgba(255, 255, 255, 0.14), var(--shadow-glow);
+    }
+
     .profile-avatar-container:hover::after {
         content: 'Change Photo';
         position: absolute;
@@ -89,6 +95,30 @@
         font-size: 12px;
         border-radius: 0 0 75px 75px;
         z-index: 3;
+    }
+
+    .profile-avatar-edit-badge {
+        position: absolute;
+        right: 6px;
+        bottom: 8px;
+        width: 42px;
+        height: 42px;
+        border-radius: 50%;
+        background: rgba(11, 11, 11, 0.88);
+        color: white;
+        border: 2px solid rgba(255, 255, 255, 0.35);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 4;
+        box-shadow: var(--shadow-md);
+        transition: transform 0.3s ease, background 0.3s ease;
+    }
+
+    .profile-avatar-container:hover .profile-avatar-edit-badge,
+    .profile-avatar-container:focus-visible .profile-avatar-edit-badge {
+        transform: scale(1.08);
+        background: rgba(102, 126, 234, 0.95);
     }
 
     .online-indicator {
@@ -172,6 +202,7 @@
         overflow: hidden;
         min-width: 160px;
         justify-content: center;
+        cursor: pointer;
     }
 
     .action-btn::before {
@@ -327,6 +358,234 @@
         color: var(--text-secondary);
         text-transform: uppercase;
         letter-spacing: 0.5px;
+    }
+
+    .membership-dashboard {
+        background: var(--bg-card);
+        backdrop-filter: var(--blur-sm);
+        border: 1px solid var(--border-color);
+        border-radius: 1.5rem;
+        padding: 2rem;
+        margin-bottom: 2rem;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .membership-dashboard:hover {
+        transform: translateY(-2px);
+        box-shadow: var(--shadow-md);
+        border-color: var(--border-hover);
+    }
+
+    .membership-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 1rem;
+        margin-bottom: 1.5rem;
+        flex-wrap: wrap;
+    }
+
+    .membership-title-group h3 {
+        margin-bottom: 0.35rem;
+        font-size: 1.6rem;
+    }
+
+    .membership-title-group p {
+        margin: 0;
+        color: var(--text-secondary);
+    }
+
+    .membership-grid {
+        display: grid;
+        grid-template-columns: 1.15fr 0.85fr;
+        gap: 1.5rem;
+        margin-bottom: 1.5rem;
+    }
+
+    .membership-summary-card,
+    .membership-history-card {
+        background: rgba(255, 255, 255, 0.04);
+        border: 1px solid rgba(255, 255, 255, 0.07);
+        border-radius: 1.35rem;
+        padding: 1.5rem;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .membership-summary-card::before,
+    .membership-history-card::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 1px;
+        background: var(--primary-gradient);
+        opacity: 0.7;
+    }
+
+    .membership-card-title {
+        font-size: 1.2rem;
+        margin-bottom: 1rem;
+    }
+
+    .status-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.45rem;
+        padding: 0.5rem 0.85rem;
+        border-radius: 999px;
+        font-size: 0.8rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        border: 1px solid transparent;
+    }
+
+    .status-approved {
+        background: rgba(49, 208, 123, 0.12);
+        border-color: rgba(49, 208, 123, 0.25);
+        color: #c9f6df;
+    }
+
+    .status-pending {
+        background: rgba(255, 175, 69, 0.12);
+        border-color: rgba(255, 175, 69, 0.25);
+        color: #ffe0b3;
+    }
+
+    .status-rejected {
+        background: rgba(255, 59, 59, 0.12);
+        border-color: rgba(255, 59, 59, 0.25);
+        color: #ffd0d0;
+    }
+
+    .status-expired,
+    .status-neutral {
+        background: rgba(255, 255, 255, 0.08);
+        border-color: rgba(255, 255, 255, 0.14);
+        color: #ededed;
+    }
+
+    .membership-plan-name {
+        font-size: 1.75rem;
+        font-weight: 700;
+        margin: 1rem 0 0.35rem;
+        font-family: 'Space Grotesk', sans-serif;
+    }
+
+    .membership-plan-copy {
+        color: var(--text-secondary);
+        margin-bottom: 1.25rem;
+    }
+
+    .membership-summary-grid {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 0.9rem;
+    }
+
+    .membership-summary-tile {
+        padding: 1rem;
+        border-radius: 1rem;
+        background: rgba(255, 255, 255, 0.04);
+        border: 1px solid rgba(255, 255, 255, 0.07);
+    }
+
+    .membership-summary-label {
+        display: block;
+        font-size: 0.78rem;
+        color: var(--text-secondary);
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+        margin-bottom: 0.3rem;
+    }
+
+    .membership-summary-value {
+        font-size: 1rem;
+        font-weight: 600;
+        color: var(--text-primary);
+    }
+
+    .membership-actions-row {
+        display: flex;
+        gap: 0.85rem;
+        flex-wrap: wrap;
+        margin-top: 1.4rem;
+    }
+
+    .membership-mini-stat {
+        padding: 1rem;
+        border-radius: 1rem;
+        background: rgba(255, 255, 255, 0.04);
+        border: 1px solid rgba(255, 255, 255, 0.07);
+        text-align: center;
+    }
+
+    .membership-mini-stat strong {
+        display: block;
+        font-size: 1.9rem;
+        margin-bottom: 0.25rem;
+        font-family: 'Space Grotesk', sans-serif;
+        color: #ffb6b6;
+    }
+
+    .membership-mini-stat span {
+        color: var(--text-secondary);
+        font-size: 0.88rem;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+    }
+
+    .membership-insight {
+        margin-top: 1rem;
+        padding: 1rem;
+        border-radius: 1rem;
+        background: rgba(255, 59, 59, 0.08);
+        border: 1px solid rgba(255, 59, 59, 0.16);
+        color: #ffe0e0;
+    }
+
+    .membership-history-wrap {
+        overflow-x: auto;
+    }
+
+    .membership-table {
+        width: 100%;
+        border-collapse: collapse;
+        min-width: 520px;
+    }
+
+    .membership-table th,
+    .membership-table td {
+        padding: 0.85rem 0.6rem;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+        text-align: left;
+        vertical-align: top;
+    }
+
+    .membership-table th {
+        color: #ffb6b6;
+        font-size: 0.78rem;
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+    }
+
+    .membership-table td {
+        color: var(--text-primary);
+        font-size: 0.94rem;
+    }
+
+    .membership-table td small {
+        color: var(--text-secondary);
+    }
+
+    .empty-membership-state {
+        padding: 1.2rem;
+        border-radius: 1rem;
+        background: rgba(255, 255, 255, 0.03);
+        border: 1px dashed rgba(255, 255, 255, 0.1);
+        color: var(--text-secondary);
     }
 
     .cta-section {
@@ -539,6 +798,27 @@
         box-shadow: var(--shadow-glow);
     }
 
+    .photo-hint {
+        color: rgba(255, 255, 255, 0.78);
+        font-size: 0.95rem;
+        margin-top: -1rem;
+        margin-bottom: 0.75rem;
+    }
+
+    .file-help {
+        color: var(--text-secondary);
+        font-size: 0.9rem;
+        margin-top: 0.5rem;
+    }
+
+    .selected-file-name {
+        margin-top: 0.75rem;
+        color: var(--text-primary);
+        font-size: 0.95rem;
+        font-weight: 600;
+        min-height: 1.5rem;
+    }
+
     .form-control {
         background: var(--bg-card);
         border: 1px solid var(--border-color);
@@ -661,6 +941,8 @@
 
         .info-grid,
         .stats-container,
+        .membership-summary-grid,
+        .membership-grid,
         .cta-section {
             grid-template-columns: 1fr;
         }
@@ -717,20 +999,32 @@
                 <div class="profile-card animate-slide-up">
                     <!-- Profile Header -->
                     <div class="profile-header">
-                        <div class="profile-avatar-container animate-fade-in animate-delay-1" id="avatar-container">
+                        <div class="profile-avatar-container animate-fade-in animate-delay-1" id="avatar-container" role="button" tabindex="0" aria-label="Open profile picture upload dialog">
                             <img src="{{user.image.url}}" alt="Profile Avatar" class="profile-avatar" id="profile-avatar">
+                            <div class="profile-avatar-edit-badge" aria-hidden="true">
+                                <i class="fas fa-camera"></i>
+                            </div>
                             <div class="online-indicator"></div>
                         </div>
                         <h1 class="profile-name animate-fade-in animate-delay-2">{{user.first_name}} {{user.last_name}}</h1>
                         <p class="profile-username animate-fade-in animate-delay-3">@{{user.username}}</p>
                         <p class="profile-id animate-fade-in animate-delay-4">ID: #{{user.id}}</p>
+                        <p class="photo-hint animate-fade-in animate-delay-4">Tap your photo or use the update button to upload a new profile picture.</p>
                     </div>
 
                     <!-- Profile Body -->
                     <div class="profile-body">
                         <!-- Action Buttons -->
                         <div class="profile-actions animate-slide-up animate-delay-1">
-                            <a href="/change_user_password?u_id={{user.id}}" class="action-btn">
+                            <button type="button" class="action-btn" id="open-upload-btn">
+                                <i class="fas fa-camera"></i>
+                                Update Photo
+                            </button>
+                            <a href="/membership" class="action-btn">
+                                <i class="fas fa-credit-card"></i>
+                                Membership Plans
+                            </a>
+                            <a href="/change_user_password" class="action-btn">
                                 <i class="fas fa-key"></i>
                                 Change Password
                             </a>
@@ -762,7 +1056,7 @@
                                         <i class="fas fa-map-marker-alt"></i>
                                     </div>
                                     <div class="info-label">Location</div>
-                                    <div class="info-value">{{user.address}}, Lahore</div>
+                                    <div class="info-value">{{user.address}}</div>
                                 </div>
                             </div>
                         </div>
@@ -789,15 +1083,157 @@
                             </div>
                         </div>
 
+                        <div class="membership-dashboard animate-slide-up animate-delay-4">
+                            <div class="membership-header">
+                                <div class="membership-title-group">
+                                    <h3>Membership Dashboard</h3>
+                                    <p>Track your current plan, payment verification status, and recent membership submissions.</p>
+                                </div>
+                                {% if current_membership %}
+                                    <span class="status-badge {{ current_membership.membership_status_badge_class }}">
+                                        <i class="fas fa-shield-alt"></i>
+                                        {{ current_membership.get_membership_status_display }}
+                                    </span>
+                                {% else %}
+                                    <span class="status-badge status-neutral">
+                                        <i class="fas fa-clock"></i>
+                                        No Active Membership
+                                    </span>
+                                {% endif %}
+                            </div>
+
+                            <div class="membership-grid">
+                                <div class="membership-summary-card">
+                                    <h4 class="membership-card-title">Current Membership</h4>
+                                    {% if current_membership %}
+                                        <span class="status-badge {{ current_membership.payment_status_badge_class }}">
+                                            <i class="fas fa-receipt"></i>
+                                            {{ current_membership.get_payment_status_display }}
+                                        </span>
+                                        <div class="membership-plan-name">{{ current_membership.plan_name }}</div>
+                                        <p class="membership-plan-copy">
+                                            {% if current_membership.membership_status == 'active' %}
+                                                Your membership is active and ready for training.
+                                            {% elif current_membership.membership_status == 'pending' %}
+                                                Your membership is waiting for manual payment verification.
+                                            {% elif current_membership.membership_status == 'expired' %}
+                                                Your membership has expired. You can renew it any time.
+                                            {% else %}
+                                                This membership is currently inactive. You can submit a fresh payment when you're ready.
+                                            {% endif %}
+                                        </p>
+
+                                        <div class="membership-summary-grid">
+                                            <div class="membership-summary-tile">
+                                                <span class="membership-summary-label">Amount</span>
+                                                <div class="membership-summary-value">Rs {{ current_membership.amount|floatformat:0 }}</div>
+                                            </div>
+                                            <div class="membership-summary-tile">
+                                                <span class="membership-summary-label">Duration</span>
+                                                <div class="membership-summary-value">{{ current_membership.duration }} Days</div>
+                                            </div>
+                                            <div class="membership-summary-tile">
+                                                <span class="membership-summary-label">Start Date</span>
+                                                <div class="membership-summary-value">{{ current_membership.start_date|default:"Pending approval" }}</div>
+                                            </div>
+                                            <div class="membership-summary-tile">
+                                                <span class="membership-summary-label">Expiry Date</span>
+                                                <div class="membership-summary-value">{{ current_membership.expiry_date|default:"Will appear after approval" }}</div>
+                                            </div>
+                                        </div>
+
+                                        <div class="membership-actions-row">
+                                            <a href="/membership" class="cta-btn">Renew / Upgrade</a>
+                                            {% if current_membership.payment_status == 'pending' %}
+                                                <a href="/payment/{{ current_membership.plan_name|lower }}" class="cta-btn secondary">Review Payment</a>
+                                            {% endif %}
+                                        </div>
+                                    {% else %}
+                                        <div class="empty-membership-state">
+                                            You have not submitted a membership payment yet. Choose a plan to unlock manual UPI payment and activation tracking.
+                                        </div>
+                                        <div class="membership-actions-row">
+                                            <a href="/membership" class="cta-btn">Choose Membership</a>
+                                        </div>
+                                    {% endif %}
+                                </div>
+
+                                <div class="membership-summary-card">
+                                    <h4 class="membership-card-title">Quick Status</h4>
+                                    <div class="membership-mini-stat">
+                                        <strong>{{ membership_total_count }}</strong>
+                                        <span>Total Submissions</span>
+                                    </div>
+                                    <div class="membership-mini-stat mt-3">
+                                        <strong>{{ membership_pending_count }}</strong>
+                                        <span>Pending Verifications</span>
+                                    </div>
+                                    <div class="membership-insight">
+                                        Admin verification activates your membership automatically and calculates your expiry date based on the selected plan duration.
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="membership-history-card">
+                                <h4 class="membership-card-title">Payment History</h4>
+                                {% if membership_history %}
+                                    <div class="membership-history-wrap">
+                                        <table class="membership-table">
+                                            <thead>
+                                                <tr>
+                                                    <th>Plan</th>
+                                                    <th>Payment</th>
+                                                    <th>Membership</th>
+                                                    <th>Details</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                {% for item in membership_history %}
+                                                    <tr>
+                                                        <td>
+                                                            <strong>{{ item.membership.plan_name }}</strong><br>
+                                                            <small>Rs {{ item.membership.amount|floatformat:0 }}</small>
+                                                        </td>
+                                                        <td>
+                                                            <span class="status-badge {{ item.membership.payment_status_badge_class }}">
+                                                                {{ item.membership.get_payment_status_display }}
+                                                            </span>
+                                                        </td>
+                                                        <td>
+                                                            <span class="status-badge {{ item.membership.membership_status_badge_class }}">
+                                                                {{ item.membership.get_membership_status_display }}
+                                                            </span>
+                                                        </td>
+                                                        <td>
+                                                            {% if item.payment_proof %}
+                                                                <small>UTR: {{ item.payment_proof.utr_number }}</small><br>
+                                                                <small>Uploaded: {{ item.payment_proof.uploaded_at|date:"M d, Y" }}</small>
+                                                            {% else %}
+                                                                <small>No payment proof attached.</small>
+                                                            {% endif %}
+                                                        </td>
+                                                    </tr>
+                                                {% endfor %}
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                {% else %}
+                                    <div class="empty-membership-state">
+                                        Your membership payment history will appear here after your first manual UPI submission.
+                                    </div>
+                                {% endif %}
+                            </div>
+                        </div>
+
                         <!-- Call-to-Action Section -->
-                        <div class="cta-section animate-slide-up animate-delay-4">
+                        <div class="cta-section animate-slide-up">
                             <div class="cta-card">
                                 <div class="cta-icon">
                                     <i class="fas fa-play"></i>
                                 </div>
                                 <h3 class="cta-title">Today's Workout</h3>
                                 <p class="text-secondary mb-3">Ready to crush your {{today}} workout session?</p>
-                                <a href="/workout_plan?pid={{user.id}}" class="cta-btn">
+                                <a href="/workout_plan" class="cta-btn">
                                     Start Exercise
                                 </a>
                             </div>
@@ -846,6 +1282,8 @@
                     <div class="mb-3">
                         <label for="image-upload" class="form-label">Select New Image</label>
                         <input class="form-control" type="file" id="image-upload" name="image" accept="image/*" required>
+                        <div class="file-help">Accepted formats: JPEG, PNG, GIF, and WebP. Maximum file size: 5 MB.</div>
+                        <div class="selected-file-name" id="selected-file-name"></div>
                     </div>
                 </form>
             </div>
@@ -934,27 +1372,45 @@
 
     // Profile picture upload functionality
     const avatarContainer = document.getElementById('avatar-container');
+    const openUploadBtn = document.getElementById('open-upload-btn');
     const profileAvatar = document.getElementById('profile-avatar');
     const imageUpload = document.getElementById('image-upload');
     const uploadPreview = document.getElementById('upload-preview');
+    const selectedFileName = document.getElementById('selected-file-name');
     const uploadModal = new bootstrap.Modal(document.getElementById('uploadModal'));
     const uploadSubmit = document.getElementById('upload-submit');
     const avatarForm = document.getElementById('avatar-form');
 
-    // Click on avatar to open upload modal
-    avatarContainer.addEventListener('click', () => {
+    function openUploadModal() {
+        imageUpload.value = '';
+        selectedFileName.textContent = '';
+        uploadPreview.src = profileAvatar.src;
         uploadModal.show();
+    }
+
+    // Click on avatar to open upload modal
+    avatarContainer.addEventListener('click', openUploadModal);
+    openUploadBtn.addEventListener('click', openUploadModal);
+    avatarContainer.addEventListener('keydown', function(e) {
+        if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            openUploadModal();
+        }
     });
 
     // Preview image when file is selected
     imageUpload.addEventListener('change', function() {
         const file = this.files[0];
         if (file) {
+            selectedFileName.textContent = `Selected: ${file.name}`;
             const reader = new FileReader();
             reader.onload = function(e) {
                 uploadPreview.src = e.target.result;
             }
             reader.readAsDataURL(file);
+        } else {
+            selectedFileName.textContent = '';
+            uploadPreview.src = profileAvatar.src;
         }
     });
 
@@ -1011,6 +1467,8 @@
                 profileAvatar.src = data.image_url + '?t=' + new Date().getTime();
                 uploadPreview.src = data.image_url + '?t=' + new Date().getTime();
                 uploadModal.hide();
+                avatarForm.reset();
+                selectedFileName.textContent = '';
                 
                 // Show success notification
                 showNotification(data.message || 'Profile picture updated successfully!', 'success');
@@ -1057,7 +1515,7 @@
     }
 
     // Enhanced hover effects for cards
-    const cards = document.querySelectorAll('.stat-card, .cta-card, .action-btn, .info-item');
+    const cards = document.querySelectorAll('.stat-card, .cta-card, .action-btn, .info-item, .membership-summary-card, .membership-history-card, .membership-mini-stat');
     
     cards.forEach(card => {
         card.addEventListener('mouseenter', function() {
@@ -1085,7 +1543,7 @@
     }, observerOptions);
 
     // Observe elements for scroll animations
-    document.querySelectorAll('.stat-card, .cta-card, .profile-info').forEach(el => {
+    document.querySelectorAll('.stat-card, .cta-card, .profile-info, .membership-dashboard').forEach(el => {
         observer.observe(el);
     });
 

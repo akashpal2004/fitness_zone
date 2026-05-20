@@ -1,20 +1,19 @@
 {% extends 'parent.html' %}
 {% load static %}
 
-{% block title %}Admin Login - FitnessPro{% endblock %}
+{% block title %}Admin Login - FitnessZone{% endblock %}
 
 {% block extra_css %}
 <style>
-    /* Admin Login Specific Styles */
     .login-container {
         min-height: 100vh;
         display: flex;
         align-items: center;
         justify-content: center;
         padding: 120px 0 80px;
-        background: 
-            radial-gradient(circle at 20% 20%, rgba(102, 126, 234, 0.1) 0%, transparent 50%),
-            radial-gradient(circle at 80% 80%, rgba(118, 75, 162, 0.1) 0%, transparent 50%),
+        background:
+            radial-gradient(circle at 20% 20%, rgba(255, 59, 59, 0.14) 0%, transparent 46%),
+            radial-gradient(circle at 80% 80%, rgba(143, 17, 17, 0.14) 0%, transparent 46%),
             var(--bg-primary);
         position: relative;
         overflow: hidden;
@@ -23,16 +22,13 @@
     .login-container::before {
         content: '';
         position: absolute;
-        top: -50%;
-        left: -50%;
-        width: 200%;
-        height: 200%;
-        background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.02'%3E%3Ccircle cx='7' cy='7' r='1'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+        inset: -50%;
+        background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23ffffff' fill-opacity='0.02'%3E%3Ccircle cx='7' cy='7' r='1'/%3E%3C/g%3E%3C/svg%3E");
         animation: float 20s ease-in-out infinite;
     }
 
     @keyframes float {
-        0%, 100% { transform: translateY(0px) rotate(0deg); }
+        0%, 100% { transform: translateY(0) rotate(0deg); }
         50% { transform: translateY(-20px) rotate(180deg); }
     }
 
@@ -48,7 +44,7 @@
         max-width: 500px;
         width: 100%;
         margin: 0 auto;
-        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        transition: all 0.3s ease;
     }
 
     .admin-login-card::before {
@@ -57,21 +53,18 @@
         top: 0;
         left: 0;
         right: 0;
-        height: 2px;
+        height: 3px;
         background: var(--primary-gradient);
-        opacity: 0.8;
     }
 
     .admin-login-card:hover {
         transform: translateY(-5px);
         box-shadow: var(--shadow-glow);
-        border-color: var(--border-hover);
     }
 
     .admin-header {
         text-align: center;
         margin-bottom: 2.5rem;
-        position: relative;
     }
 
     .admin-icon {
@@ -83,36 +76,12 @@
         align-items: center;
         justify-content: center;
         margin: 0 auto 1.5rem;
-        box-shadow: var(--shadow-md);
-        position: relative;
-        overflow: hidden;
-    }
-
-    .admin-icon::before {
-        content: '';
-        position: absolute;
-        top: -50%;
-        left: -50%;
-        width: 200%;
-        height: 200%;
-        background: conic-gradient(from 0deg, transparent, rgba(255,255,255,0.3), transparent);
-        animation: rotate 3s linear infinite;
-    }
-
-    .admin-icon i {
-        font-size: 2rem;
         color: white;
-        position: relative;
-        z-index: 1;
-    }
-
-    @keyframes rotate {
-        0% { transform: rotate(0deg); }
-        100% { transform: rotate(360deg); }
+        font-size: 2rem;
     }
 
     .admin-title {
-        font-family: 'Space Grotesk', sans-serif;
+        font-family: 'Montserrat', sans-serif;
         font-size: 2rem;
         font-weight: 700;
         background: var(--primary-gradient);
@@ -120,19 +89,16 @@
         -webkit-text-fill-color: transparent;
         background-clip: text;
         margin-bottom: 0.5rem;
-        position: relative;
     }
 
     .admin-subtitle {
         color: var(--text-secondary);
-        font-size: 1rem;
-        font-weight: 400;
         margin-bottom: 0;
     }
 
     .form-floating {
         position: relative;
-        margin-bottom: 1.5rem;
+        margin-bottom: 1.35rem;
     }
 
     .form-floating .form-control {
@@ -142,23 +108,12 @@
         border: 1px solid var(--border-color);
         border-radius: 1rem;
         color: var(--text-primary);
-        font-size: 1rem;
-        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-        position: relative;
-        z-index: 1;
     }
 
     .form-floating .form-control:focus {
-        background: rgba(255, 255, 255, 0.05);
         border-color: var(--accent-primary);
-        box-shadow: 
-            0 0 0 3px rgba(102, 126, 234, 0.1),
-            inset 0 1px 0 rgba(255, 255, 255, 0.1);
-        transform: translateY(-2px);
-    }
-
-    .form-floating .form-control::placeholder {
-        color: transparent;
+        box-shadow: 0 0 0 3px rgba(255, 59, 59, 0.14);
+        background: rgba(255, 255, 255, 0.05);
     }
 
     .form-floating label {
@@ -167,82 +122,36 @@
         left: 1.25rem;
         transform: translateY(-50%);
         color: var(--text-muted);
-        font-size: 1rem;
-        font-weight: 500;
-        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        transition: all 0.3s ease;
         pointer-events: none;
-        z-index: 2;
     }
 
-.form-floating .form-control:focus + label,
-.form-floating .form-control:not(:placeholder-shown) + label {
-    top: -1rem;   
-    font-size: 0.75rem;
-    color: var(--accent-primary);
-    transform: translateY(0);
-}
-
+    .form-floating .form-control:focus + label,
+    .form-floating .form-control:not(:placeholder-shown) + label {
+        top: -0.9rem;
+        font-size: 0.75rem;
+        color: var(--accent-primary);
+        transform: translateY(0);
+    }
 
     .input-icon {
         position: absolute;
-        right: 1.25rem;
+        right: 1rem;
         top: 50%;
         transform: translateY(-50%);
         color: var(--text-muted);
-        transition: all 0.3s ease;
         z-index: 3;
+    }
+
+    .input-icon.button {
+        background: none;
+        border: none;
         cursor: pointer;
-    }
-
-    .form-floating .form-control:focus ~ .input-icon {
-        color: var(--accent-primary);
-    }
-
-    .show-password {
-        cursor: pointer;
-        user-select: none;
-    }
-
-    .show-password:hover {
-        color: var(--accent-primary);
-    }
-
-    .form-check {
-        margin: 1.5rem 0;
-        display: flex;
-        align-items: center;
-        gap: 0.75rem;
-    }
-
-    .form-check-input {
-        width: 1.25rem;
-        height: 1.25rem;
-        background: var(--bg-card);
-        border: 1px solid var(--border-color);
-        border-radius: 0.25rem;
-        transition: all 0.3s ease;
-        cursor: pointer;
-    }
-
-    .form-check-input:checked {
-        background: var(--primary-gradient);
-        border-color: var(--accent-primary);
-    }
-
-    .form-check-input:focus {
-        box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
-    }
-
-    .form-check-label {
-        color: var(--text-secondary);
-        font-weight: 500;
-        cursor: pointer;
-        user-select: none;
         transition: color 0.3s ease;
     }
 
-    .form-check-input:checked + .form-check-label {
-        color: var(--text-primary);
+    .input-icon.button:hover {
+        color: var(--accent-primary);
     }
 
     .btn-admin-login {
@@ -252,39 +161,17 @@
         border: none;
         border-radius: 1rem;
         color: white;
-        font-size: 1.1rem;
-        font-weight: 600;
+        font-size: 1.05rem;
+        font-weight: 700;
         text-transform: uppercase;
         letter-spacing: 0.5px;
-        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-        position: relative;
-        overflow: hidden;
-        margin-top: 1rem;
-    }
-
-    .btn-admin-login::before {
-        content: '';
-        position: absolute;
-        top: 0;
-        left: -100%;
-        width: 100%;
-        height: 100%;
-        background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
-        transition: left 0.5s;
+        transition: all 0.3s ease;
+        margin-top: 0.5rem;
     }
 
     .btn-admin-login:hover {
         transform: translateY(-3px);
         box-shadow: var(--shadow-glow);
-        filter: brightness(1.1);
-    }
-
-    .btn-admin-login:hover::before {
-        left: 100%;
-    }
-
-    .btn-admin-login:active {
-        transform: translateY(-1px);
     }
 
     .alert {
@@ -295,24 +182,6 @@
         padding: 1rem 1.25rem;
         margin-bottom: 1.5rem;
         font-weight: 500;
-        backdrop-filter: var(--blur-sm);
-        position: relative;
-        overflow: hidden;
-    }
-
-    .alert::before {
-        content: '';
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 4px;
-        height: 100%;
-        background: var(--accent-danger);
-    }
-
-    .alert i {
-        margin-right: 0.5rem;
-        font-size: 1.1rem;
     }
 
     .back-to-home {
@@ -326,80 +195,26 @@
         color: var(--text-secondary);
         text-decoration: none;
         font-weight: 500;
-        transition: all 0.3s ease;
-        display: inline-flex;
-        align-items: center;
-        gap: 0.5rem;
     }
 
     .back-to-home a:hover {
         color: var(--accent-primary);
-        transform: translateX(-5px);
     }
 
-    /* Loading Animation */
-    .btn-loading {
-        position: relative;
-        color: transparent !important;
+    .field-error {
+        color: #ff8f98;
+        font-size: 0.9rem;
+        margin-top: 0.5rem;
     }
 
-    .btn-loading::after {
-        content: '';
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        width: 20px;
-        height: 20px;
-        margin: -10px 0 0 -10px;
-        border: 2px solid transparent;
-        border-top: 2px solid white;
-        border-radius: 50%;
-        animation: spin 1s linear infinite;
-    }
-
-    /* Responsive Design */
     @media (max-width: 768px) {
         .login-container {
             padding: 100px 1rem 60px;
         }
-        
+
         .admin-login-card {
             padding: 2rem 1.5rem;
-            border-radius: 1.5rem;
         }
-        
-        .admin-title {
-            font-size: 1.75rem;
-        }
-        
-        .admin-icon {
-            width: 70px;
-            height: 70px;
-            margin-bottom: 1rem;
-        }
-        
-        .admin-icon i {
-            font-size: 1.75rem;
-        }
-    }
-
-    @media (max-width: 480px) {
-        .admin-login-card {
-            padding: 1.5rem 1rem;
-            margin: 0 0.5rem;
-        }
-        
-        .admin-title {
-            font-size: 1.5rem;
-        }
-    }
-
-    /* Focus visible for accessibility */
-    .form-control:focus-visible,
-    .btn-admin-login:focus-visible,
-    .form-check-input:focus-visible {
-        outline: 2px solid var(--accent-primary);
-        outline-offset: 2px;
     }
 </style>
 {% endblock %}
@@ -410,87 +225,65 @@
         <div class="row justify-content-center">
             <div class="col-lg-6 col-md-8 col-sm-10">
                 <div class="admin-login-card" data-aos="fade-up" data-aos-duration="800">
-                    <!-- Admin Header -->
                     <div class="admin-header">
                         <div class="admin-icon">
                             <i class="fas fa-user-shield"></i>
                         </div>
                         <h1 class="admin-title">Admin Access</h1>
-                        <p class="admin-subtitle">Secure login for administrators</p>
+                        <p class="admin-subtitle">Sign in with your Django staff or superuser account.</p>
                     </div>
 
-                    <!-- Error Alert -->
-                    {% if error %}
-                    <div class="alert" data-aos="shake" data-aos-duration="600">
-                        <i class="fas fa-exclamation-triangle"></i>
-                        {{ error }}
-                    </div>
+                    {% if messages %}
+                        {% for message in messages %}
+                            <div class="alert">
+                                <i class="fas fa-exclamation-triangle me-2"></i>{{ message }}
+                            </div>
+                        {% endfor %}
                     {% endif %}
 
-                    <!-- Login Form -->
-                    <form action="/admin_login" method="POST" id="adminLoginForm">
+                    {% if form.non_field_errors %}
+                        {% for error in form.non_field_errors %}
+                            <div class="alert">
+                                <i class="fas fa-exclamation-triangle me-2"></i>{{ error }}
+                            </div>
+                        {% endfor %}
+                    {% endif %}
+
+                    <form action="{% url 'admin_login' %}" method="post" id="adminLoginForm">
                         {% csrf_token %}
-                        
-                        <!-- Username Field -->
-                        <div class="form-floating" data-aos="fade-up" data-aos-delay="200">
-                            <input 
-                                type="text" 
-                                class="form-control" 
-                                id="username" 
-                                name="a_username" 
-                                placeholder="Username"
-                                required
-                                autocomplete="username"
-                            >
-                            <label for="username">Administrator Username</label>
+                        {% if next_url %}
+                            <input type="hidden" name="next" value="{{ next_url }}">
+                        {% endif %}
+
+                        <div class="form-floating">
+                            {{ form.username }}
+                            <label for="{{ form.username.id_for_label }}">Administrator Username</label>
                             <i class="fas fa-user input-icon"></i>
+                            {% for error in form.username.errors %}
+                                <div class="field-error">{{ error }}</div>
+                            {% endfor %}
                         </div>
 
-                        <!-- Password Field -->
-                        <div class="form-floating" data-aos="fade-up" data-aos-delay="300">
-                            <input 
-                                type="password" 
-                                class="form-control" 
-                                id="password" 
-                                name="a_password" 
-                                placeholder="Password"
-                                required
-                                autocomplete="current-password"
-                            >
-                            <label for="password">Administrator Password</label>
-                            <i class="fas fa-eye input-icon show-password" id="togglePassword"></i>
+                        <div class="form-floating">
+                            {{ form.password }}
+                            <label for="{{ form.password.id_for_label }}">Administrator Password</label>
+                            <button type="button" class="input-icon button" id="togglePassword" aria-label="Show password">
+                                <i class="fas fa-eye" id="passwordEye"></i>
+                            </button>
+                            {% for error in form.password.errors %}
+                                <div class="field-error">{{ error }}</div>
+                            {% endfor %}
                         </div>
 
-                        <!-- Show Password Checkbox -->
-                        <div class="form-check" data-aos="fade-up" data-aos-delay="400">
-                            <input 
-                                class="form-check-input" 
-                                type="checkbox" 
-                                id="showPasswordCheck"
-                            >
-                            <label class="form-check-label" for="showPasswordCheck">
-                                Show password
-                            </label>
-                        </div>
-
-                        <!-- Submit Button -->
-                        <button 
-                            type="submit" 
-                            class="btn btn-admin-login" 
-                            id="loginButton"
-                            data-aos="fade-up" 
-                            data-aos-delay="500"
-                        >
+                        <button type="submit" class="btn btn-admin-login" id="loginButton">
                             <i class="fas fa-sign-in-alt me-2"></i>
                             Login to Dashboard
                         </button>
                     </form>
 
-                    <!-- Back to Home -->
-                    <div class="back-to-home" data-aos="fade-up" data-aos-delay="600">
+                    <div class="back-to-home">
                         <a href="/">
-                            <i class="fas fa-arrow-left"></i>
-                            Back to Home
+                            <i class="fas fa-arrow-left me-2"></i>Back to Home
                         </a>
                     </div>
                 </div>
@@ -505,169 +298,22 @@
 document.addEventListener('DOMContentLoaded', function() {
     const passwordField = document.getElementById('password');
     const togglePassword = document.getElementById('togglePassword');
-    const showPasswordCheck = document.getElementById('showPasswordCheck');
-    const loginForm = document.getElementById('adminLoginForm');
-    const loginButton = document.getElementById('loginButton');
+    const passwordEye = document.getElementById('passwordEye');
 
-    // Toggle password visibility with icon
-    togglePassword.addEventListener('click', function() {
-        const type = passwordField.getAttribute('type') === 'password' ? 'text' : 'password';
-        passwordField.setAttribute('type', type);
-        
-        // Toggle icon
-        this.classList.toggle('fa-eye');
-        this.classList.toggle('fa-eye-slash');
-        
-        // Update checkbox
-        showPasswordCheck.checked = type === 'text';
-    });
-
-    // Toggle password visibility with checkbox
-    showPasswordCheck.addEventListener('change', function() {
-        const type = this.checked ? 'text' : 'password';
-        passwordField.setAttribute('type', type);
-        
-        // Toggle icon
-        togglePassword.classList.toggle('fa-eye', !this.checked);
-        togglePassword.classList.toggle('fa-eye-slash', this.checked);
-    });
-
-    // Form submission with loading state
-    loginForm.addEventListener('submit', function() {
-        loginButton.classList.add('btn-loading');
-        loginButton.disabled = true;
-        
-        // Re-enable after 3 seconds in case of issues
-        setTimeout(() => {
-            loginButton.classList.remove('btn-loading');
-            loginButton.disabled = false;
-        }, 3000);
-    });
-
-    // Input focus effects
-    const inputs = document.querySelectorAll('.form-control');
-    inputs.forEach(input => {
-        input.addEventListener('focus', function() {
-            this.parentElement.classList.add('focused');
+    if (togglePassword && passwordField) {
+        togglePassword.addEventListener('click', function() {
+            const showPassword = passwordField.type === 'password';
+            passwordField.type = showPassword ? 'text' : 'password';
+            passwordEye.classList.toggle('fa-eye', !showPassword);
+            passwordEye.classList.toggle('fa-eye-slash', showPassword);
         });
-        
-        input.addEventListener('blur', function() {
-            if (!this.value) {
-                this.parentElement.classList.remove('focused');
-            }
-        });
-
-        // Check if input has value on page load
-        if (input.value) {
-            input.parentElement.classList.add('focused');
-        }
-    });
-
-    // Enhanced form validation
-    const username = document.getElementById('username');
-    const password = document.getElementById('password');
-
-    function validateForm() {
-        let isValid = true;
-        
-        // Username validation
-        if (username.value.trim().length < 3) {
-            setFieldError(username, 'Username must be at least 3 characters');
-            isValid = false;
-        } else {
-            clearFieldError(username);
-        }
-
-        // Password validation
-        if (password.value.length < 6) {
-            setFieldError(password, 'Password must be at least 6 characters');
-            isValid = false;
-        } else {
-            clearFieldError(password);
-        }
-
-        return isValid;
     }
+});
 
-    function setFieldError(field, message) {
-        field.classList.add('is-invalid');
-        
-        // Remove existing error message
-        const existingError = field.parentElement.querySelector('.invalid-feedback');
-        if (existingError) {
-            existingError.remove();
-        }
-
-        // Add new error message
-        const errorDiv = document.createElement('div');
-        errorDiv.className = 'invalid-feedback';
-        errorDiv.style.display = 'block';
-        errorDiv.style.color = 'var(--accent-danger)';
-        errorDiv.style.fontSize = '0.875rem';
-        errorDiv.style.marginTop = '0.5rem';
-        errorDiv.textContent = message;
-        field.parentElement.appendChild(errorDiv);
+window.addEventListener('pageshow', function(event) {
+    if (event.persisted) {
+        window.location.reload();
     }
-
-    function clearFieldError(field) {
-        field.classList.remove('is-invalid');
-        const errorDiv = field.parentElement.querySelector('.invalid-feedback');
-        if (errorDiv) {
-            errorDiv.remove();
-        }
-    }
-
-    // Real-time validation
-    username.addEventListener('input', function() {
-        if (this.classList.contains('is-invalid')) {
-            clearFieldError(this);
-        }
-    });
-
-    password.addEventListener('input', function() {
-        if (this.classList.contains('is-invalid')) {
-            clearFieldError(this);
-        }
-    });
-
-    // Prevent multiple rapid submissions
-    let isSubmitting = false;
-    loginForm.addEventListener('submit', function(e) {
-        if (isSubmitting) {
-            e.preventDefault();
-            return;
-        }
-
-        if (!validateForm()) {
-            e.preventDefault();
-            return;
-        }
-
-        isSubmitting = true;
-        setTimeout(() => {
-            isSubmitting = false;
-        }, 2000);
-    });
-
-    // Add keyboard shortcuts
-    document.addEventListener('keydown', function(e) {
-        // Escape to focus on username
-        if (e.key === 'Escape') {
-            username.focus();
-        }
-        
-        // Enter to submit when form is ready
-        if (e.key === 'Enter' && document.activeElement.tagName !== 'BUTTON') {
-            if (validateForm()) {
-                loginForm.submit();
-            }
-        }
-    });
-
-    // Auto-focus username field
-    setTimeout(() => {
-        username.focus();
-    }, 500);
 });
 </script>
 {% endblock %}

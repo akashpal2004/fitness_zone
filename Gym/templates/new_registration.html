@@ -1,11 +1,10 @@
 {% extends "parent.html" %}
 {% load static %}
 
-{% block title %}Register - FitnessPro{% endblock %}
+{% block title %}{% if is_admin_creator %}Add Member{% else %}Register{% endif %} - FitnessPro{% endblock %}
 
 {% block extra_css %}
 <style>
-    /* Registration Page Specific Styles */
     .registration-section {
         min-height: 100vh;
         padding: 140px 0 80px;
@@ -19,17 +18,14 @@
     .registration-section::before {
         content: '';
         position: absolute;
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
+        inset: 0;
         background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grid" width="8" height="8" patternUnits="userSpaceOnUse"><path d="M 8 0 L 0 0 0 8" fill="none" stroke="rgba(255,255,255,0.02)" stroke-width="1"/></pattern></defs><rect width="100" height="100" fill="url(%23grid)"/></svg>');
         opacity: 0.7;
         pointer-events: none;
     }
 
     .registration-container {
-        max-width: 700px;
+        max-width: 720px;
         width: 100%;
         margin: 0 auto;
         padding: 0 20px;
@@ -46,7 +42,6 @@
         box-shadow: var(--shadow-lg);
         position: relative;
         overflow: hidden;
-        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     }
 
     .registration-card::before {
@@ -78,11 +73,10 @@
 
     .registration-header p {
         color: var(--text-secondary);
-        font-size: 1.1rem;
+        font-size: 1.05rem;
         margin: 0;
     }
 
-    /* Multi-step Progress */
     .step-progress {
         display: flex;
         justify-content: space-between;
@@ -110,7 +104,7 @@
         left: 0;
         height: 2px;
         background: var(--primary-gradient);
-        transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        transition: width 0.3s ease;
         z-index: 2;
         width: 0%;
         transform: translateY(-50%);
@@ -142,7 +136,7 @@
         font-weight: 600;
         font-size: 1.1rem;
         margin-bottom: 0.5rem;
-        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        transition: all 0.3s ease;
     }
 
     .step-item.active .step-circle {
@@ -164,7 +158,6 @@
         font-size: 0.9rem;
         font-weight: 500;
         text-align: center;
-        transition: color 0.3s ease;
     }
 
     .step-item.active .step-title {
@@ -172,7 +165,6 @@
         font-weight: 600;
     }
 
-    /* Form Steps */
     .form-step {
         display: none;
         animation: fadeIn 0.5s ease-in-out;
@@ -195,7 +187,6 @@
 
     .form-group {
         flex: 1;
-        position: relative;
     }
 
     .form-label {
@@ -212,7 +203,7 @@
         width: 16px;
     }
 
-    .form-control {
+    .registration-card .form-control {
         width: 100%;
         height: 55px;
         padding: 0 1.25rem;
@@ -221,10 +212,15 @@
         border-radius: 1rem;
         color: var(--text-primary);
         font-size: 1rem;
-        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        transition: all 0.3s ease;
     }
 
-    .form-control:focus {
+    .registration-card textarea.form-control {
+        min-height: 120px;
+        padding: 1rem 1.25rem;
+    }
+
+    .registration-card .form-control:focus {
         background: var(--bg-secondary);
         border-color: var(--accent-primary);
         box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.1);
@@ -232,42 +228,35 @@
         outline: none;
     }
 
-    .form-control::placeholder {
-        color: var(--text-muted);
-    }
-
-    .form-control.is-valid {
-        border-color: var(--accent-success);
-        box-shadow: 0 0 0 4px rgba(46, 213, 115, 0.1);
-    }
-
-    .form-control.is-invalid {
+    .registration-card .form-control.is-invalid {
         border-color: var(--accent-danger);
         box-shadow: 0 0 0 4px rgba(255, 71, 87, 0.1);
     }
 
-    .invalid-feedback {
-        color: var(--accent-danger);
-        font-size: 0.875rem;
-        margin-top: 0.25rem;
-        display: none;
-    }
-
-    .form-control.is-invalid + .invalid-feedback {
-        display: block;
-    }
-
     .custom-select {
+        -webkit-appearance: none;
+        -moz-appearance: none;
         appearance: none;
-        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath fill='%23667eea' d='M8 11L3 6h10l-5 5z'/%3E%3C/svg%3E");
-        background-repeat: no-repeat;
-        background-position: right 1rem center;
-        background-size: 16px;
+        background: var(--bg-secondary) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath fill='%23ff3b3b' d='M8 11L3 6h10l-5 5z'/%3E%3C/svg%3E") no-repeat calc(100% - 1rem) 50% / 14px 14px;
         padding-right: 3rem;
         cursor: pointer;
     }
 
-    /* Button Navigation */
+    select.custom-select::-ms-expand {
+        display: none;
+    }
+
+    .custom-select option {
+        background: var(--bg-secondary);
+        color: var(--text-primary);
+    }
+
+    .field-error {
+        color: #ff8f98;
+        font-size: 0.88rem;
+        margin-top: 0.45rem;
+    }
+
     .form-navigation {
         display: flex;
         justify-content: space-between;
@@ -276,6 +265,21 @@
         margin-top: 2rem;
         padding-top: 2rem;
         border-top: 1px solid var(--border-color);
+    }
+
+    .step-validation-message {
+        display: none;
+        margin-top: 1.25rem;
+        padding: 0.9rem 1rem;
+        border-radius: 0.9rem;
+        border: 1px solid rgba(255, 59, 59, 0.22);
+        background: rgba(255, 59, 59, 0.08);
+        color: #ffd0d0;
+        font-size: 0.92rem;
+    }
+
+    .step-validation-message.show {
+        display: block;
     }
 
     .btn-nav {
@@ -287,10 +291,8 @@
         text-transform: uppercase;
         letter-spacing: 0.5px;
         cursor: pointer;
-        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        transition: all 0.3s ease;
         border: none;
-        position: relative;
-        overflow: hidden;
         display: flex;
         align-items: center;
         justify-content: center;
@@ -307,40 +309,18 @@
         display: flex;
     }
 
-    .btn-back:hover {
-        color: var(--text-primary);
-        border-color: var(--border-hover);
-        background: var(--bg-tertiary);
-        transform: translateY(-2px);
-    }
-
     .btn-next {
         background: var(--primary-gradient);
         color: white;
         margin-left: auto;
     }
 
-    .btn-next::before {
-        content: '';
-        position: absolute;
-        top: 0;
-        left: -100%;
-        width: 100%;
-        height: 100%;
-        background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
-        transition: left 0.5s;
-    }
-
-    .btn-next:hover {
+    .btn-next:hover,
+    .btn-back:hover {
         transform: translateY(-2px);
         box-shadow: var(--shadow-glow);
     }
 
-    .btn-next:hover::before {
-        left: 100%;
-    }
-
-    /* Form Check */
     .form-check {
         display: flex;
         align-items: flex-start;
@@ -350,83 +330,163 @@
     .form-check-input {
         width: 20px;
         height: 20px;
-        border: 2px solid var(--border-color);
-        border-radius: 0.375rem;
-        background: var(--bg-secondary);
         margin-right: 0.75rem;
         margin-top: 0.125rem;
-        transition: all 0.3s ease;
         flex-shrink: 0;
-    }
-
-    .form-check-input:checked {
-        background: var(--primary-gradient);
-        border-color: var(--accent-primary);
-    }
-
-    .form-check-input:focus {
-        box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
-        outline: none;
     }
 
     .form-check-label {
         color: var(--text-secondary);
         font-size: 0.95rem;
-        cursor: pointer;
-        user-select: none;
         line-height: 1.4;
     }
 
     .form-check-label a {
         color: var(--accent-primary);
         text-decoration: none;
-        font-weight: 500;
     }
 
-    .form-check-label a:hover {
-        color: var(--accent-secondary);
-        text-decoration: underline;
-    }
-
-    /* Alert Messages */
     .alert {
         border: none;
         border-radius: 1rem;
         padding: 1rem 1.25rem;
-        margin-bottom: 1.5rem;
+        margin-bottom: 1rem;
         font-weight: 500;
-        position: relative;
-        overflow: hidden;
-    }
-
-    .alert::before {
-        content: '';
-        position: absolute;
-        left: 0;
-        top: 0;
-        bottom: 0;
-        width: 4px;
     }
 
     .alert-danger {
         background: rgba(255, 71, 87, 0.1);
         color: var(--accent-danger);
-    }
-
-    .alert-danger::before {
-        background: var(--accent-danger);
+        border-left: 4px solid var(--accent-danger);
     }
 
     .alert-success {
         background: rgba(46, 213, 115, 0.1);
         color: var(--accent-success);
+        border-left: 4px solid var(--accent-success);
     }
 
-    .alert-success::before {
-        background: var(--accent-success);
+    .form-error-summary {
+        background: rgba(255, 59, 59, 0.09);
+        border: 1px solid rgba(255, 59, 59, 0.24);
+        border-radius: 1rem;
+        padding: 1rem 1.25rem;
+        margin-bottom: 1.5rem;
     }
 
-    .login-link {
+    .form-error-summary h2 {
+        font-size: 1rem;
+        margin-bottom: 0.75rem;
+        color: #ffd1d1;
+    }
+
+    .form-error-summary ul {
+        margin: 0;
+        padding-left: 1.1rem;
+        color: #ffc3c3;
+    }
+
+    .form-error-summary li + li {
+        margin-top: 0.35rem;
+    }
+
+    .step-caption {
+        margin-top: -0.25rem;
+        margin-bottom: 1.5rem;
+        text-align: center;
+        color: var(--text-secondary);
+        font-size: 0.95rem;
+    }
+
+    .step-panel-title {
+        font-size: 1.15rem;
+        font-weight: 700;
+        color: var(--text-primary);
+        margin-bottom: 0.35rem;
+    }
+
+    .step-panel-copy {
+        color: var(--text-secondary);
+        margin-bottom: 1.5rem;
+        font-size: 0.95rem;
+    }
+
+    .field-note {
+        margin-top: 0.55rem;
+        color: var(--text-secondary);
+        font-size: 0.85rem;
+    }
+
+    .password-guidance {
+        margin-top: 1rem;
+        padding: 0.95rem 1rem;
+        border-radius: 1rem;
+        background: rgba(255, 255, 255, 0.04);
+        border: 1px solid var(--border-color);
+        color: var(--text-secondary);
+        font-size: 0.9rem;
+        line-height: 1.5;
+    }
+
+    .password-guidance strong {
+        display: block;
+        margin-bottom: 0.35rem;
+        color: var(--text-primary);
+    }
+
+    .password-match-status {
+        min-height: 1.25rem;
+        margin-top: 0.5rem;
+        font-size: 0.88rem;
+        font-weight: 600;
+    }
+
+    .password-match-status.match {
+        color: var(--accent-success);
+    }
+
+    .password-match-status.mismatch {
+        color: var(--accent-danger);
+    }
+
+    .terms-panel,
+    .admin-note {
+        margin-top: 1.25rem;
+        padding: 1rem 1.1rem;
+        border-radius: 1rem;
+        background: rgba(255, 255, 255, 0.04);
+        border: 1px solid var(--border-color);
+    }
+
+    .terms-panel.is-invalid {
+        border-color: var(--accent-danger);
+        box-shadow: 0 0 0 3px rgba(255, 59, 59, 0.12);
+    }
+
+    .admin-note {
+        color: var(--text-secondary);
+        font-size: 0.92rem;
+    }
+
+    .admin-note strong {
+        color: var(--text-primary);
+    }
+
+    .submit-caption {
+        margin-top: 0.85rem;
+        color: var(--text-secondary);
+        font-size: 0.85rem;
+        text-align: right;
+    }
+
+    .btn-nav:disabled {
+        opacity: 0.75;
+        cursor: wait;
+        transform: none !important;
+        box-shadow: none !important;
+    }
+
+    .auth-link {
         text-align: center;
         color: var(--text-secondary);
         margin-top: 2rem;
@@ -434,40 +494,13 @@
         border-top: 1px solid var(--border-color);
     }
 
-    .login-link a {
+    .auth-link a {
         color: var(--accent-primary);
         text-decoration: none;
         font-weight: 600;
-        transition: all 0.3s ease;
-        position: relative;
     }
 
-    .login-link a::after {
-        content: '';
-        position: absolute;
-        width: 0;
-        height: 2px;
-        bottom: -2px;
-        left: 50%;
-        background: var(--primary-gradient);
-        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-        transform: translateX(-50%);
-    }
-
-    .login-link a:hover {
-        color: var(--accent-secondary);
-    }
-
-    .login-link a:hover::after {
-        width: 100%;
-    }
-
-    /* Responsive Design */
     @media (max-width: 768px) {
-        .registration-section {
-            padding: 120px 0 60px;
-        }
-
         .registration-card {
             padding: 2rem 1.5rem;
         }
@@ -481,51 +514,12 @@
             gap: 0;
         }
 
-        .step-progress {
-            margin-bottom: 2rem;
-        }
-
-        .step-item {
-            min-width: 80px;
-        }
-
-        .step-circle {
-            width: 35px;
-            height: 35px;
-            font-size: 0.9rem;
-        }
-
-        .step-title {
-            font-size: 0.8rem;
-        }
-
         .form-navigation {
             flex-direction: column;
-            gap: 1rem;
         }
 
         .btn-nav {
             width: 100%;
-            justify-content: center;
-        }
-    }
-
-    @media (max-width: 576px) {
-        .registration-section {
-            padding: 100px 0 40px;
-        }
-
-        .registration-container {
-            padding: 0 15px;
-        }
-
-        .registration-card {
-            padding: 1.5rem;
-            border-radius: 1.5rem;
-        }
-
-        .registration-header h1 {
-            font-size: 1.75rem;
         }
     }
 </style>
@@ -537,11 +531,23 @@
         <div class="registration-container">
             <div class="registration-card">
                 <div class="registration-header">
-                    <h1>Join FitnessPro</h1>
-                    <p>Start your transformation journey today</p>
+                    <h1>{% if is_admin_creator %}Add New Member{% else %}Join FitnessPro{% endif %}</h1>
+                    <p>
+                        {% if is_admin_creator %}
+                            Create a new member account using Django's secure registration flow.
+                        {% else %}
+                            Start your transformation journey with Django-powered secure registration.
+                        {% endif %}
+                    </p>
                 </div>
+                <p class="step-caption">
+                    {% if is_admin_creator %}
+                        Complete the member details in three quick steps.
+                    {% else %}
+                        Complete the form step by step to activate your gym account securely.
+                    {% endif %}
+                </p>
 
-                <!-- Progress Steps -->
                 <div class="step-progress" id="stepProgress" data-step="1">
                     <div class="step-item active" data-step="1">
                         <div class="step-circle">1</div>
@@ -557,301 +563,260 @@
                     </div>
                 </div>
 
-                <!-- Alert Messages -->
-                {% if error %}
-                <div class="alert alert-danger" role="alert">
-                    <i class="fas fa-exclamation-circle me-2"></i>{{ error }}
-                </div>
+                {% if messages %}
+                    {% for message in messages %}
+                        <div class="alert {% if message.tags == 'success' %}alert-success{% else %}alert-danger{% endif %}">
+                            {{ message }}
+                        </div>
+                    {% endfor %}
                 {% endif %}
 
-                {% if msg %}
-                <div class="alert alert-success" role="alert">
-                    <i class="fas fa-check-circle me-2"></i>{{ msg }}
-                </div>
+                {% if form.non_field_errors %}
+                    {% for error in form.non_field_errors %}
+                        <div class="alert alert-danger">{{ error }}</div>
+                    {% endfor %}
                 {% endif %}
 
-                <form action="/new_registration" method="POST" id="registrationForm" novalidate>
+                {% if form.errors %}
+                    <div class="form-error-summary" aria-live="polite">
+                        <h2>Please review the following fields before continuing:</h2>
+                        <ul>
+                            {% for error in form.non_field_errors %}
+                                <li>{{ error }}</li>
+                            {% endfor %}
+                            {% for field in form.visible_fields %}
+                                {% for error in field.errors %}
+                                    <li><strong>{{ field.label }}:</strong> {{ error }}</li>
+                                {% endfor %}
+                            {% endfor %}
+                        </ul>
+                    </div>
+                {% endif %}
+
+                <form action="{% url 'register' %}" method="post" id="registrationForm" novalidate>
                     {% csrf_token %}
-                    
-                    <!-- Step 1: Basic Information -->
+                    {% if next_url %}
+                        <input type="hidden" name="next" value="{{ next_url }}">
+                    {% endif %}
+                    {% if is_admin_creator %}
+                        {{ form.accept_terms }}
+                    {% endif %}
+
                     <div class="form-step active" data-step="1">
+                        <div class="step-panel-title">Step 1 of 3: Basic Details</div>
+                        <div class="step-panel-copy">Tell us who this member is and capture the essentials we need for the gym profile.</div>
                         <div class="form-row">
                             <div class="form-group">
-                                <label for="firstname" class="form-label">
+                                <label for="{{ form.first_name.id_for_label }}" class="form-label">
                                     <i class="fas fa-user"></i>First Name
                                 </label>
-                                <input 
-                                    type="text" 
-                                    class="form-control" 
-                                    id="firstname" 
-                                    name="firstname" 
-                                    placeholder="Enter your first name"
-                                    value="{{ first_name }}" 
-                                    required
-                                >
-                                <div class="invalid-feedback">Please enter your first name</div>
+                                {{ form.first_name }}
+                                {% for error in form.first_name.errors %}
+                                    <div class="field-error">{{ error }}</div>
+                                {% endfor %}
                             </div>
                             <div class="form-group">
-                                <label for="lastname" class="form-label">
+                                <label for="{{ form.last_name.id_for_label }}" class="form-label">
                                     <i class="fas fa-user"></i>Last Name
                                 </label>
-                                <input 
-                                    type="text" 
-                                    class="form-control" 
-                                    id="lastname" 
-                                    name="lastname" 
-                                    placeholder="Enter your last name"
-                                    value="{{ last_name }}" 
-                                    required
-                                >
-                                <div class="invalid-feedback">Please enter your last name</div>
+                                {{ form.last_name }}
+                                {% for error in form.last_name.errors %}
+                                    <div class="field-error">{{ error }}</div>
+                                {% endfor %}
                             </div>
                         </div>
 
                         <div class="form-row">
                             <div class="form-group">
-                                <label for="dob" class="form-label">
+                                <label for="{{ form.dob.id_for_label }}" class="form-label">
                                     <i class="fas fa-calendar"></i>Date of Birth
                                 </label>
-                                <input 
-                                    type="date" 
-                                    class="form-control" 
-                                    id="dob" 
-                                    name="dob" 
-                                    value="{{ dob }}" 
-                                    required
-                                >
-                                <div class="invalid-feedback">Please select your date of birth</div>
+                                {{ form.dob }}
+                                {% for error in form.dob.errors %}
+                                    <div class="field-error">{{ error }}</div>
+                                {% endfor %}
                             </div>
                             <div class="form-group">
-                                <label for="phone" class="form-label">
+                                <label for="{{ form.phone_number.id_for_label }}" class="form-label">
                                     <i class="fas fa-phone"></i>Phone Number
                                 </label>
-                                <input 
-                                    type="tel" 
-                                    class="form-control" 
-                                    id="phone" 
-                                    name="phone_number" 
-                                    placeholder="0300-0000000"
-                                    value="{{ phone_number }}" 
-                                    required
-                                >
-                                <div class="invalid-feedback">Please enter a valid phone number</div>
+                                {{ form.phone_number }}
+                                {% for error in form.phone_number.errors %}
+                                    <div class="field-error">{{ error }}</div>
+                                {% endfor %}
                             </div>
                         </div>
 
                         <div class="form-row">
                             <div class="form-group">
-                                <label for="height" class="form-label">
+                                <label for="{{ form.height.id_for_label }}" class="form-label">
                                     <i class="fas fa-ruler-vertical"></i>Height (cm)
                                 </label>
-                                <input 
-                                    type="number" 
-                                    class="form-control" 
-                                    id="height" 
-                                    name="height" 
-                                    placeholder="170"
-                                    min="100" 
-                                    max="250"
-                                    value="{{ height }}" 
-                                    required
-                                >
-                                <div class="invalid-feedback">Please enter a valid height (100-250 cm)</div>
+                                {{ form.height }}
+                                {% for error in form.height.errors %}
+                                    <div class="field-error">{{ error }}</div>
+                                {% endfor %}
                             </div>
                             <div class="form-group">
-                                <label for="weight" class="form-label">
+                                <label for="{{ form.weight.id_for_label }}" class="form-label">
                                     <i class="fas fa-weight"></i>Weight (kg)
                                 </label>
-                                <input 
-                                    type="number" 
-                                    class="form-control" 
-                                    id="weight" 
-                                    name="weight" 
-                                    placeholder="70"
-                                    min="30" 
-                                    max="200"
-                                    value="{{ weight }}" 
-                                    required
-                                >
-                                <div class="invalid-feedback">Please enter a valid weight (30-200 kg)</div>
+                                {{ form.weight }}
+                                {% for error in form.weight.errors %}
+                                    <div class="field-error">{{ error }}</div>
+                                {% endfor %}
                             </div>
                         </div>
                     </div>
 
-                    <!-- Step 2: Fitness Information -->
                     <div class="form-step" data-step="2">
+                        <div class="step-panel-title">Step 2 of 3: Fitness Profile</div>
+                        <div class="step-panel-copy">Choose the member's training preferences so the platform can personalize workouts and plans.</div>
                         <div class="form-row">
                             <div class="form-group">
-                                <label for="gender" class="form-label">
+                                <label for="{{ form.gender.id_for_label }}" class="form-label">
                                     <i class="fas fa-venus-mars"></i>Gender
                                 </label>
-                                <select 
-                                    class="form-control custom-select" 
-                                    id="gender" 
-                                    name="gender" 
-                                    required
-                                >
-                                    <option value="">Select Gender</option>
-                                    <option value="male" {% if gender == 'male' %}selected{% endif %}>Male</option>
-                                    <option value="female" {% if gender == 'female' %}selected{% endif %}>Female</option>
-                                </select>
-                                <div class="invalid-feedback">Please select your gender</div>
+                                {{ form.gender }}
+                                {% for error in form.gender.errors %}
+                                    <div class="field-error">{{ error }}</div>
+                                {% endfor %}
                             </div>
                             <div class="form-group">
-                                <label for="muscle_strength" class="form-label">
+                                <label for="{{ form.muscle_strength.id_for_label }}" class="form-label">
                                     <i class="fas fa-dumbbell"></i>Fitness Level
                                 </label>
-                                <select 
-                                    class="form-control custom-select" 
-                                    id="muscle_strength" 
-                                    name="muscle_strength" 
-                                    required
-                                >
-                                    <option value="">Select Level</option>
-                                    <option value="beginner" {% if muscle_strength == 'beginner' %}selected{% endif %}>Beginner</option>
-                                    <option value="intermediate" {% if muscle_strength == 'intermediate' %}selected{% endif %}>Intermediate</option>
-                                    <option value="advanced" {% if muscle_strength == 'advanced' %}selected{% endif %}>Advanced</option>
-                                </select>
-                                <div class="invalid-feedback">Please select your fitness level</div>
+                                {{ form.muscle_strength }}
+                                {% for error in form.muscle_strength.errors %}
+                                    <div class="field-error">{{ error }}</div>
+                                {% endfor %}
                             </div>
                         </div>
 
                         <div class="form-row">
                             <div class="form-group">
-                                <label for="address" class="form-label">
-                                    <i class="fas fa-map-marker-alt"></i>Address Area
+                                <label for="{{ form.address.id_for_label }}" class="form-label">
+                                    <i class="fas fa-map-marker-alt"></i>City
                                 </label>
-                                <select 
-                                    class="form-control custom-select" 
-                                    id="address" 
-                                    name="address" 
-                                    required
-                                >
-                                    <option value="">Select Area</option>
-                                    <option value="township" {% if address == 'township' %}selected{% endif %}>Township</option>
-                                    <option value="johr town" {% if address == 'johr town' %}selected{% endif %}>Johr Town</option>
-                                    <option value="model town" {% if address == 'model town' %}selected{% endif %}>Model Town</option>
-                                    <option value="faisal town" {% if address == 'faisal town' %}selected{% endif %}>Faisal Town</option>
-                                    <option value="green town" {% if address == 'green town' %}selected{% endif %}>Green Town</option>
-                                    <option value="iqbal town" {% if address == 'iqbal town' %}selected{% endif %}>Iqbal Town</option>
-                                    <option value="garden town" {% if address == 'garden town' %}selected{% endif %}>Garden Town</option>
-                                </select>
-                                <div class="invalid-feedback">Please select your address area</div>
+                                {{ form.address }}
+                                {% for error in form.address.errors %}
+                                    <div class="field-error">{{ error }}</div>
+                                {% endfor %}
                             </div>
                             <div class="form-group">
-                                <label for="gym_split" class="form-label">
+                                <label for="{{ form.gym_split.id_for_label }}" class="form-label">
                                     <i class="fas fa-calendar-week"></i>Workout Plan
                                 </label>
-                                <select 
-                                    class="form-control custom-select" 
-                                    id="gym_split" 
-                                    name="gym_split" 
-                                    required
-                                >
-                                    <option value="">Select Plan</option>
-                                    <option value="5_day_split" {% if gym_split == '5_day_split' %}selected{% endif %}>5 Day Split</option>
-                                    <option value="3_day_split" {% if gym_split == '3_day_split' %}selected{% endif %}>3 Day Split (PPL)</option>
-                                </select>
-                                <div class="invalid-feedback">Please select a workout plan</div>
+                                {{ form.gym_split }}
+                                {% for error in form.gym_split.errors %}
+                                    <div class="field-error">{{ error }}</div>
+                                {% endfor %}
                             </div>
                         </div>
 
                         <div class="form-group">
-                            <label for="email" class="form-label">
+                            <label for="{{ form.email.id_for_label }}" class="form-label">
                                 <i class="fas fa-envelope"></i>Email Address
                             </label>
-                            <input 
-                                type="email" 
-                                class="form-control" 
-                                id="email" 
-                                name="email" 
-                                placeholder="your@email.com"
-                                value="{{ email }}" 
-                                required
-                            >
-                            <div class="invalid-feedback">Please enter a valid email address</div>
+                            {{ form.email }}
+                            {% for error in form.email.errors %}
+                                <div class="field-error">{{ error }}</div>
+                            {% endfor %}
+                            <div class="field-note">We'll use this email for account access, updates, and recovery.</div>
                         </div>
                     </div>
 
-                    <!-- Step 3: Account Creation -->
                     <div class="form-step" data-step="3">
+                        <div class="step-panel-title">Step 3 of 3: Secure the Account</div>
+                        <div class="step-panel-copy">
+                            {% if is_admin_creator %}
+                                Set login credentials for the new member account.
+                            {% else %}
+                                Choose secure login credentials so you can access your fitness dashboard anytime.
+                            {% endif %}
+                        </div>
                         <div class="form-group">
-                            <label for="username" class="form-label">
+                            <label for="{{ form.username.id_for_label }}" class="form-label">
                                 <i class="fas fa-user-circle"></i>Create Username
                             </label>
-                            <input 
-                                type="text" 
-                                class="form-control" 
-                                id="username" 
-                                name="username" 
-                                placeholder="Choose a unique username"
-                                value="{{ username }}" 
-                                required
-                                minlength="3"
-                            >
-                            <div class="invalid-feedback">Username must be at least 3 characters long</div>
+                            {{ form.username }}
+                            {% for error in form.username.errors %}
+                                <div class="field-error">{{ error }}</div>
+                            {% endfor %}
                         </div>
 
                         <div class="form-group">
-                            <label for="password" class="form-label">
+                            <label for="{{ form.password1.id_for_label }}" class="form-label">
                                 <i class="fas fa-lock"></i>Create Password
                             </label>
-                            <input 
-                                type="password" 
-                                class="form-control" 
-                                id="password" 
-                                name="password" 
-                                placeholder="Create a strong password"
-                                value="{{ password }}" 
-                                required
-                                minlength="6"
-                            >
-                            <div class="invalid-feedback">Password must be at least 6 characters long</div>
+                            {{ form.password1 }}
+                            {% for error in form.password1.errors %}
+                                <div class="field-error">{{ error }}</div>
+                            {% endfor %}
                         </div>
 
                         <div class="form-group">
-                            <label for="c_password" class="form-label">
+                            <label for="{{ form.password2.id_for_label }}" class="form-label">
                                 <i class="fas fa-lock"></i>Confirm Password
                             </label>
-                            <input 
-                                type="password" 
-                                class="form-control" 
-                                id="c_password" 
-                                name="c_password" 
-                                placeholder="Confirm your password"
-                                required
-                                minlength="6"
-                            >
-                            <div class="invalid-feedback">Passwords do not match</div>
+                            {{ form.password2 }}
+                            {% for error in form.password2.errors %}
+                                <div class="field-error">{{ error }}</div>
+                            {% endfor %}
+                            <div class="password-match-status" id="passwordMatchStatus" aria-live="polite"></div>
                         </div>
 
-                        <div class="form-check">
-                            <input 
-                                class="form-check-input" 
-                                type="checkbox" 
-                                id="terms" 
-                                required
-                            >
-                            <label class="form-check-label" for="terms">
-                                I agree to the <a href="#" onclick="return false;">Terms & Conditions</a> and <a href="#" onclick="return false;">Privacy Policy</a>
-                            </label>
-                            <div class="invalid-feedback">Please agree to the terms and conditions</div>
+                        <div class="password-guidance">
+                            <strong>Password tips</strong>
+                            Use at least 8 characters with a mix of uppercase, lowercase, numbers, and symbols for a stronger account.
                         </div>
+
+                        {% if is_admin_creator %}
+                            <div class="admin-note">
+                                <strong>Admin note:</strong> This member can change their password later from their profile once they sign in.
+                            </div>
+                        {% else %}
+                            <div class="terms-panel" id="termsPanel">
+                                <div class="form-check">
+                                    {{ form.accept_terms }}
+                                    <label class="form-check-label" for="{{ form.accept_terms.id_for_label }}">
+                                        I agree to the <a href="#" onclick="return false;">Terms &amp; Conditions</a> and <a href="#" onclick="return false;">Privacy Policy</a>
+                                    </label>
+                                </div>
+                                {% for error in form.accept_terms.errors %}
+                                    <div class="field-error">{{ error }}</div>
+                                {% endfor %}
+                            </div>
+                        {% endif %}
                     </div>
 
-                    <!-- Navigation Buttons -->
+                    <div class="step-validation-message" id="stepValidationMessage" aria-live="polite">
+                        Please complete the highlighted fields to continue.
+                    </div>
+
                     <div class="form-navigation">
                         <button type="button" class="btn-nav btn-back" id="prevBtn">
                             <i class="fas fa-arrow-left me-2"></i>Back
                         </button>
-                        <button type="button" class="btn-nav btn-next" id="nextBtn">
+                        <button type="button" class="btn-nav btn-next" id="nextBtn" data-final-label="{% if is_admin_creator %}Add Member{% else %}Create Account{% endif %}">
                             Next<i class="fas fa-arrow-right ms-2"></i>
                         </button>
                     </div>
+                    <div class="submit-caption" id="submitCaption">
+                        {% if is_admin_creator %}
+                            New members are created instantly after successful validation.
+                        {% else %}
+                            Your account will be created and you'll be signed in automatically.
+                        {% endif %}
+                    </div>
                 </form>
 
-                <div class="login-link">
-                    <p>Already have an account? <a href="/login">Sign in here</a></p>
+                <div class="auth-link">
+                    {% if is_admin_creator %}
+                        <p><a href="/admin_portal">Return to admin dashboard</a></p>
+                    {% else %}
+                        <p>Already have an account? <a href="{% url 'login' %}{% if next_url %}?next={{ next_url|urlencode }}{% endif %}">Sign in here</a></p>
+                    {% endif %}
                 </div>
             </div>
         </div>
@@ -868,112 +833,131 @@ document.addEventListener('DOMContentLoaded', function() {
     const stepProgress = document.getElementById('stepProgress');
     const formSteps = document.querySelectorAll('.form-step');
     const stepItems = document.querySelectorAll('.step-item');
-    
-    let currentStep = 1;
+    const submitCaption = document.getElementById('submitCaption');
+    const passwordField = document.getElementById('password');
+    const confirmPasswordField = document.getElementById('c_password');
+    const passwordMatchStatus = document.getElementById('passwordMatchStatus');
+    const termsField = form.querySelector('input[name="accept_terms"]');
+    const termsPanel = document.getElementById('termsPanel');
+    const stepValidationMessage = document.getElementById('stepValidationMessage');
+    const finalLabel = nextBtn.dataset.finalLabel;
     const totalSteps = 3;
+    let currentStep = {{ initial_step|default:1 }};
+    let isSubmitting = false;
 
-    // Initialize
     updateStepDisplay();
+    updatePasswordMatchStatus();
 
-    // Next button functionality
     nextBtn.addEventListener('click', function(e) {
         e.preventDefault();
-        
-        if (validateCurrentStep()) {
-            if (currentStep < totalSteps) {
+        if (isSubmitting) {
+            return;
+        }
+
+        if (currentStep < totalSteps) {
+            if (validateCurrentStep()) {
                 currentStep++;
                 updateStepDisplay();
-            } else {
-                // Submit form on last step
-                if (validateFinalStep()) {
-                    form.submit();
-                }
             }
+            return;
+        }
+
+        if (validateFinalStep()) {
+            submitForm();
         }
     });
 
-    // Previous button functionality
     prevBtn.addEventListener('click', function(e) {
         e.preventDefault();
-        
         if (currentStep > 1) {
             currentStep--;
             updateStepDisplay();
         }
     });
 
+    function setFieldValidity(field, isValid) {
+        field.classList.toggle('is-invalid', !isValid);
+        if (isValid) {
+            field.removeAttribute('aria-invalid');
+        } else {
+            field.setAttribute('aria-invalid', 'true');
+        }
+    }
+
+    function setStepValidationMessage(isVisible) {
+        if (!stepValidationMessage) {
+            return;
+        }
+        stepValidationMessage.classList.toggle('show', isVisible);
+    }
+
     function updateStepDisplay() {
-        // Update form steps visibility
         formSteps.forEach((step, index) => {
             step.classList.toggle('active', index + 1 === currentStep);
         });
 
-        // Update progress indicators
         stepItems.forEach((item, index) => {
             item.classList.remove('active', 'completed');
-            
+            const circle = item.querySelector('.step-circle');
+
             if (index + 1 === currentStep) {
                 item.classList.add('active');
+                circle.textContent = index + 1;
             } else if (index + 1 < currentStep) {
                 item.classList.add('completed');
-                item.querySelector('.step-circle').innerHTML = '<i class="fas fa-check"></i>';
+                circle.innerHTML = '<i class="fas fa-check"></i>';
             } else {
-                item.querySelector('.step-circle').innerHTML = index + 1;
+                circle.textContent = index + 1;
             }
         });
 
-        // Update progress bar
         stepProgress.setAttribute('data-step', currentStep);
-
-        // Update navigation buttons
         prevBtn.classList.toggle('show', currentStep > 1);
-        
-        if (currentStep === totalSteps) {
-            nextBtn.innerHTML = '<i class="fas fa-user-plus me-2"></i>Create Account';
-        } else {
-            nextBtn.innerHTML = 'Next<i class="fas fa-arrow-right ms-2"></i>';
+        setStepValidationMessage(false);
+        nextBtn.innerHTML = currentStep === totalSteps
+            ? `<i class="fas fa-user-plus me-2"></i>${finalLabel}`
+            : 'Next<i class="fas fa-arrow-right ms-2"></i>';
+
+        if (submitCaption) {
+            submitCaption.style.visibility = currentStep === totalSteps ? 'visible' : 'hidden';
+        }
+
+        if (termsPanel && termsField && currentStep === totalSteps) {
+            termsPanel.classList.toggle('is-invalid', termsField.classList.contains('is-invalid'));
         }
     }
 
     function validateCurrentStep() {
         const currentFormStep = document.querySelector('.form-step.active');
-        const requiredFields = currentFormStep.querySelectorAll('input[required], select[required]');
+        const requiredFields = currentFormStep.querySelectorAll('input[name], select[name]');
         let isValid = true;
 
         requiredFields.forEach(field => {
-            // Remove previous validation classes
-            field.classList.remove('is-valid', 'is-invalid');
-            
-            // Check if field is valid
-            if (!field.checkValidity() || !field.value.trim()) {
-                field.classList.add('is-invalid');
+            if (field.type === 'hidden' || field.disabled) {
+                return;
+            }
+            const value = field.type === 'checkbox' ? field.checked : field.value.trim();
+            const fieldIsValid = field.type === 'checkbox'
+                ? value
+                : value && field.checkValidity();
+
+            setFieldValidity(field, Boolean(fieldIsValid));
+            if (!fieldIsValid) {
                 isValid = false;
-            } else {
-                field.classList.add('is-valid');
             }
         });
 
-        // Special validation for step 2 - email format
-        if (currentStep === 2) {
-            const emailField = document.getElementById('email');
-            const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-            
-            if (emailField.value && !emailPattern.test(emailField.value)) {
-                emailField.classList.remove('is-valid');
-                emailField.classList.add('is-invalid');
-                isValid = false;
-            }
+        if (termsPanel && termsField && currentStep === totalSteps) {
+            termsPanel.classList.toggle('is-invalid', !termsField.checked);
         }
 
-        // Scroll to first invalid field if any
+        setStepValidationMessage(!isValid);
+
         if (!isValid) {
             const firstInvalid = currentFormStep.querySelector('.is-invalid');
             if (firstInvalid) {
-                firstInvalid.scrollIntoView({ 
-                    behavior: 'smooth', 
-                    block: 'center'
-                });
                 firstInvalid.focus();
+                firstInvalid.scrollIntoView({ behavior: 'smooth', block: 'center' });
             }
         }
 
@@ -981,105 +965,110 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     function validateFinalStep() {
-        const password = document.getElementById('password').value;
-        const confirmPassword = document.getElementById('c_password').value;
-        const terms = document.getElementById('terms').checked;
-        const passwordField = document.getElementById('c_password');
-        const termsField = document.getElementById('terms');
-        
-        let isValid = true;
-
-        // Password match validation
-        if (password !== confirmPassword) {
-            passwordField.classList.remove('is-valid');
-            passwordField.classList.add('is-invalid');
-            isValid = false;
-        } else if (confirmPassword) {
-            passwordField.classList.remove('is-invalid');
-            passwordField.classList.add('is-valid');
+        const isCurrentStepValid = validateCurrentStep();
+        if (!isCurrentStepValid) {
+            return false;
         }
 
-        // Terms validation
-        if (!terms) {
-            // Visual indication for terms checkbox
-            const termsLabel = document.querySelector('label[for="terms"]');
-            termsLabel.style.color = 'var(--accent-danger)';
-            isValid = false;
-        } else {
-            const termsLabel = document.querySelector('label[for="terms"]');
-            termsLabel.style.color = '';
+        if (passwordField && confirmPasswordField && passwordField.value !== confirmPasswordField.value) {
+            setFieldValidity(confirmPasswordField, false);
+            updatePasswordMatchStatus();
+            confirmPasswordField.focus();
+            return false;
         }
 
-        return isValid;
+        return true;
     }
 
-    // Real-time validation for all inputs
+    function submitForm() {
+        isSubmitting = true;
+        nextBtn.disabled = true;
+        prevBtn.disabled = true;
+        nextBtn.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Processing...';
+        form.submit();
+    }
+
+    function updatePasswordMatchStatus() {
+        if (!passwordField || !confirmPasswordField || !passwordMatchStatus) {
+            return;
+        }
+
+        const password = passwordField.value;
+        const confirmPassword = confirmPasswordField.value;
+
+        if (!confirmPassword) {
+            passwordMatchStatus.textContent = '';
+            passwordMatchStatus.className = 'password-match-status';
+            return;
+        }
+
+        if (password === confirmPassword) {
+            passwordMatchStatus.textContent = 'Passwords match.';
+            passwordMatchStatus.className = 'password-match-status match';
+            setFieldValidity(confirmPasswordField, true);
+        } else {
+            passwordMatchStatus.textContent = 'Passwords do not match yet.';
+            passwordMatchStatus.className = 'password-match-status mismatch';
+        }
+    }
+
     form.addEventListener('input', function(e) {
         const field = e.target;
-        
-        if (field.hasAttribute('required')) {
-            // Remove error styling when user starts typing
-            field.classList.remove('is-invalid');
+        if (!field.name) {
+            return;
+        }
 
-            // Add success styling for valid fields
-            if (field.checkValidity() && field.value.trim()) {
-                field.classList.add('is-valid');
-            } else {
-                field.classList.remove('is-valid');
+        if (field.id === 'firstname' || field.id === 'lastname') {
+            field.value = field.value.replace(/[^a-zA-Z\s]/g, '');
+        }
+
+        if (field.id === 'phone') {
+            field.value = field.value.replace(/\D/g, '').slice(0, 15);
+        }
+
+        if (field.type === 'checkbox') {
+            setFieldValidity(field, field.checked);
+            if (termsPanel && field === termsField) {
+                termsPanel.classList.toggle('is-invalid', !field.checked);
+            }
+        } else if (field.value.trim()) {
+            setFieldValidity(field, field.checkValidity());
+        }
+
+        if (!field.classList.contains('is-invalid')) {
+            setStepValidationMessage(false);
+        }
+
+        if (field === passwordField || field === confirmPasswordField) {
+            updatePasswordMatchStatus();
+        }
+    });
+
+    form.addEventListener('change', function(e) {
+        const field = e.target;
+        if (!field.name) {
+            return;
+        }
+
+        if (field.tagName === 'SELECT') {
+            setFieldValidity(field, Boolean(field.value.trim()) && field.checkValidity());
+            if (!field.classList.contains('is-invalid')) {
+                setStepValidationMessage(false);
             }
         }
     });
 
-    // Password confirmation real-time validation
-    document.getElementById('c_password').addEventListener('input', function() {
-        const password = document.getElementById('password').value;
-        const confirmPassword = this.value;
-        
-        this.classList.remove('is-invalid');
-
-        if (confirmPassword && password === confirmPassword) {
-            this.classList.add('is-valid');
-        } else if (confirmPassword) {
-            this.classList.remove('is-valid');
-        }
-    });
-
-    // Terms checkbox styling fix
-    document.getElementById('terms').addEventListener('change', function() {
-        const termsLabel = document.querySelector('label[for="terms"]');
-        termsLabel.style.color = '';
-    });
-
-    // Prevent form submission on Enter key except on last step
     form.addEventListener('keydown', function(e) {
-        if (e.key === 'Enter' && currentStep < totalSteps) {
+        if (e.key === 'Enter' && currentStep < totalSteps && e.target.tagName !== 'TEXTAREA') {
             e.preventDefault();
             nextBtn.click();
         }
     });
 
-    // Age validation for date of birth
-    document.getElementById('dob').addEventListener('change', function() {
-        const birthDate = new Date(this.value);
-        const today = new Date();
-        const age = today.getFullYear() - birthDate.getFullYear();
-        const monthDiff = today.getMonth() - birthDate.getMonth();
-        
-        if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthDate.getDate())) {
-            age--;
-        }
-        
-        if (age < 13 || age > 100) {
-            this.classList.add('is-invalid');
-            this.setCustomValidity('Age must be between 13 and 100 years');
-        } else {
-            this.classList.remove('is-invalid');
-            this.setCustomValidity('');
-            if (this.value) {
-                this.classList.add('is-valid');
-            }
-        }
-    });
+    const activeStepInvalidField = document.querySelector('.form-step.active .is-invalid');
+    if (activeStepInvalidField) {
+        activeStepInvalidField.focus();
+    }
 });
 </script>
 {% endblock %}

@@ -7,11 +7,26 @@
     <div class="row mb-4" data-aos="fade-up">
         <div class="col-12">
             <div class="welcome-header">
-                <h1 class="gradient-text mb-2">Welcome Admin!</h1>
+                <h1 class="gradient-text mb-2">Welcome, {% firstof admin.get_full_name admin.username "Admin" %}!</h1>
                 <p class="text-secondary fs-5">Manage your fitness center operations from this dashboard</p>
             </div>
         </div>
     </div>
+
+    {% if messages %}
+    <div class="row mb-4" data-aos="fade-up" data-aos-delay="80">
+        <div class="col-12">
+            {% for message in messages %}
+            <div class="alert admin-portal-alert {% if 'success' in message.tags %}alert-success{% elif 'warning' in message.tags %}alert-warning{% elif 'error' in message.tags %}alert-danger{% else %}alert-info{% endif %}">
+                <div class="d-flex align-items-start gap-3">
+                    <i class="fas {% if 'success' in message.tags %}fa-check-circle{% elif 'warning' in message.tags %}fa-exclamation-triangle{% elif 'error' in message.tags %}fa-times-circle{% else %}fa-info-circle{% endif %} mt-1"></i>
+                    <div>{{ message }}</div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    {% endif %}
 
     <!-- Dashboard Cards -->
     <div class="row g-4">
@@ -78,6 +93,23 @@
                 </div>
             </a>
         </div>
+
+        <div class="col-lg-3 col-md-6" data-aos="fade-up" data-aos-delay="500">
+            <a href="{% url 'add_exercise' %}" class="dashboard-card">
+                <div class="card-icon bg-red">
+                    <i class="fas fa-dumbbell fs-3 text-white"></i>
+                </div>
+                <div class="card-content">
+                    <h4 class="card-title">Add Exercise</h4>
+                    <p class="card-subtitle">Create exercise records with image upload and preview</p>
+                </div>
+                <div class="card-overlay">
+                    <i class="fas fa-arrow-right"></i>
+                </div>
+            </a>
+        </div>
+
+        
     </div>
 
     <!-- Statistics Section -->
@@ -89,31 +121,254 @@
                     <div class="col-md-3 text-center">
                         <div class="stat-item">
                             <i class="fas fa-users fs-1 text-primary mb-2"></i>
-                            <h4 class="text-white">Total Members</h4>
+                            <h4 class="text-white">{{ total_members }}</h4>
                             <p class="text-secondary">Active gym members</p>
                         </div>
                     </div>
                     <div class="col-md-3 text-center">
                         <div class="stat-item">
                             <i class="fas fa-calendar-check fs-1 text-success mb-2"></i>
-                            <h4 class="text-white">Today's Attendance</h4>
-                            <p class="text-secondary">Members checked in</p>
+                            <h4 class="text-white">{{ present_today }}</h4>
+                            <p class="text-secondary">Present today ({{ today }})</p>
                         </div>
                     </div>
                     <div class="col-md-3 text-center">
                         <div class="stat-item">
                             <i class="fas fa-user-plus fs-1 text-warning mb-2"></i>
-                            <h4 class="text-white">New This Month</h4>
-                            <p class="text-secondary">Recent registrations</p>
+                            <h4 class="text-white">{{ monthly_members }}</h4>
+                            <p class="text-secondary">New registrations this month</p>
                         </div>
                     </div>
                     <div class="col-md-3 text-center">
                         <div class="stat-item">
                             <i class="fas fa-chart-line fs-1 text-info mb-2"></i>
-                            <h4 class="text-white">Growth Rate</h4>
-                            <p class="text-secondary">Monthly progress</p>
+                            <h4 class="text-white">{% if growth_rate >= 0 %}+{% endif %}{{ growth_rate }}%</h4>
+                            <p class="text-secondary">Monthly growth rate</p>
                         </div>
                     </div>
+                </div>
+                <div class="row g-4 mt-3">
+                    <div class="col-md-3 text-center">
+                        <div class="stat-item">
+                            <i class="fas fa-user-check fs-1 text-success mb-2"></i>
+                            <h4 class="text-white">{{ active_members }}</h4>
+                            <p class="text-secondary">Active members (attended)</p>
+                        </div>
+                    </div>
+                    <div class="col-md-3 text-center">
+                        <div class="stat-item">
+                            <i class="fas fa-times-circle fs-1 text-danger mb-2"></i>
+                            <h4 class="text-white">{{ absent_today }}</h4>
+                            <p class="text-secondary">Absent today</p>
+                        </div>
+                    </div>
+                    <div class="col-md-3 text-center">
+                        <div class="stat-item">
+                            <i class="fas fa-shield-alt fs-1 text-secondary mb-2"></i>
+                            <h4 class="text-white">{{ total_staff }}</h4>
+                            <p class="text-secondary">Admin accounts</p>
+                        </div>
+                    </div>
+                    <div class="col-md-3 text-center">
+                        <div class="stat-item">
+                            <i class="fas fa-calendar-alt fs-1 text-purple mb-2"></i>
+                            <h4 class="text-white">{{ today }}</h4>
+                            <p class="text-secondary">Today's date</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    
+
+    <!-- Membership Payment Review -->
+    <div class="row mt-5" id="membership-payment-review">
+        <div class="col-12" data-aos="fade-up">
+            <div class="glass-card p-4 payment-review-section">
+                <div class="section-heading d-flex flex-column flex-lg-row align-items-lg-center justify-content-between gap-3 mb-4">
+                    <div>
+                        <h3 class="gradient-text mb-2">Membership Payment Review</h3>
+                        <p class="text-secondary mb-0">Review manual UPI payment proofs, verify screenshots, and activate memberships without leaving the admin portal.</p>
+                    </div>
+                </div>
+
+                <div class="row g-4 mb-4">
+                    <div class="col-lg-3 col-md-6">
+                        <div class="payment-summary-card pending">
+                            <span class="summary-label">Pending Verification</span>
+                            <h3>{{ pending_payment_count }}</h3>
+                            <p>Payment submissions waiting for action</p>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-md-6">
+                        <div class="payment-summary-card approved">
+                            <span class="summary-label">Approved Payments</span>
+                            <h3>{{ approved_payment_count }}</h3>
+                            <p>Membership payments verified successfully</p>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-md-6">
+                        <div class="payment-summary-card rejected">
+                            <span class="summary-label">Rejected Payments</span>
+                            <h3>{{ rejected_payment_count }}</h3>
+                            <p>Submissions that need member follow-up</p>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-md-6">
+                        <div class="payment-summary-card active">
+                            <span class="summary-label">Active Memberships</span>
+                            <h3>{{ active_membership_count }}</h3>
+                            <p>Currently active paid memberships</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="section-heading d-flex align-items-center justify-content-between gap-3 mb-4">
+                    <div>
+                        <h4 class="text-white mb-1">Pending Payment Queue</h4>
+                        <p class="text-secondary mb-0">Approve or reject the latest membership payment submissions from this dashboard.</p>
+                    </div>
+                    <span class="queue-count-badge">{{ pending_payment_count }} pending</span>
+                </div>
+
+                <div class="row g-4">
+                    {% for proof in pending_membership_payments %}
+                    <div class="col-xl-6">
+                        <div class="payment-proof-card">
+                            <div class="payment-proof-header">
+                                <div>
+                                    <h5 class="text-white mb-1">{{ proof.user.username }}</h5>
+                                    <p class="text-secondary mb-0">{{ proof.user.email|default:"No email available" }}</p>
+                                </div>
+                                <span class="status-pill {{ proof.payment_status_badge_class }}">{{ proof.get_payment_status_display }}</span>
+                            </div>
+
+                            <div class="payment-proof-grid">
+                                <div class="proof-preview-panel">
+                                    <a href="{{ proof.screenshot.url }}" target="_blank" rel="noopener noreferrer" class="proof-preview-link">
+                                        <img src="{{ proof.screenshot.url }}" alt="Payment proof for {{ proof.user.username }}" class="proof-preview-image">
+                                        <span class="proof-preview-overlay">
+                                            <i class="fas fa-expand-alt me-2"></i>Open Screenshot
+                                        </span>
+                                    </a>
+                                </div>
+
+                                <div class="proof-details-panel">
+                                    <div class="detail-row">
+                                        <span class="detail-label">Plan</span>
+                                        <span class="detail-value">{{ proof.membership.plan_name }}</span>
+                                    </div>
+                                    <div class="detail-row">
+                                        <span class="detail-label">Amount</span>
+                                        <span class="detail-value">Rs {{ proof.membership.amount|floatformat:2 }}</span>
+                                    </div>
+                                    <div class="detail-row">
+                                        <span class="detail-label">Duration</span>
+                                        <span class="detail-value">{{ proof.membership.duration }} days</span>
+                                    </div>
+                                    <div class="detail-row">
+                                        <span class="detail-label">UTR Number</span>
+                                        <span class="detail-value text-break">{{ proof.utr_number }}</span>
+                                    </div>
+                                    <div class="detail-row">
+                                        <span class="detail-label">Uploaded</span>
+                                        <span class="detail-value">{{ proof.uploaded_at|date:"d M Y, h:i A" }}</span>
+                                    </div>
+                                    <div class="detail-row">
+                                        <span class="detail-label">Membership Status</span>
+                                        <span class="status-pill {{ proof.membership.membership_status_badge_class }}">{{ proof.membership.get_membership_status_display }}</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <form method="post" class="verification-form mt-4">
+                                {% csrf_token %}
+                                <input type="hidden" name="portal_action" value="review_membership_payment">
+                                <input type="hidden" name="payment_id" value="{{ proof.id }}">
+
+                                <label for="admin-note-{{ proof.id }}" class="form-label text-white fw-semibold">Admin Note</label>
+                                <textarea id="admin-note-{{ proof.id }}" name="admin_note" rows="3" class="form-control admin-note-field" placeholder="Add a verification note or a rejection reason for the member...">{{ proof.admin_note }}</textarea>
+
+                                <div class="verification-actions">
+                                    <button type="submit" name="payment_decision" value="approve" class="btn btn-primary approval-btn">
+                                        <i class="fas fa-check-circle me-2"></i>Approve Payment
+                                    </button>
+                                    <button type="submit" name="payment_decision" value="reject" class="btn btn-danger rejection-btn">
+                                        <i class="fas fa-times-circle me-2"></i>Reject Payment
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                    {% empty %}
+                    <div class="col-12">
+                        <div class="empty-payment-state">
+                            <div class="empty-icon">
+                                <i class="fas fa-circle-check"></i>
+                            </div>
+                            <h4 class="text-white mb-2">No Pending Membership Payments</h4>
+                            <p class="text-secondary mb-0">All submitted membership payments have been reviewed. New manual UPI submissions will appear here automatically.</p>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+
+                <div class="section-heading d-flex align-items-center justify-content-between gap-3 mt-5 mb-4">
+                    <div>
+                        <h4 class="text-white mb-1">Recent Payment Activity</h4>
+                        <p class="text-secondary mb-0">A quick snapshot of the latest membership payment submissions and verification outcomes.</p>
+                    </div>
+                </div>
+
+                <div class="table-responsive payment-history-table-wrap">
+                    <table class="table payment-history-table align-middle mb-0">
+                        <thead>
+                            <tr>
+                                <th>Member</th>
+                                <th>Plan</th>
+                                <th>UTR</th>
+                                <th>Proof</th>
+                                <th>Payment</th>
+                                <th>Membership</th>
+                                <th>Uploaded</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for proof in recent_membership_payments %}
+                            <tr>
+                                <td>
+                                    <div class="table-member-cell">
+                                        <strong class="text-white d-block">{{ proof.user.username }}</strong>
+                                        <small class="text-secondary">{{ proof.user.email|default:"-" }}</small>
+                                    </div>
+                                </td>
+                                <td>
+                                    <strong class="text-white d-block">{{ proof.membership.plan_name }}</strong>
+                                    <small class="text-secondary">Rs {{ proof.membership.amount|floatformat:2 }}</small>
+                                </td>
+                                <td class="text-white text-break">{{ proof.utr_number }}</td>
+                                <td>
+                                    <a href="{{ proof.screenshot.url }}" target="_blank" rel="noopener noreferrer" class="history-proof-link">
+                                        <img src="{{ proof.screenshot.url }}" alt="Payment proof thumbnail" class="history-proof-thumb">
+                                    </a>
+                                </td>
+                                <td>
+                                    <span class="status-pill {{ proof.payment_status_badge_class }}">{{ proof.get_payment_status_display }}</span>
+                                </td>
+                                <td>
+                                    <span class="status-pill {{ proof.membership.membership_status_badge_class }}">{{ proof.membership.get_membership_status_display }}</span>
+                                </td>
+                                <td class="text-secondary">{{ proof.uploaded_at|date:"d M Y" }}</td>
+                            </tr>
+                            {% empty %}
+                            <tr>
+                                <td colspan="7" class="text-center text-secondary py-4">No membership payment records yet.</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </div>
@@ -227,6 +482,557 @@
         backdrop-filter: var(--blur-md);
     }
 
+    .admin-portal-alert {
+        border-radius: 1rem;
+        padding: 1rem 1.25rem;
+        box-shadow: var(--shadow-sm);
+    }
+
+    .alert-warning {
+        border-color: var(--accent-warning);
+        background: rgba(255, 175, 69, 0.12);
+        color: #ffe7bf;
+    }
+
+    .alert-info {
+        border-color: rgba(116, 192, 252, 0.6);
+        background: rgba(116, 192, 252, 0.12);
+        color: #d5efff;
+    }
+
+    .payment-review-section {
+        background: var(--bg-card);
+        backdrop-filter: var(--blur-md);
+    }
+
+    .section-heading h4 {
+        font-weight: 700;
+    }
+
+    .admin-review-link {
+        border-radius: 999px;
+        border-color: rgba(255, 255, 255, 0.16);
+        color: var(--text-primary);
+        padding: 0.8rem 1.3rem;
+        font-weight: 600;
+    }
+
+    .admin-review-link:hover {
+        border-color: rgba(255, 59, 59, 0.4);
+        background: rgba(255, 59, 59, 0.1);
+        color: var(--text-primary);
+    }
+
+    .payment-summary-card {
+        height: 100%;
+        padding: 1.4rem;
+        border-radius: 1.25rem;
+        border: 1px solid var(--border-color);
+        background: var(--bg-secondary);
+        box-shadow: var(--shadow-sm);
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .payment-summary-card:hover {
+        transform: translateY(-4px);
+        box-shadow: var(--shadow-md);
+    }
+
+    .payment-summary-card h3 {
+        color: var(--text-primary);
+        margin: 0.85rem 0 0.45rem;
+        font-size: 2rem;
+    }
+
+    .payment-summary-card p,
+    .summary-label {
+        margin: 0;
+        color: var(--text-secondary);
+    }
+
+    .summary-label {
+        display: inline-flex;
+        align-items: center;
+        padding: 0.38rem 0.75rem;
+        border-radius: 999px;
+        font-size: 0.8rem;
+        font-weight: 700;
+        letter-spacing: 0.03em;
+        text-transform: uppercase;
+    }
+
+    .payment-summary-card.pending .summary-label {
+        background: rgba(255, 175, 69, 0.18);
+        color: #ffce86;
+    }
+
+    .payment-summary-card.approved .summary-label,
+    .payment-summary-card.active .summary-label {
+        background: rgba(49, 208, 123, 0.16);
+        color: #87f0b4;
+    }
+
+    .payment-summary-card.rejected .summary-label {
+        background: rgba(255, 59, 59, 0.18);
+        color: #ffb5b5;
+    }
+
+    .exercise-library-admin-section {
+        background: var(--bg-card);
+        backdrop-filter: var(--blur-md);
+    }
+
+    .exercise-summary-card {
+        height: 100%;
+        padding: 1.4rem;
+        border-radius: 1.25rem;
+        border: 1px solid var(--border-color);
+        background: var(--bg-secondary);
+        box-shadow: var(--shadow-sm);
+    }
+
+    .exercise-summary-card h3 {
+        color: var(--text-primary);
+        margin: 0.85rem 0 0.45rem;
+        font-size: 2rem;
+    }
+
+    .exercise-summary-card p {
+        margin: 0;
+        color: var(--text-secondary);
+    }
+
+    .exercise-admin-filter-panel,
+    .exercise-admin-tree,
+    .exercise-admin-accordion-item {
+        border-radius: 1.25rem;
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        background: rgba(255, 255, 255, 0.03);
+        box-shadow: var(--shadow-sm);
+    }
+
+    .exercise-admin-filter-panel,
+    .exercise-admin-tree {
+        padding: 1.4rem;
+    }
+
+    .exercise-admin-chip-list {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.75rem;
+    }
+
+    .exercise-admin-chip {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 0.75rem 1rem;
+        border-radius: 999px;
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        background: rgba(255, 255, 255, 0.03);
+        color: var(--text-secondary);
+        text-decoration: none;
+        transition: transform 0.3s ease, border-color 0.3s ease, color 0.3s ease, background 0.3s ease;
+    }
+
+    .exercise-admin-chip:hover,
+    .exercise-admin-chip.active {
+        color: #ffffff;
+        border-color: rgba(255, 59, 59, 0.28);
+        background: rgba(255, 59, 59, 0.12);
+        transform: translateY(-2px);
+    }
+
+    .exercise-admin-chip-count,
+    .exercise-admin-tree-link span:last-child {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-width: 34px;
+        height: 34px;
+        padding: 0 0.7rem;
+        border-radius: 999px;
+        background: rgba(255, 255, 255, 0.08);
+        color: #ffd5d5;
+        font-size: 0.82rem;
+        font-weight: 700;
+    }
+
+    .exercise-admin-tree-list {
+        display: flex;
+        flex-direction: column;
+        gap: 0.75rem;
+    }
+
+    .exercise-admin-tree-link {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 0.75rem;
+        padding: 0.95rem 1rem;
+        border-radius: 1rem;
+        text-decoration: none;
+        color: var(--text-secondary);
+        border: 1px solid rgba(255, 255, 255, 0.05);
+        background: rgba(255, 255, 255, 0.03);
+        transition: transform 0.3s ease, border-color 0.3s ease, color 0.3s ease;
+    }
+
+    .exercise-admin-tree-link:hover,
+    .exercise-admin-tree-link.active {
+        color: var(--text-primary);
+        border-color: rgba(255, 59, 59, 0.24);
+        background: rgba(255, 59, 59, 0.1);
+        transform: translateX(6px);
+    }
+
+    .exercise-admin-accordion {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+    }
+
+    .exercise-admin-accordion-item {
+        overflow: hidden;
+    }
+
+    .exercise-admin-accordion-item .accordion-button {
+        background: transparent;
+        color: var(--text-primary);
+        box-shadow: none;
+        padding: 1.2rem 1.4rem;
+        border: 0;
+        font-family: var(--font-heading);
+        font-size: 1.1rem;
+    }
+
+    .exercise-admin-accordion-item .accordion-button:not(.collapsed) {
+        background: rgba(255, 59, 59, 0.08);
+    }
+
+    .exercise-admin-accordion-item .accordion-button::after {
+        filter: invert(1) brightness(1.5);
+    }
+
+    .accordion-header-content {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 1rem;
+        width: 100%;
+    }
+
+    .accordion-count {
+        font-size: 0.82rem;
+        font-weight: 700;
+        color: #ffbdbd;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+    }
+
+    .exercise-admin-accordion-item .accordion-body {
+        padding: 1.4rem;
+        background: rgba(0, 0, 0, 0.12);
+    }
+
+    .exercise-admin-card {
+        height: 100%;
+        border-radius: 1.25rem;
+        overflow: hidden;
+        background: rgba(255, 255, 255, 0.03);
+        border: 1px solid rgba(255, 255, 255, 0.06);
+        transition: transform 0.35s ease, border-color 0.35s ease, box-shadow 0.35s ease;
+    }
+
+    .exercise-admin-card:hover {
+        transform: translateY(-6px);
+        border-color: rgba(255, 59, 59, 0.22);
+        box-shadow: var(--shadow-md);
+    }
+
+    .exercise-admin-card-image-wrap {
+        aspect-ratio: 16 / 10;
+        overflow: hidden;
+        background:
+            radial-gradient(circle at top left, rgba(255, 59, 59, 0.18), transparent 35%),
+            linear-gradient(180deg, rgba(255, 255, 255, 0.04), rgba(0, 0, 0, 0.22));
+    }
+
+    .exercise-admin-card-image {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        transition: transform 0.4s ease;
+    }
+
+    .exercise-admin-card:hover .exercise-admin-card-image {
+        transform: scale(1.05);
+    }
+
+    .exercise-admin-card-body {
+        padding: 1.25rem;
+    }
+
+    .exercise-admin-card-target {
+        display: inline-flex;
+        align-items: center;
+        padding: 0.35rem 0.8rem;
+        border-radius: 999px;
+        background: rgba(255, 59, 59, 0.12);
+        border: 1px solid rgba(255, 59, 59, 0.2);
+        color: #ffb7b7;
+        font-size: 0.78rem;
+        font-weight: 700;
+        letter-spacing: 0.05em;
+        text-transform: uppercase;
+        margin-bottom: 0.9rem;
+    }
+
+    .exercise-admin-card-instructions {
+        color: var(--text-secondary);
+        line-height: 1.7;
+        display: -webkit-box;
+        -webkit-line-clamp: 3;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+    }
+
+    .exercise-admin-edit-link {
+        color: #ffd0d0;
+        font-weight: 700;
+        text-decoration: none;
+    }
+
+    .exercise-admin-edit-link:hover {
+        color: #ffffff;
+    }
+
+    .queue-count-badge {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        padding: 0.5rem 0.95rem;
+        border-radius: 999px;
+        background: rgba(255, 59, 59, 0.14);
+        color: #ffc1c1;
+        font-weight: 700;
+        border: 1px solid rgba(255, 59, 59, 0.22);
+    }
+
+    .payment-proof-card {
+        height: 100%;
+        padding: 1.5rem;
+        border-radius: 1.35rem;
+        background: var(--bg-secondary);
+        border: 1px solid var(--border-color);
+        box-shadow: var(--shadow-sm);
+    }
+
+    .payment-proof-header {
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        gap: 1rem;
+        margin-bottom: 1.25rem;
+    }
+
+    .payment-proof-grid {
+        display: grid;
+        grid-template-columns: minmax(190px, 220px) minmax(0, 1fr);
+        gap: 1.25rem;
+        align-items: start;
+    }
+
+    .proof-preview-panel {
+        position: relative;
+    }
+
+    .proof-preview-link {
+        display: block;
+        position: relative;
+        border-radius: 1rem;
+        overflow: hidden;
+        text-decoration: none;
+    }
+
+    .proof-preview-image {
+        width: 100%;
+        height: 220px;
+        object-fit: cover;
+        border-radius: 1rem;
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        transition: transform 0.35s ease;
+    }
+
+    .proof-preview-overlay {
+        position: absolute;
+        inset: auto 0 0 0;
+        padding: 0.8rem 1rem;
+        background: linear-gradient(180deg, transparent, rgba(0, 0, 0, 0.85));
+        color: #ffffff;
+        font-size: 0.9rem;
+        font-weight: 600;
+    }
+
+    .proof-preview-link:hover .proof-preview-image {
+        transform: scale(1.04);
+    }
+
+    .proof-details-panel {
+        display: flex;
+        flex-direction: column;
+        gap: 0.85rem;
+    }
+
+    .detail-row {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 1rem;
+        padding: 0.8rem 0.95rem;
+        border-radius: 0.9rem;
+        background: rgba(255, 255, 255, 0.03);
+    }
+
+    .detail-label {
+        color: var(--text-secondary);
+        font-size: 0.92rem;
+    }
+
+    .detail-value {
+        color: var(--text-primary);
+        font-weight: 600;
+        text-align: right;
+    }
+
+    .status-pill {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        padding: 0.45rem 0.85rem;
+        border-radius: 999px;
+        border: 1px solid transparent;
+        font-size: 0.78rem;
+        font-weight: 700;
+        letter-spacing: 0.04em;
+        text-transform: uppercase;
+        white-space: nowrap;
+    }
+
+    .status-pill.status-pending {
+        background: rgba(255, 175, 69, 0.16);
+        border-color: rgba(255, 175, 69, 0.32);
+        color: #ffd18d;
+    }
+
+    .status-pill.status-approved {
+        background: rgba(49, 208, 123, 0.16);
+        border-color: rgba(49, 208, 123, 0.3);
+        color: #8ff3ba;
+    }
+
+    .status-pill.status-rejected {
+        background: rgba(255, 59, 59, 0.16);
+        border-color: rgba(255, 59, 59, 0.3);
+        color: #ffc0c0;
+    }
+
+    .status-pill.status-expired,
+    .status-pill.status-neutral {
+        background: rgba(255, 255, 255, 0.1);
+        border-color: rgba(255, 255, 255, 0.16);
+        color: #efefef;
+    }
+
+    .verification-form .form-label {
+        margin-bottom: 0.65rem;
+    }
+
+    .admin-note-field {
+        min-height: 110px;
+        resize: vertical;
+    }
+
+    .verification-actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.85rem;
+        margin-top: 1rem;
+    }
+
+    .approval-btn,
+    .rejection-btn {
+        min-width: 190px;
+    }
+
+    .empty-payment-state {
+        padding: 2.5rem 1.5rem;
+        border-radius: 1.25rem;
+        text-align: center;
+        background: rgba(255, 255, 255, 0.03);
+        border: 1px dashed rgba(255, 255, 255, 0.12);
+    }
+
+    .empty-icon {
+        width: 72px;
+        height: 72px;
+        margin: 0 auto 1rem;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: rgba(49, 208, 123, 0.14);
+        color: #95f5bd;
+        font-size: 1.7rem;
+    }
+
+    .payment-history-table-wrap {
+        border-radius: 1.15rem;
+        overflow: hidden;
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        background: rgba(255, 255, 255, 0.02);
+    }
+
+    .payment-history-table {
+        color: var(--text-primary);
+        margin-bottom: 0;
+    }
+
+    .payment-history-table thead th {
+        background: rgba(255, 255, 255, 0.04);
+        color: #ffb9b9;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+        border-top: 0;
+        font-weight: 700;
+        padding: 1rem 1.1rem;
+        white-space: nowrap;
+    }
+
+    .payment-history-table tbody td {
+        padding: 1rem 1.1rem;
+        border-color: rgba(255, 255, 255, 0.05);
+        vertical-align: middle;
+        background: transparent;
+    }
+
+    .payment-history-table tbody tr:hover td {
+        background: rgba(255, 255, 255, 0.03);
+    }
+
+    .history-proof-link {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .history-proof-thumb {
+        width: 58px;
+        height: 58px;
+        object-fit: cover;
+        border-radius: 0.9rem;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
     .activity-icon {
         width: 40px;
         height: 40px;
@@ -242,6 +1048,35 @@
         
         .dashboard-card {
             margin-bottom: 1rem;
+        }
+
+        .payment-proof-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .payment-proof-header,
+        .detail-row,
+        .section-heading {
+            flex-direction: column;
+            align-items: flex-start;
+        }
+
+        .accordion-header-content {
+            align-items: flex-start;
+            flex-direction: column;
+        }
+
+        .detail-value {
+            text-align: left;
+        }
+
+        .verification-actions {
+            flex-direction: column;
+        }
+
+        .approval-btn,
+        .rejection-btn {
+            width: 100%;
         }
     }
 </style>

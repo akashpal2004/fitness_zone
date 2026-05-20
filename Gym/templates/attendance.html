@@ -7,7 +7,7 @@
 <style>
     /* Attendance Specific Styles */
     .attendance-container {
-        max-width: 800px;
+        max-width: 1200px;
         margin: 0 auto;
     }
 
@@ -289,6 +289,147 @@
     .input-group-enhanced:nth-child(4) { animation-delay: 0.4s; }
     .input-group-enhanced:nth-child(5) { animation-delay: 0.5s; }
 
+    /* Attendance Table Styles */
+    .attendance-table-container {
+        background: var(--bg-card);
+        backdrop-filter: var(--blur-md);
+        border: 1px solid var(--border-color);
+        border-radius: 2rem;
+        padding: 2rem;
+        position: relative;
+        overflow: hidden;
+        margin-bottom: 2rem;
+    }
+
+    .attendance-table-container::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 4px;
+        background: var(--primary-gradient);
+    }
+
+    .attendance-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 1rem;
+    }
+
+    .attendance-table thead {
+        background: var(--bg-secondary);
+    }
+
+    .attendance-table th {
+        padding: 1rem;
+        text-align: left;
+        font-weight: 600;
+        color: var(--accent-primary);
+        border-bottom: 2px solid var(--border-color);
+        font-size: 0.9rem;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+
+    .attendance-table td {
+        padding: 1rem;
+        border-bottom: 1px solid var(--border-color);
+        color: var(--text-primary);
+    }
+
+    .attendance-table tbody tr {
+        transition: background 0.2s ease;
+    }
+
+    .attendance-table tbody tr:hover {
+        background: var(--bg-secondary);
+    }
+
+    .member-name {
+        font-weight: 500;
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+    }
+
+    .member-avatar {
+        width: 40px;
+        height: 40px;
+        background: var(--primary-gradient);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-weight: 600;
+        font-size: 0.9rem;
+    }
+
+    .attendance-status {
+        display: flex;
+        gap: 0.5rem;
+    }
+
+    .status-toggle {
+        flex: 1;
+        padding: 0.5rem;
+        border: 2px solid var(--border-color);
+        border-radius: 0.75rem;
+        background: transparent;
+        color: var(--text-secondary);
+        cursor: pointer;
+        font-weight: 600;
+        transition: all 0.2s ease;
+    }
+
+    .status-toggle:hover {
+        border-color: var(--accent-primary);
+    }
+
+    .status-toggle.active {
+        background: var(--accent-primary);
+        color: white;
+        border-color: var(--accent-primary);
+    }
+
+    .select-all-row {
+        background: var(--bg-secondary);
+        font-weight: 600;
+    }
+
+    .attendance-form {
+        text-align: center;
+        margin-top: 2rem;
+        padding-top: 2rem;
+        border-top: 1px solid var(--border-color);
+    }
+
+    .quick-actions {
+        display: flex;
+        gap: 1rem;
+        justify-content: center;
+        margin-bottom: 2rem;
+        flex-wrap: wrap;
+    }
+
+    .btn-quick {
+        padding: 0.75rem 1.5rem;
+        border: 2px solid var(--border-color);
+        background: transparent;
+        color: var(--accent-primary);
+        border-radius: 1rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.2s ease;
+    }
+
+    .btn-quick:hover {
+        background: var(--accent-primary);
+        color: white;
+        border-color: var(--accent-primary);
+    }
+
     /* Responsive Design */
     @media (max-width: 768px) {
         .attendance-container {
@@ -339,226 +480,185 @@
 <div class="attendance-container" data-aos="fade-up">
     <!-- Attendance Header -->
     <div class="attendance-header" data-aos="fade-up" data-aos-delay="100">
-        <h1 class="attendance-title">Take Attendance</h1>
-        <p class="attendance-subtitle">Mark members as present by entering their ID numbers</p>
+        <h1 class="attendance-title">Mark Attendance</h1>
+        <p class="attendance-subtitle">Mark members as present or absent for today ({{ today }})</p>
     </div>
 
-    <!-- Success Message -->
+    <!-- Success/Error Messages -->
     {% if msg %}
     <div class="alert-enhanced" role="alert" data-aos="fade-up" data-aos-delay="200">
         <i class="fas fa-check-circle alert-icon"></i>
-        {{msg}}
+        {{ msg }}
     </div>
     {% endif %}
 
-    <!-- Instructions Card -->
-    <div class="instruction-card" data-aos="fade-up" data-aos-delay="300">
-        <div class="instruction-title">
-            <i class="fas fa-info-circle"></i>
-            How to Take Attendance
-        </div>
-        <ul class="instruction-list">
-            <li>Enter the member ID numbers in the fields below</li>
-            <li>Use 0 for empty slots if fewer than 5 members are present</li>
-            <li>Click "Mark as Present" to record attendance</li>
-            <li>Each member's attendance count will be automatically updated</li>
-        </ul>
+    {% if error %}
+    <div class="alert alert-danger" role="alert" data-aos="fade-up" data-aos-delay="200">
+        <i class="fas fa-exclamation-circle me-2"></i>{{ error }}
     </div>
+    {% endif %}
 
-    <!-- Attendance Form -->
-    <div class="attendance-form" data-aos="fade-up" data-aos-delay="400">
-        <form method="post" action="/attendance">
-            {% csrf_token %}
-            
-            <div class="form-section">
-                <h3 class="form-section-title">
-                    <div class="icon-wrapper">
-                        <i class="fas fa-clipboard-check"></i>
-                    </div>
-                    Enter Member IDs
-                </h3>
-
-                <div class="attendance-grid">
-                    <div class="input-group-enhanced">
-                        <label class="input-label">Member ID #1</label>
-                        <div class="input-wrapper">
-                            <i class="fas fa-hashtag input-icon"></i>
-                            <input 
-                                type="number" 
-                                value="0" 
-                                class="form-control-enhanced" 
-                                name="1" 
-                                placeholder="Enter member ID"
-                                min="0"
-                            >
-                        </div>
-                    </div>
-
-                    <div class="input-group-enhanced">
-                        <label class="input-label">Member ID #2</label>
-                        <div class="input-wrapper">
-                            <i class="fas fa-hashtag input-icon"></i>
-                            <input 
-                                type="number" 
-                                value="0" 
-                                class="form-control-enhanced" 
-                                name="2" 
-                                placeholder="Enter member ID"
-                                min="0"
-                            >
-                        </div>
-                    </div>
-
-                    <div class="input-group-enhanced">
-                        <label class="input-label">Member ID #3</label>
-                        <div class="input-wrapper">
-                            <i class="fas fa-hashtag input-icon"></i>
-                            <input 
-                                type="number" 
-                                value="0" 
-                                class="form-control-enhanced" 
-                                name="3" 
-                                placeholder="Enter member ID"
-                                min="0"
-                            >
-                        </div>
-                    </div>
-
-                    <div class="input-group-enhanced">
-                        <label class="input-label">Member ID #4</label>
-                        <div class="input-wrapper">
-                            <i class="fas fa-hashtag input-icon"></i>
-                            <input 
-                                type="number" 
-                                value="0" 
-                                class="form-control-enhanced" 
-                                name="4" 
-                                placeholder="Enter member ID"
-                                min="0"
-                            >
-                        </div>
-                    </div>
-
-                    <div class="input-group-enhanced">
-                        <label class="input-label">Member ID #5</label>
-                        <div class="input-wrapper">
-                            <i class="fas fa-hashtag input-icon"></i>
-                            <input 
-                                type="number" 
-                                value="0" 
-                                class="form-control-enhanced" 
-                                name="5" 
-                                placeholder="Enter member ID"
-                                min="0"
-                            >
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="attendance-submit">
-                <button type="submit" class="btn-attendance">
-                    <i class="fas fa-check-double me-2"></i>
-                    Mark as Present
+    <!-- Attendance Table -->
+    <form method="post" action="{% url 'attendance' %}" id="attendanceForm" data-aos="fade-up" data-aos-delay="300">
+        {% csrf_token %}
+        
+        <div class="attendance-table-container">
+            <div class="quick-actions">
+                <button type="button" class="btn-quick" id="markAllPresent">
+                    <i class="fas fa-check me-2"></i>Mark All Present
+                </button>
+                <button type="button" class="btn-quick" id="clearAll">
+                    <i class="fas fa-times me-2"></i>Clear All
                 </button>
             </div>
-        </form>
-    </div>
+
+            <table class="attendance-table">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Member Name</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for item in members %}
+                    <tr>
+                        <td>{{ forloop.counter }}</td>
+                        <td>
+                            <div class="member-name">
+                                <div class="member-avatar">{{ item.member.first_name|first|upper }}</div>
+                                <div>
+                                    <div>{{ item.member.first_name }} {{ item.member.last_name }}</div>
+                                    <small style="color: var(--text-secondary);">@{{ item.member.username }}</small>
+                                </div>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="attendance-status">
+                                <button type="button" class="status-toggle {% if item.status == 'present' %}active{% endif %}" 
+                                        data-member-id="{{ item.member.id }}" data-status="present">
+                                    <i class="fas fa-check me-1"></i>Present
+                                </button>
+                                <button type="button" class="status-toggle {% if item.status == 'absent' %}active{% endif %}" 
+                                        data-member-id="{{ item.member.id }}" data-status="absent">
+                                    <i class="fas fa-times me-1"></i>Absent
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+
+            <div class="attendance-form">
+                <button type="submit" class="btn-attendance">
+                    <i class="fas fa-save me-2"></i>Save Attendance
+                </button>
+            </div>
+        </div>
+    </form>
 </div>
 {% endblock %}
 
 {% block extra_js %}
 <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        // Auto-focus first input
-        const firstInput = document.querySelector('.form-control-enhanced');
-        if (firstInput) {
-            firstInput.focus();
-        }
+document.addEventListener('DOMContentLoaded', function() {
+    const form = document.getElementById('attendanceForm');
+    const statusToggles = document.querySelectorAll('.status-toggle');
+    const markAllPresentBtn = document.getElementById('markAllPresent');
+    const clearAllBtn = document.getElementById('clearAll');
 
-        // Handle Enter key to move to next input
-        const inputs = document.querySelectorAll('.form-control-enhanced');
-        inputs.forEach((input, index) => {
-            input.addEventListener('keydown', function(e) {
-                if (e.key === 'Enter') {
-                    e.preventDefault();
-                    if (index < inputs.length - 1) {
-                        inputs[index + 1].focus();
-                    } else {
-                        // If it's the last input, submit the form
-                        document.querySelector('.btn-attendance').click();
-                    }
-                }
-            });
-
-            // Clear placeholder behavior
-            input.addEventListener('focus', function() {
-                if (this.value === '0') {
-                    this.value = '';
-                }
-                this.parentElement.parentElement.style.transform = 'scale(1.02)';
-            });
-
-            input.addEventListener('blur', function() {
-                if (this.value === '') {
-                    this.value = '0';
-                }
-                this.parentElement.parentElement.style.transform = 'scale(1)';
-            });
-
-            // Input validation
-            input.addEventListener('input', function() {
-                const value = parseInt(this.value);
-                if (value < 0) {
-                    this.value = '0';
-                }
-            });
-        });
-
-        // Form submission with loading state
-        const form = document.querySelector('form');
-        const submitBtn = document.querySelector('.btn-attendance');
-        const originalText = submitBtn.innerHTML;
-
-        form.addEventListener('submit', function(e) {
-            submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Processing...';
-            submitBtn.disabled = true;
-
-            // Re-enable button after 3 seconds in case of error
-            setTimeout(() => {
-                submitBtn.innerHTML = originalText;
-                submitBtn.disabled = false;
-            }, 3000);
-        });
-
-        // Enhanced hover effects
-        const inputWrappers = document.querySelectorAll('.input-wrapper');
-        inputWrappers.forEach(wrapper => {
-            const input = wrapper.querySelector('.form-control-enhanced');
-            const icon = wrapper.querySelector('.input-icon');
-
-            input.addEventListener('focus', () => {
-                icon.style.color = 'var(--accent-primary)';
-                icon.style.transform = 'translateY(-50%) scale(1.1)';
-            });
-
-            input.addEventListener('blur', () => {
-                icon.style.color = 'var(--text-secondary)';
-                icon.style.transform = 'translateY(-50%) scale(1)';
-            });
-        });
-
-        // Success message auto-hide
-        const alertElement = document.querySelector('.alert-enhanced');
-        if (alertElement) {
-            setTimeout(() => {
-                alertElement.style.opacity = '0';
-                alertElement.style.transform = 'translateY(-20px)';
-                setTimeout(() => {
-                    alertElement.remove();
-                }, 500);
-            }, 5000);
+    // Track attendance status in a map
+    const attendanceMap = new Map();
+    
+    // Initialize from existing selections
+    statusToggles.forEach(toggle => {
+        if (toggle.classList.contains('active')) {
+            const memberId = toggle.dataset.memberId;
+            const status = toggle.dataset.status;
+            attendanceMap.set(memberId, status);
         }
     });
+
+    // Handle status toggle click
+    statusToggles.forEach(toggle => {
+        toggle.addEventListener('click', function(e) {
+            e.preventDefault();
+            const memberId = this.dataset.memberId;
+            const status = this.dataset.status;
+            
+            // Find all toggles for this member
+            const memberToggles = Array.from(statusToggles).filter(t => t.dataset.memberId === memberId);
+            
+            // Remove active class from all toggles for this member
+            memberToggles.forEach(t => t.classList.remove('active'));
+            
+            // Add active class to clicked toggle
+            this.classList.add('active');
+            
+            // Update map
+            attendanceMap.set(memberId, status);
+        });
+    });
+
+    // Mark all as present
+    markAllPresentBtn.addEventListener('click', function(e) {
+        e.preventDefault();
+        statusToggles.forEach(toggle => {
+            if (toggle.dataset.status === 'present') {
+                toggle.click();
+            }
+        });
+    });
+
+    // Clear all (set to absent)
+    clearAllBtn.addEventListener('click', function(e) {
+        e.preventDefault();
+        statusToggles.forEach(toggle => {
+            if (toggle.dataset.status === 'absent') {
+                toggle.click();
+            }
+        });
+    });
+
+    // Form submission
+    form.addEventListener('submit', function(e) {
+        e.preventDefault();
+        
+        // Build attendance data
+        const attendanceData = Array.from(attendanceMap.entries()).map(([memberId, status]) => {
+            return `${memberId}:${status}`;
+        });
+
+        // Create hidden inputs for each attendance record
+        attendanceData.forEach(data => {
+            const input = document.createElement('input');
+            input.type = 'hidden';
+            input.name = 'attendance';
+            input.value = data;
+            form.appendChild(input);
+        });
+
+        // Submit form
+        const submitBtn = document.querySelector('.btn-attendance');
+        const originalText = submitBtn.innerHTML;
+        submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Saving...';
+        submitBtn.disabled = true;
+
+        form.submit();
+    });
+
+    // Auto-hide success message
+    const alertElement = document.querySelector('.alert-enhanced');
+    if (alertElement) {
+        setTimeout(() => {
+            alertElement.style.opacity = '0';
+            alertElement.style.transform = 'translateY(-20px)';
+            setTimeout(() => {
+                alertElement.remove();
+            }, 500);
+        }, 5000);
+    }
+});
 </script>
 {% endblock %}

@@ -1,0 +1,742 @@
+{% extends 'parent.html' %}
+
+{% block title %}Manual UPI Payment - fitnessZone{% endblock %}
+
+{% block extra_css %}
+<style>
+    .payment-section {
+        min-height: 100vh;
+        padding: 8rem 0 4rem;
+        background:
+            radial-gradient(circle at 15% 10%, rgba(255, 59, 59, 0.18) 0%, transparent 28%),
+            radial-gradient(circle at 85% 14%, rgba(255, 255, 255, 0.08) 0%, transparent 24%),
+            linear-gradient(180deg, #090909 0%, #0f0f0f 45%, #141414 100%);
+    }
+
+    .payment-shell {
+        max-width: 1180px;
+        margin: 0 auto;
+    }
+
+    .payment-hero {
+        text-align: center;
+        margin-bottom: 2rem;
+    }
+
+    .payment-kicker {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.55rem;
+        padding: 0.65rem 1rem;
+        border-radius: 999px;
+        background: rgba(255, 59, 59, 0.12);
+        border: 1px solid rgba(255, 59, 59, 0.22);
+        color: #ffd5d5;
+        font-size: 0.84rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.06em;
+        margin-bottom: 1rem;
+    }
+
+    .payment-title {
+        font-size: clamp(2.2rem, 4vw, 4rem);
+        margin-bottom: 0.85rem;
+    }
+
+    .payment-subtitle {
+        max-width: 760px;
+        margin: 0 auto;
+        color: var(--text-secondary);
+        font-size: 1rem;
+    }
+
+    .payment-layout {
+        display: grid;
+        grid-template-columns: 1.1fr 0.9fr;
+        gap: 1.5rem;
+        align-items: start;
+    }
+
+    .payment-panel {
+        background: linear-gradient(180deg, rgba(24, 24, 24, 0.95), rgba(12, 12, 12, 0.96));
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        border-radius: 1.8rem;
+        box-shadow: var(--shadow-lg);
+        overflow: hidden;
+    }
+
+    .payment-panel-body {
+        padding: 2rem;
+    }
+
+    .status-messages {
+        display: grid;
+        gap: 0.9rem;
+        margin-bottom: 1.2rem;
+    }
+
+    .status-message {
+        display: flex;
+        gap: 0.8rem;
+        align-items: flex-start;
+        padding: 1rem 1.1rem;
+        border-radius: 1.1rem;
+        border: 1px solid transparent;
+    }
+
+    .status-message.success {
+        background: rgba(49, 208, 123, 0.12);
+        border-color: rgba(49, 208, 123, 0.25);
+        color: #c9f6df;
+    }
+
+    .status-message.error {
+        background: rgba(255, 59, 59, 0.12);
+        border-color: rgba(255, 59, 59, 0.24);
+        color: #ffd0d0;
+    }
+
+    .status-message.warning {
+        background: rgba(255, 175, 69, 0.12);
+        border-color: rgba(255, 175, 69, 0.24);
+        color: #ffe0b3;
+    }
+
+    .status-message.info {
+        background: rgba(255, 255, 255, 0.05);
+        border-color: rgba(255, 255, 255, 0.08);
+        color: #f5f5f5;
+    }
+
+    .plan-overview {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 1rem;
+        margin-top: 1.5rem;
+    }
+
+    .overview-tile {
+        padding: 1rem 1.1rem;
+        border-radius: 1.2rem;
+        background: rgba(255, 255, 255, 0.04);
+        border: 1px solid rgba(255, 255, 255, 0.07);
+    }
+
+    .overview-label {
+        display: block;
+        font-size: 0.78rem;
+        color: var(--text-secondary);
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+        margin-bottom: 0.35rem;
+    }
+
+    .overview-value {
+        font-size: 1.15rem;
+        font-weight: 700;
+        color: #ffffff;
+    }
+
+    .member-card,
+    .instructions-card,
+    .current-status-card,
+    .proof-form-card,
+    .history-card {
+        padding: 1.5rem;
+        border-radius: 1.5rem;
+        background: rgba(255, 255, 255, 0.04);
+        border: 1px solid rgba(255, 255, 255, 0.07);
+    }
+
+    .card-stack {
+        display: grid;
+        gap: 1.2rem;
+    }
+
+    .card-title {
+        font-size: 1.25rem;
+        margin-bottom: 0.95rem;
+    }
+
+    .member-name {
+        font-size: 1.45rem;
+        font-weight: 700;
+        margin-bottom: 0.4rem;
+    }
+
+    .membership-plan-name {
+        font-size: 1.8rem;
+        font-weight: 700;
+        margin-top: 1.1rem;
+        font-family: 'Space Grotesk', sans-serif;
+    }
+
+    .muted-copy {
+        color: var(--text-secondary);
+        margin: 0;
+    }
+
+    .qr-shell {
+        border-radius: 1.4rem;
+        padding: 1.2rem;
+        background: linear-gradient(180deg, #ffffff 0%, #f4f4f4 100%);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 320px;
+        box-shadow: inset 0 0 0 1px rgba(15, 15, 15, 0.08);
+    }
+
+    .qr-shell img {
+        width: min(100%, 260px);
+        height: auto;
+        display: block;
+    }
+
+    .qr-fallback {
+        width: 260px;
+        min-height: 260px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .upi-meta {
+        margin-top: 1rem;
+        display: grid;
+        gap: 0.75rem;
+    }
+
+    .upi-meta-item {
+        padding: 0.9rem 1rem;
+        border-radius: 1rem;
+        background: rgba(255, 255, 255, 0.05);
+        border: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    .upi-meta-item strong {
+        display: block;
+        font-size: 0.8rem;
+        color: #ffb6b6;
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+        margin-bottom: 0.25rem;
+    }
+
+    .upi-deep-link {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.6rem;
+        width: 100%;
+        margin-top: 1rem;
+        padding: 0.95rem 1.1rem;
+        border-radius: 999px;
+        text-decoration: none;
+        color: white;
+        background: var(--primary-gradient);
+        font-weight: 700;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .upi-deep-link:hover {
+        color: white;
+        transform: translateY(-2px);
+        box-shadow: var(--shadow-glow);
+    }
+
+    .instruction-list {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+        display: grid;
+        gap: 0.75rem;
+    }
+
+    .instruction-list li {
+        display: flex;
+        gap: 0.8rem;
+        align-items: flex-start;
+        color: #f7f7f7;
+    }
+
+    .instruction-step {
+        width: 30px;
+        height: 30px;
+        border-radius: 50%;
+        background: rgba(255, 59, 59, 0.14);
+        border: 1px solid rgba(255, 59, 59, 0.26);
+        color: #ffffff;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+        font-weight: 700;
+    }
+
+    .status-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.45rem;
+        padding: 0.55rem 0.9rem;
+        border-radius: 999px;
+        font-size: 0.82rem;
+        font-weight: 700;
+        border: 1px solid transparent;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+    }
+
+    .status-approved {
+        background: rgba(49, 208, 123, 0.12);
+        border-color: rgba(49, 208, 123, 0.25);
+        color: #c9f6df;
+    }
+
+    .status-pending {
+        background: rgba(255, 175, 69, 0.12);
+        border-color: rgba(255, 175, 69, 0.25);
+        color: #ffe0b3;
+    }
+
+    .status-rejected {
+        background: rgba(255, 59, 59, 0.12);
+        border-color: rgba(255, 59, 59, 0.25);
+        color: #ffd0d0;
+    }
+
+    .status-expired {
+        background: rgba(255, 255, 255, 0.08);
+        border-color: rgba(255, 255, 255, 0.14);
+        color: #e4e4e4;
+    }
+
+    .proof-form {
+        display: grid;
+        gap: 1rem;
+    }
+
+    .form-field label {
+        display: block;
+        margin-bottom: 0.45rem;
+        font-weight: 600;
+        color: #f4f4f4;
+    }
+
+    .field-help {
+        color: var(--text-secondary);
+        font-size: 0.88rem;
+        margin-top: 0.45rem;
+    }
+
+    .field-errors {
+        margin-top: 0.45rem;
+        color: #ffb1b1;
+        font-size: 0.88rem;
+    }
+
+    .proof-submit {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.6rem;
+        padding: 1rem 1.2rem;
+        border: none;
+        border-radius: 999px;
+        background: var(--primary-gradient);
+        color: white;
+        font-weight: 700;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .proof-submit:hover {
+        transform: translateY(-2px);
+        box-shadow: var(--shadow-glow);
+    }
+
+    .proof-submit:disabled {
+        opacity: 0.65;
+        cursor: not-allowed;
+        box-shadow: none;
+        transform: none;
+    }
+
+    .current-status-grid,
+    .history-grid {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 0.85rem;
+        margin-top: 1rem;
+    }
+
+    .status-tile {
+        padding: 1rem;
+        border-radius: 1rem;
+        background: rgba(255, 255, 255, 0.04);
+        border: 1px solid rgba(255, 255, 255, 0.07);
+    }
+
+    .status-tile strong {
+        display: block;
+        color: #ffb6b6;
+        font-size: 0.78rem;
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+        margin-bottom: 0.3rem;
+    }
+
+    .history-card table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 1rem;
+    }
+
+    .history-card th,
+    .history-card td {
+        padding: 0.85rem 0.6rem;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+        text-align: left;
+        font-size: 0.95rem;
+    }
+
+    .history-card th {
+        color: #ffb6b6;
+        font-size: 0.8rem;
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+    }
+
+    .history-card td {
+        color: #f7f7f7;
+    }
+
+    .empty-history {
+        color: var(--text-secondary);
+        margin-top: 0.4rem;
+    }
+
+    .panel-footer-links {
+        display: flex;
+        gap: 1rem;
+        flex-wrap: wrap;
+        margin-top: 1.1rem;
+    }
+
+    .panel-footer-links a {
+        color: #ffb6b6;
+        text-decoration: none;
+        font-weight: 600;
+    }
+
+    .panel-footer-links a:hover {
+        color: #ffffff;
+    }
+
+    @media (max-width: 991.98px) {
+        .payment-layout {
+            grid-template-columns: 1fr;
+        }
+
+        .plan-overview,
+        .current-status-grid,
+        .history-grid {
+            grid-template-columns: 1fr 1fr;
+        }
+    }
+
+    @media (max-width: 767.98px) {
+        .plan-overview,
+        .current-status-grid,
+        .history-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .payment-panel-body {
+            padding: 1.35rem;
+        }
+
+        .history-card {
+            overflow-x: auto;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<section class="payment-section">
+    <div class="container">
+        <div class="payment-shell">
+            <div class="payment-hero" data-aos="fade-up">
+                <div class="payment-kicker">
+                    <i class="fas fa-qrcode"></i>
+                    Manual UPI Membership Payment
+                </div>
+                <h1 class="payment-title">Pay Securely, Upload Proof, Get Approved</h1>
+                <p class="payment-subtitle">
+                    Scan the QR code with any UPI app, complete the payment manually, then upload your screenshot and UTR so the admin team can verify and activate your membership.
+                </p>
+            </div>
+
+            <div class="payment-layout">
+                <div class="payment-panel" data-aos="fade-up" data-aos-delay="100">
+                    <div class="payment-panel-body">
+                        {% if messages %}
+                            <div class="status-messages">
+                                {% for message in messages %}
+                                    <div class="status-message {{ message.tags|default:'info' }}">
+                                        <i class="fas fa-info-circle mt-1"></i>
+                                        <div>{{ message }}</div>
+                                    </div>
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+
+                        <div class="member-card">
+                            <span class="status-badge status-approved">
+                                <i class="fas fa-user-check"></i>
+                                Member Account Linked
+                            </span>
+                            <div class="member-name mt-3">{{ user.first_name }} {{ user.last_name }}</div>
+                            <p class="muted-copy">This payment will be connected to your existing fitnessZone account and membership dashboard.</p>
+                            <div class="membership-plan-name">{{ plan.name }} Plan</div>
+
+                            <div class="plan-overview">
+                                <div class="overview-tile">
+                                    <span class="overview-label">Selected Plan</span>
+                                    <div class="overview-value">{{ plan.name }}</div>
+                                </div>
+                                <div class="overview-tile">
+                                    <span class="overview-label">Amount</span>
+                                    <div class="overview-value">{{ plan.price }}</div>
+                                </div>
+                                <div class="overview-tile">
+                                    <span class="overview-label">Duration</span>
+                                    <div class="overview-value">{{ plan.duration }} Days</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="card-stack mt-4">
+                            <div class="instructions-card">
+                                <h2 class="card-title">Payment Instructions</h2>
+                                <ul class="instruction-list">
+                                    <li>
+                                        <span class="instruction-step">1</span>
+                                        <span>Tap <strong>Pay Now</strong> in your UPI app or scan the QR code shown here.</span>
+                                    </li>
+                                    <li>
+                                        <span class="instruction-step">2</span>
+                                        <span>Pay the exact amount for the <strong>{{ plan.name }}</strong> membership: <strong>{{ plan.price }}</strong>.</span>
+                                    </li>
+                                    <li>
+                                        <span class="instruction-step">3</span>
+                                        <span>Upload the payment screenshot and enter the UTR / transaction ID after the transfer is completed.</span>
+                                    </li>
+                                    <li>
+                                        <span class="instruction-step">4</span>
+                                        <span>Your request will stay in <strong>Pending Verification</strong> until the admin approves it from the Django admin panel.</span>
+                                    </li>
+                                </ul>
+                            </div>
+
+                            {% if current_membership %}
+                                <div class="current-status-card">
+                                    <div class="d-flex flex-wrap gap-2 align-items-center justify-content-between">
+                                        <h2 class="card-title mb-0">Current Membership Status</h2>
+                                        <span class="status-badge {{ current_membership.membership_status_badge_class }}">
+                                            <i class="fas fa-shield-alt"></i>
+                                            {{ current_membership.get_membership_status_display }}
+                                        </span>
+                                    </div>
+                                    <div class="current-status-grid">
+                                        <div class="status-tile">
+                                            <strong>Current Plan</strong>
+                                            <div>{{ current_membership.plan_name }}</div>
+                                        </div>
+                                        <div class="status-tile">
+                                            <strong>Payment Status</strong>
+                                            <div>{{ current_membership.get_payment_status_display }}</div>
+                                        </div>
+                                        <div class="status-tile">
+                                            <strong>Start Date</strong>
+                                            <div>{{ current_membership.start_date|default:"Waiting for approval" }}</div>
+                                        </div>
+                                        <div class="status-tile">
+                                            <strong>Expiry Date</strong>
+                                            <div>{{ current_membership.expiry_date|default:"Will appear after approval" }}</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            {% endif %}
+
+                            <div class="history-card">
+                                <h2 class="card-title">Recent Payment History</h2>
+                                {% if membership_history %}
+                                    <table>
+                                        <thead>
+                                            <tr>
+                                                <th>Plan</th>
+                                                <th>Amount</th>
+                                                <th>Payment</th>
+                                                <th>Membership</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {% for item in membership_history|slice:":5" %}
+                                                <tr>
+                                                    <td>{{ item.membership.plan_name }}</td>
+                                                    <td>Rs {{ item.membership.amount|floatformat:0 }}</td>
+                                                    <td>{{ item.membership.get_payment_status_display }}</td>
+                                                    <td>{{ item.membership.get_membership_status_display }}</td>
+                                                </tr>
+                                            {% endfor %}
+                                        </tbody>
+                                    </table>
+                                {% else %}
+                                    <p class="empty-history">No membership payment submissions yet. Your first submission from this page will appear here.</p>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="payment-panel" data-aos="fade-up" data-aos-delay="200">
+                    <div class="payment-panel-body">
+                        <div class="proof-form-card">
+                            <h2 class="card-title">Pay Now</h2>
+                            <div class="qr-shell">
+                                {% if payment_qr_data_uri %}
+                                    <img src="{{ payment_qr_data_uri }}" alt="UPI QR code for {{ plan.name }} membership">
+                                {% else %}
+                                    <div id="upiQrFallback" class="qr-fallback" data-qr="{{ payment_uri }}"></div>
+                                {% endif %}
+                            </div>
+
+                            <div class="upi-meta">
+                                <div class="upi-meta-item">
+                                    <strong>UPI ID</strong>
+                                    <span>{{ upi_id }}</span>
+                                </div>
+                                <div class="upi-meta-item">
+                                    <strong>Payee Name</strong>
+                                    <span>{{ upi_payee_name }}</span>
+                                </div>
+                                <div class="upi-meta-item">
+                                    <strong>Amount to Transfer</strong>
+                                    <span>{{ plan.price }}</span>
+                                </div>
+                            </div>
+
+                            <a class="upi-deep-link" href="{{ payment_uri }}">
+                                <i class="fas fa-mobile-alt"></i>
+                                Pay Now with Any UPI App
+                            </a>
+                        </div>
+
+                        <div class="proof-form-card mt-4">
+                            <div class="d-flex flex-wrap gap-2 align-items-center justify-content-between">
+                                <h2 class="card-title mb-0">Upload Payment Proof</h2>
+                                {% if pending_membership %}
+                                    <span class="status-badge status-pending">
+                                        <i class="fas fa-hourglass-half"></i>
+                                        Pending Verification
+                                    </span>
+                                {% endif %}
+                            </div>
+
+                            {% if pending_membership %}
+                                <p class="muted-copy mt-3 mb-0">
+                                    Your latest payment for this plan was submitted on {{ pending_membership.created_at|date:"M d, Y - h:i A" }}. The admin team will verify it soon.
+                                </p>
+                            {% else %}
+                                <form method="post" enctype="multipart/form-data" class="proof-form mt-3">
+                                    {% csrf_token %}
+                                    {% if payment_form.non_field_errors %}
+                                        <div class="field-errors">
+                                            {% for error in payment_form.non_field_errors %}
+                                                <div>{{ error }}</div>
+                                            {% endfor %}
+                                        </div>
+                                    {% endif %}
+
+                                    <div class="form-field">
+                                        <label for="{{ payment_form.screenshot.id_for_label }}">Payment Screenshot</label>
+                                        {{ payment_form.screenshot }}
+                                        <div class="field-help">Upload a clear JPG, PNG, or WebP screenshot of the successful UPI payment. Maximum file size: 5 MB.</div>
+                                        {% if payment_form.screenshot.errors %}
+                                            <div class="field-errors">
+                                                {% for error in payment_form.screenshot.errors %}
+                                                    <div>{{ error }}</div>
+                                                {% endfor %}
+                                            </div>
+                                        {% endif %}
+                                    </div>
+
+                                    <div class="form-field">
+                                        <label for="{{ payment_form.utr_number.id_for_label }}">UTR / Transaction ID</label>
+                                        {{ payment_form.utr_number }}
+                                        <div class="field-help">The UTR / transaction ID is required so the admin can match your transfer quickly.</div>
+                                        {% if payment_form.utr_number.errors %}
+                                            <div class="field-errors">
+                                                {% for error in payment_form.utr_number.errors %}
+                                                    <div>{{ error }}</div>
+                                                {% endfor %}
+                                            </div>
+                                        {% endif %}
+                                    </div>
+
+                                    <button type="submit" class="proof-submit">
+                                        <i class="fas fa-cloud-upload-alt"></i>
+                                        Submit Payment Proof
+                                    </button>
+                                </form>
+                            {% endif %}
+
+                            {% if latest_plan_membership and latest_plan_membership.payment_status != 'pending' %}
+                                <div class="current-status-grid mt-4">
+                                    <div class="status-tile">
+                                        <strong>Latest Plan Status</strong>
+                                        <div>{{ latest_plan_membership.get_payment_status_display }}</div>
+                                    </div>
+                                    <div class="status-tile">
+                                        <strong>Membership Result</strong>
+                                        <div>{{ latest_plan_membership.get_membership_status_display }}</div>
+                                    </div>
+                                </div>
+                            {% endif %}
+
+                            <div class="panel-footer-links">
+                                <a href="{% url 'membership' %}"><i class="fas fa-arrow-left me-1"></i>Back to Plans</a>
+                                <a href="{% url 'profile_page' %}"><i class="fas fa-id-card me-1"></i>View Membership Dashboard</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+{% block extra_js %}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const fallbackQr = document.getElementById('upiQrFallback');
+        if (!fallbackQr || typeof QRCode === 'undefined') {
+            return;
+        }
+
+        fallbackQr.innerHTML = '';
+        new QRCode(fallbackQr, {
+            text: fallbackQr.dataset.qr,
+            width: 250,
+            height: 250,
+            colorDark: '#0f0f0f',
+            colorLight: '#ffffff',
+            correctLevel: QRCode.CorrectLevel.H
+        });
+    });
+</script>
+{% endblock %}

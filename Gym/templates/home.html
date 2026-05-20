@@ -1,7 +1,7 @@
 {% extends 'parent.html' %}
 {% load static %}
 
-{% block title %}FitnessPro - Transform Your Body, Transform Your Life{% endblock %}
+{% block title %}fitnessZone - Transform Your Body, Transform Your Life{% endblock %}
 
 {% block extra_css %}
 <style>
@@ -62,10 +62,12 @@
 }
 
 .hero-title .gradient-text {
-    background: var(--primary-gradient);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
+    background: none !important;
+    -webkit-background-clip: initial !important;
+    background-clip: initial !important;
+    -webkit-text-fill-color: #ffb6b6 !important;
+    color: #ffb6b6 !important;
+    text-shadow: 0 0 24px rgba(255, 59, 59, 0.35);
     display: block;
 }
 .hero-subtitle {
@@ -594,6 +596,89 @@
         border-color: transparent;
     }
 
+    .exercise-preview-card {
+        background: var(--bg-card);
+        backdrop-filter: var(--blur-md);
+        border: 1px solid var(--border-color);
+        border-radius: 1.75rem;
+        overflow: hidden;
+        height: 100%;
+        box-shadow: var(--shadow-md);
+        transition: transform 0.35s ease, box-shadow 0.35s ease, border-color 0.35s ease;
+    }
+
+    .exercise-preview-card:hover {
+        transform: translateY(-10px);
+        border-color: var(--border-hover);
+        box-shadow: var(--shadow-lg);
+    }
+
+    .exercise-preview-image-wrap {
+        position: relative;
+        aspect-ratio: 16 / 10;
+        overflow: hidden;
+        background:
+            radial-gradient(circle at top left, rgba(255, 59, 59, 0.22), transparent 35%),
+            linear-gradient(180deg, rgba(255, 255, 255, 0.04), rgba(0, 0, 0, 0.2));
+    }
+
+    .exercise-preview-image {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        transition: transform 0.45s ease;
+    }
+
+    .exercise-preview-card:hover .exercise-preview-image {
+        transform: scale(1.06);
+    }
+
+    .exercise-preview-content {
+        padding: 1.6rem;
+    }
+
+    .exercise-preview-target {
+        display: inline-flex;
+        align-items: center;
+        padding: 0.4rem 0.8rem;
+        border-radius: 999px;
+        background: rgba(255, 59, 59, 0.14);
+        border: 1px solid rgba(255, 59, 59, 0.2);
+        color: #ffb5b5;
+        font-size: 0.82rem;
+        font-weight: 700;
+        letter-spacing: 0.04em;
+        text-transform: uppercase;
+        margin-bottom: 1rem;
+    }
+
+    .exercise-preview-title {
+        font-family: 'Space Grotesk', sans-serif;
+        font-size: 1.8rem;
+        margin-bottom: 0.85rem;
+    }
+
+    .exercise-preview-instructions {
+        color: var(--text-secondary);
+        margin-bottom: 1.25rem;
+        line-height: 1.7;
+        display: -webkit-box;
+        -webkit-line-clamp: 3;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+    }
+
+    .exercise-preview-link {
+        color: #ffd3d3;
+        font-weight: 700;
+        text-decoration: none;
+        letter-spacing: 0.02em;
+    }
+
+    .exercise-preview-link:hover {
+        color: #ffffff;
+    }
+
     /* Contact Section */
     .contact-section {
         padding: 8rem 0;
@@ -798,7 +883,7 @@
                     
                     <h1 class="hero-title">
                         Transform Your
-                        <span class="gradient-text">FitnessPro</span>
+                        <span class="gradient-text">fitnessZone</span>
                         Journey
                     </h1>
                     
@@ -812,13 +897,9 @@
                     </p>
                     
                     <div class="hero-cta">
-                        <a href="/new_registration" class="cta-primary">
-                            <i class="fas fa-rocket me-2"></i>
-                            Start Your Journey
-                        </a>
-                        <a href="#features" class="cta-secondary">
-                            <i class="fas fa-play me-2"></i>
-                            Discover More
+                        <a href="/membership" class="cta-secondary">
+                            <i class="fas fa-id-card me-2"></i>
+                            View Memberships
                         </a>
                     </div>
                 </div>
@@ -827,14 +908,61 @@
     </div>
 </section>
 
+{% if featured_exercises %}
+<section class="features-section">
+    <div class="container">
+        <div class="section-header" data-aos="fade-up">
+            <span class="section-badge">Exercise Preview</span>
+            <h2 class="section-title">Start With These Essentials</h2>
+            <p class="section-description">
+                Build your next workout with a few proven movements from our exercise library.
+            </p>
+        </div>
+
+        <div class="row g-4">
+            {% for exercise in featured_exercises %}
+            <div class="col-md-6 col-xl-4" data-aos="fade-up" data-aos-delay="{{ forloop.counter }}00">
+                <div class="exercise-preview-card">
+                    <div class="exercise-preview-image-wrap">
+                        {% if exercise.image %}
+                        <img src="{{ exercise.image.url }}" alt="{{ exercise.name }}" class="exercise-preview-image">
+                        {% elif exercise.image_url %}
+                        <img src="{{ exercise.image_url }}" alt="{{ exercise.name }}" class="exercise-preview-image">
+                        {% else %}
+                        <img src="{% static 'exercises/default.png' %}" alt="{{ exercise.name }}" class="exercise-preview-image">
+                        {% endif %}
+                    </div>
+                    <div class="exercise-preview-content">
+                        <span class="exercise-preview-target">{{ exercise.get_muscle_group_display }}</span>
+                        <h3 class="exercise-preview-title">{{ exercise.name }}</h3>
+                        <p class="exercise-preview-instructions">{{ exercise.instructions }}</p>
+                        <a href="{% url 'exercises' %}?group={{ exercise.muscle_group }}" class="exercise-preview-link">
+                            Explore {{ exercise.get_muscle_group_display }} Exercises <i class="fas fa-arrow-right ms-2"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+
+        <div class="text-center mt-5" data-aos="fade-up">
+            <a href="{% url 'exercises' %}" class="cta-primary">
+                <i class="fas fa-list me-2"></i>
+                View All Exercises
+            </a>
+        </div>
+    </div>
+</section>
+{% endif %}
+
 <!-- Features Section -->
 <section id="features" class="features-section">
     <div class="container">
         <div class="section-header" data-aos="fade-up">
-            <span class="section-badge">Why Choose FitnessPro</span>
+            <span class="section-badge">Why Choose fitnessZone</span>
             <h2 class="section-title">Elevate Your Fitness Experience</h2>
             <p class="section-description">
-                Discover what makes FitnessPro the ultimate destination for fitness enthusiasts 
+                Discover what makes fitnessZone the ultimate destination for fitness enthusiasts 
                 who demand excellence in every aspect of their training journey.
             </p>
         </div>
@@ -899,10 +1027,6 @@
                 well-being. Discover how proper exercise, nutrition, and mindfulness practices work together to enhance 
                 your cognitive function, boost confidence, reduce stress, and unlock your full potential in every aspect of life.
             </p>
-            <a href="#" class="cta-primary">
-                <i class="fas fa-brain me-2"></i>
-                Explore Wellness Programs
-            </a>
         </div>
     </div>
 </section>
@@ -970,8 +1094,8 @@
         
 <div class="trainers-grid">
     <div class="trainer-card" data-aos="fade-up" data-aos-delay="100">
-        <img src="{% static 'images/trainer1.jpg' %}" alt="Asad Ullah" class="trainer-image">
-        <h3 class="trainer-name">Asad Ullah</h3>
+        <img src="{% static 'images/trainer1.jpg' %}" alt="Vasu Kumar" class="trainer-image">
+        <h3 class="trainer-name">Vasu Kumar</h3>
         <div class="trainer-specialty">Strength & Conditioning</div>
         <p class="trainer-bio">
             Former Olympic athlete with 10+ years of experience in strength training and athletic performance.
@@ -985,8 +1109,8 @@
     </div>
 
     <div class="trainer-card" data-aos="fade-up" data-aos-delay="200">
-        <img src="{% static 'images/trainer2.jpg' %}" alt="Mohammad Ali" class="trainer-image">
-        <h3 class="trainer-name">Mohammad Ali</h3>
+        <img src="{% static 'images/trainer2.jpg' %}" alt="Rohit Sharma" class="trainer-image">
+        <h3 class="trainer-name">Rohit Sharma</h3>
         <div class="trainer-specialty">Yoga & Wellness</div>
         <p class="trainer-bio">
             Certified yoga instructor and wellness coach with expertise in mindfulness, flexibility,
@@ -1000,8 +1124,8 @@
     </div>
 
     <div class="trainer-card" data-aos="fade-up" data-aos-delay="300">
-        <img src="{% static 'images/trainer3.jpg' %}" alt="Ibrahim Khan" class="trainer-image">
-        <h3 class="trainer-name">Ibrahim Khan</h3>
+        <img src="{% static 'images/trainer3.jpg' %}" alt="Dhanush Roy" class="trainer-image">
+        <h3 class="trainer-name">Dhanush Roy</h3>
         <div class="trainer-specialty">HIIT & Cardio</div>
         <p class="trainer-bio">
             High-intensity training specialist and former military fitness instructor. Expert in
@@ -1295,7 +1419,7 @@ document.querySelectorAll('.bmi-input, .form-control').forEach(input => {
             const weight = document.getElementById('weight').value;
             
             if (height && weight && height > 0 && weight > 0) {
-                setTimeout(() => calculateBMI(), 500);
+                setTimeout(() => calculateBMI(), 500);    
             }
         });
     }

@@ -1,0 +1,360 @@
+{% extends "parent.html" %}
+{% load static %}
+
+{% block title %}fitnessZone - Exercises{% endblock %}
+
+{% block extra_css %}
+<style>
+.exercise-library-section {
+    padding: 8rem 0 6rem;
+}
+
+.exercise-library-layout {
+    margin-top: 3rem;
+}
+
+.exercise-tree-panel,
+.exercise-filter-panel,
+.exercise-accordion-item {
+    background: var(--bg-card);
+    backdrop-filter: var(--blur-md);
+    border: 1px solid var(--border-color);
+    border-radius: 1.5rem;
+    box-shadow: var(--shadow-sm);
+}
+
+.exercise-tree-panel,
+.exercise-filter-panel {
+    padding: 1.5rem;
+}
+
+.tree-title,
+.filter-panel-title {
+    font-family: var(--font-heading);
+    font-size: 1.15rem;
+    margin-bottom: 1rem;
+}
+
+.tree-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.tree-link {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem;
+    padding: 0.95rem 1rem;
+    border-radius: 1rem;
+    text-decoration: none;
+    color: var(--text-secondary);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    background: rgba(255, 255, 255, 0.03);
+    transition: transform 0.3s ease, border-color 0.3s ease, color 0.3s ease;
+}
+
+.tree-link:hover,
+.tree-link.active {
+    color: var(--text-primary);
+    border-color: rgba(255, 59, 59, 0.24);
+    transform: translateX(6px);
+}
+
+.tree-link.active {
+    background: rgba(255, 59, 59, 0.12);
+}
+
+.tree-link span:last-child,
+.filter-chip-count {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 34px;
+    height: 34px;
+    padding: 0 0.7rem;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.08);
+    color: #ffd5d5;
+    font-size: 0.82rem;
+    font-weight: 700;
+}
+
+.exercise-filter-panel {
+    margin-bottom: 1.5rem;
+}
+
+.filter-chip-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+}
+
+.filter-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.55rem;
+    padding: 0.75rem 1rem;
+    border-radius: 999px;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    color: var(--text-secondary);
+    text-decoration: none;
+    background: rgba(255, 255, 255, 0.03);
+    transition: transform 0.3s ease, border-color 0.3s ease, color 0.3s ease, background 0.3s ease;
+}
+
+.filter-chip:hover,
+.filter-chip.active {
+    color: #ffffff;
+    border-color: rgba(255, 59, 59, 0.28);
+    background: rgba(255, 59, 59, 0.12);
+    transform: translateY(-2px);
+}
+
+.exercise-accordion {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+}
+
+.exercise-accordion-item {
+    overflow: hidden;
+}
+
+.exercise-accordion-item .accordion-button {
+    background: transparent;
+    color: var(--text-primary);
+    box-shadow: none;
+    padding: 1.35rem 1.5rem;
+    font-family: var(--font-heading);
+    font-size: 1.2rem;
+    border: 0;
+}
+
+.exercise-accordion-item .accordion-button:not(.collapsed) {
+    background: rgba(255, 59, 59, 0.08);
+    color: #ffffff;
+}
+
+.exercise-accordion-item .accordion-button::after {
+    filter: invert(1) brightness(1.5);
+}
+
+.accordion-header-content {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    width: 100%;
+}
+
+.accordion-count {
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: #ffbdbd;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.exercise-accordion-item .accordion-body {
+    padding: 1.5rem;
+    background: rgba(0, 0, 0, 0.12);
+}
+
+.exercise-card {
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    border-radius: 1.5rem;
+    overflow: hidden;
+    height: 100%;
+    box-shadow: var(--shadow-sm);
+    transition: transform 0.35s ease, border-color 0.35s ease, box-shadow 0.35s ease;
+}
+
+.exercise-card:hover {
+    transform: translateY(-8px);
+    border-color: rgba(255, 59, 59, 0.24);
+    box-shadow: var(--shadow-md);
+}
+
+.exercise-card-image-wrap {
+    aspect-ratio: 16 / 10;
+    overflow: hidden;
+    background:
+        radial-gradient(circle at top left, rgba(255, 59, 59, 0.18), transparent 35%),
+        linear-gradient(180deg, rgba(255, 255, 255, 0.04), rgba(0, 0, 0, 0.22));
+}
+
+.exercise-card-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.4s ease;
+}
+
+.exercise-card:hover .exercise-card-image {
+    transform: scale(1.05);
+}
+
+.exercise-card-body {
+    padding: 1.4rem;
+}
+
+.exercise-card-target {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.35rem 0.8rem;
+    border-radius: 999px;
+    background: rgba(255, 59, 59, 0.12);
+    border: 1px solid rgba(255, 59, 59, 0.2);
+    color: #ffb7b7;
+    font-size: 0.78rem;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    margin-bottom: 0.9rem;
+}
+
+.exercise-card-title {
+    font-size: 1.65rem;
+    margin-bottom: 0.9rem;
+}
+
+.exercise-card-instruction-label {
+    color: #ffd6d6;
+    font-size: 0.88rem;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    margin-bottom: 0.45rem;
+    text-transform: uppercase;
+}
+
+.exercise-card-instructions {
+    color: var(--text-secondary);
+    line-height: 1.75;
+    margin-bottom: 0;
+}
+
+.selected-group-banner {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+    padding: 0.75rem 1rem;
+    border-radius: 999px;
+    background: rgba(255, 59, 59, 0.12);
+    color: #ffe0e0;
+    border: 1px solid rgba(255, 59, 59, 0.2);
+    margin-bottom: 1rem;
+}
+
+@media (max-width: 991.98px) {
+    .exercise-tree-panel {
+        margin-bottom: 1.5rem;
+    }
+}
+
+@media (max-width: 576px) {
+    .exercise-library-section {
+        padding-top: 7rem;
+    }
+
+    .exercise-card-title {
+        font-size: 1.4rem;
+    }
+
+    .accordion-header-content {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+}
+</style>
+{% endblock %}
+
+{% block content %}
+<section class="exercise-library-section">
+    <div class="container">
+        <div class="section-header text-center" data-aos="fade-up">
+            <span class="section-badge">Exercise Library</span>
+            <h1 class="section-title">Train By Muscle Group</h1>
+            <p class="section-description">
+                Open each muscle group like a tree, explore movements, and filter the full library by target area.
+            </p>
+        </div>
+
+        <div class="exercise-library-layout row g-4">
+            <div class="col-lg-12">
+                <div class="exercise-filter-panel" data-aos="fade-up" data-aos-delay="150">
+                    <div class="selected-group-banner">
+                        <i class="fas fa-filter"></i>
+                        Showing: {{ selected_group_label }}
+                    </div>
+
+                    <h2 class="filter-panel-title">Filter By Target Muscle</h2>
+                    <div class="filter-chip-list">
+                        <a href="{% url 'exercises' %}" class="filter-chip {% if not selected_group %}active{% endif %}">
+                            <span>All</span>
+                        </a>
+                        {% for filter in muscle_group_filters %}
+                        <a href="{% url 'exercises' %}?group={{ filter.value }}" class="filter-chip {% if selected_group == filter.value %}active{% endif %}">
+                            <span>{{ filter.label }}</span>
+                            <span class="filter-chip-count">{{ filter.count }}</span>
+                        </a>
+                        {% endfor %}
+                    </div>
+                </div>
+
+                <div class="accordion exercise-accordion" id="exerciseAccordion">
+                    {% for group in exercise_groups %}
+                    <div class="accordion-item exercise-accordion-item" data-aos="fade-up" data-aos-delay="{{ forloop.counter }}00">
+                        <h2 class="accordion-header" id="heading-{{ group.value }}">
+                            <button class="accordion-button {% if not selected_group and not forloop.first %}collapsed{% endif %}" type="button" data-bs-toggle="collapse" data-bs-target="#collapse-{{ group.value }}" aria-expanded="{% if selected_group == group.value or not selected_group and forloop.first %}true{% else %}false{% endif %}" aria-controls="collapse-{{ group.value }}">
+                                <span class="accordion-header-content">
+                                    <span>{{ group.label }}</span>
+                                    <span class="accordion-count">{{ group.count }} exercises</span>
+                                </span>
+                            </button>
+                        </h2>
+                        <div id="collapse-{{ group.value }}" class="accordion-collapse collapse {% if selected_group == group.value or not selected_group and forloop.first %}show{% endif %}" aria-labelledby="heading-{{ group.value }}" data-bs-parent="#exerciseAccordion">
+                            <div class="accordion-body">
+                                <div class="row g-4">
+                                    {% for exercise in group.exercises %}
+                                    <div class="col-md-6">
+                                        <div class="exercise-card ">
+                                            <div class="exercise-card-image-wrap">
+                                                {% if exercise.image %}
+                                                <img src="{{ exercise.image.url }}" alt="{{ exercise.name }}" class="exercise-card-image">
+                                                {% elif exercise.image_url %}
+                                                <img src="{{ exercise.image_url }}" alt="{{ exercise.name }}" class="exercise-card-image">
+                                                {% else %}
+                                                <img src="{% static 'exercises/default.png' %}" alt="{{ exercise.name }}" class="exercise-card-image">
+                                                {% endif %}
+                                            </div>
+                                            <div class="exercise-card-body">
+                                                <span class="exercise-card-target">{{ exercise.get_muscle_group_display }}</span>
+                                                <h3 class="exercise-card-title">{{ exercise.name }}</h3>
+                                                <p class="exercise-card-instruction-label">How To Perform</p>
+                                                <p class="exercise-card-instructions">{{ exercise.instructions }}</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {% empty %}
+                    <div class="exercise-filter-panel">
+                        <p class="text-secondary mb-0">No exercises are available yet.</p>
+                    </div>
+                    {% endfor %}
+                </div>
+
+                <div class="text-center mt-5" data-aos="fade-up">
+                    <a href="{% url 'home' %}" class="btn btn-outline-primary">Back To Home</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

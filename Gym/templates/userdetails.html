@@ -362,7 +362,7 @@
             </div>
             <div class="detail-item">
                 <span class="detail-label">Address</span>
-                <span class="detail-value">{{a_user.address}}, Lahore</span>
+                <span class="detail-value">{{a_user.address}}</span>
             </div>
         </div>
 
@@ -406,7 +406,7 @@
             </div>
             <div class="detail-item">
                 <span class="detail-label">Member Since</span>
-                <span class="detail-value">{{a_user.date_joined|date:"M d, Y"}}</span>
+                <span class="detail-value">{{member_since|date:"M d, Y"}}</span>
             </div>
         </div>
 
@@ -425,22 +425,12 @@
             <div class="detail-item">
                 <span class="detail-label">Account Status</span>
                 <span class="detail-value">
-                    {% if a_user.is_active %}
-                        <span style="color: var(--accent-success);">Active</span>
-                    {% else %}
-                        <span style="color: var(--accent-danger);">Inactive</span>
-                    {% endif %}
+                    <span style="color: var(--accent-success);">{{ account_status }}</span>
                 </span>
             </div>
             <div class="detail-item">
                 <span class="detail-label">Last Login</span>
-                <span class="detail-value">
-                    {% if a_user.last_login %}
-                        {{a_user.last_login|date:"M d, Y H:i"}}
-                    {% else %}
-                        Never
-                    {% endif %}
-                </span>
+                <span class="detail-value">{{ last_login_display }}</span>
             </div>
         </div>
     </div>

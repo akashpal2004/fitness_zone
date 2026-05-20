@@ -1,0 +1,15 @@
+{% extends "admin/change_form.html" %}
+
+{% block submit_buttons_bottom %}
+{{ block.super }}
+{% if original %}
+<div class="submit-row">
+    {% if original.payment_status != "approved" %}
+        <input type="submit" value="Approve Payment" name="_approve-payment" style="background:#198754;border-color:#198754;">
+    {% endif %}
+    {% if original.payment_status != "rejected" %}
+        <input type="submit" value="Reject Payment" name="_reject-payment" style="background:#dc3545;border-color:#dc3545;">
+    {% endif %}
+</div>
+{% endif %}
+{% endblock %}

@@ -1,26 +1,31 @@
-
 from django.urls import path
-from .views import *
 from . import views
-urlpatterns = [
-    path('', home),
-    path('contact', contact_us),
-    path('new_registration', new_registration),
-    path('login', login),
-    path('admin_portal', admin_portal),
-    path('all_members', all_members),
-    path('attendance', attendance),
-    path('userdetails', userdetails),
-    path('profile_page', profilePage),
-    path('diet_plan', diet_plan),
-    path('workout_plan', workout_plan),
-    path('workout', workout),
-    path('searchPage', searchPage),
-    path('upload_profile_image/', views.upload_profile_image, name='upload_profile_image'),
-    path('change_admin_password', change_admin_password),
-    path('change_user_password', change_user_password),
-    path('admin_login', admin_login),
-    path("delete",delete_user),
-    path("delete_user",delete_profbyuser)
 
+urlpatterns = [
+    path('membership', views.membership, name='membership'),
+    path('membership/join/<slug:plan_slug>', views.join_membership, name='join_membership'),
+    path('payment/<slug:plan_slug>', views.payment_page, name='payment_page'),
+    path('contact', views.contact_view, name='contact'),
+    path('register', views.register_view, name='register'),
+    path('new_registration', views.register_view, name='new_registration'),
+    path('login', views.login_view, name='login'),
+    path('logout', views.logout_view, name='logout'),
+    path('admin_login', views.admin_login_view, name='admin_login'),
+    path('admin_logout', views.admin_logout_view, name='admin_logout'),
+    path('admin_portal', views.admin_portal, name='admin_portal'),
+    path('add_exercise', views.add_exercise, name='add_exercise'),
+    path('add_exercise/<int:exercise_id>', views.add_exercise, name='edit_exercise'),
+    path('all_members', views.all_members, name='all_members'),
+    path('attendance', views.attendance, name='attendance'),
+    path('userdetails', views.userdetails, name='userdetails'),
+    path('profile_page', views.profilePage, name='profile_page'),
+    path('diet_plan', views.diet_plan, name='diet_plan'),
+    path('workout_plan', views.workout_plan, name='workout_plan'),
+    path('workout', views.workout, name='workout'),
+    path('searchPage', views.searchPage, name='search_page'),
+    path('upload_profile_image/', views.upload_profile_image, name='upload_profile_image'),
+    path('change_admin_password', views.change_admin_password, name='change_admin_password'),
+    path('change_user_password', views.change_user_password, name='change_user_password'),
+    path("delete", views.delete_user, name='delete_user'),
+    path("delete_user", views.delete_profbyuser, name='delete_own_user'),
 ]

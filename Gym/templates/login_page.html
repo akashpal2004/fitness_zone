@@ -5,9 +5,7 @@
 
 {% block extra_css %}
 <style>
-    /* Login Page Specific Styles */
     .login-section {
-
         display: flex;
         align-items: center;
         justify-content: center;
@@ -21,21 +19,16 @@
     .login-section::before {
         content: '';
         position: absolute;
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
+        inset: 0;
         background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grid" width="10" height="10" patternUnits="userSpaceOnUse"><path d="M 10 0 L 0 0 0 10" fill="none" stroke="rgba(255,255,255,0.03)" stroke-width="1"/></pattern></defs><rect width="100" height="100" fill="url(%23grid)"/></svg>');
         opacity: 0.5;
         pointer-events: none;
     }
 
     .login-container {
-        max-width: 450px;
+        max-width: 460px;
         width: 100%;
-        margin: 0 auto;
-        margin-top: 100px;
-        margin-bottom: 100px;
+        margin: 100px auto;
         padding: 0 20px;
         position: relative;
         z-index: 2;
@@ -50,7 +43,7 @@
         box-shadow: var(--shadow-lg);
         position: relative;
         overflow: hidden;
-        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        transition: all 0.3s ease;
     }
 
     .login-card::before {
@@ -59,7 +52,7 @@
         top: 0;
         left: 0;
         right: 0;
-        height: 2px;
+        height: 3px;
         background: var(--primary-gradient);
         opacity: 0.8;
     }
@@ -88,13 +81,13 @@
 
     .login-header p {
         color: var(--text-secondary);
-        font-size: 1.1rem;
+        font-size: 1.05rem;
         margin: 0;
     }
 
     .form-floating {
         position: relative;
-        margin-bottom: 1.5rem;
+        margin-bottom: 1.35rem;
     }
 
     .form-floating .form-control {
@@ -105,7 +98,7 @@
         border-radius: 1rem;
         color: var(--text-primary);
         font-size: 1rem;
-        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        transition: all 0.3s ease;
     }
 
     .form-floating .form-control:focus {
@@ -115,11 +108,6 @@
         color: var(--text-primary);
     }
 
-    .form-floating .form-control:not(:placeholder-shown) {
-        padding-top: 1.625rem;
-        padding-bottom: 0.625rem;
-    }
-
     .form-floating label {
         position: absolute;
         top: 0;
@@ -127,17 +115,15 @@
         height: 60px;
         padding: 1rem 1.25rem;
         pointer-events: none;
-        border: 2px solid transparent;
-        transform-origin: 0 0;
-        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        transition: all 0.3s ease;
         color: var(--text-muted);
         font-size: 1rem;
     }
 
     .form-floating .form-control:focus ~ label,
     .form-floating .form-control:not(:placeholder-shown) ~ label {
-        opacity: 0.65;
-        transform: scale(0.85) translateY(-0.5rem) translateX(0.15rem);
+        opacity: 0.7;
+        transform: scale(0.85) translateY(-0.55rem) translateX(0.15rem);
         color: var(--accent-primary);
     }
 
@@ -152,46 +138,13 @@
         cursor: pointer;
         padding: 0.5rem;
         border-radius: 0.5rem;
-        transition: all 0.3s ease;
         z-index: 3;
+        transition: all 0.3s ease;
     }
 
     .password-toggle:hover {
         color: var(--accent-primary);
         background: rgba(102, 126, 234, 0.1);
-    }
-
-    .form-check {
-        display: flex;
-        align-items: center;
-        margin-bottom: 2rem;
-    }
-
-    .form-check-input {
-        width: 20px;
-        height: 20px;
-        border: 2px solid var(--border-color);
-        border-radius: 0.375rem;
-        background: var(--bg-secondary);
-        margin-right: 0.75rem;
-        margin-top: 0;
-        transition: all 0.3s ease;
-    }
-
-    .form-check-input:checked {
-        background: var(--primary-gradient);
-        border-color: var(--accent-primary);
-    }
-
-    .form-check-input:focus {
-        box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
-    }
-
-    .form-check-label {
-        color: var(--text-secondary);
-        font-size: 0.95rem;
-        cursor: pointer;
-        user-select: none;
     }
 
     .login-btn {
@@ -201,97 +154,18 @@
         border: none;
         border-radius: 1rem;
         color: white;
-        font-weight: 600;
-        font-size: 1.1rem;
+        font-weight: 700;
+        font-size: 1.05rem;
         text-transform: uppercase;
         letter-spacing: 0.5px;
         cursor: pointer;
-        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-        position: relative;
-        overflow: hidden;
-        margin-bottom: 2rem;
-    }
-
-    .login-btn::before {
-        content: '';
-        position: absolute;
-        top: 0;
-        left: -100%;
-        width: 100%;
-        height: 100%;
-        background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
-        transition: left 0.5s;
+        transition: all 0.3s ease;
+        margin-bottom: 1.5rem;
     }
 
     .login-btn:hover {
         transform: translateY(-2px);
         box-shadow: var(--shadow-glow);
-        filter: brightness(1.1);
-    }
-
-    .login-btn:hover::before {
-        left: 100%;
-    }
-
-    .login-btn:active {
-        transform: translateY(0);
-    }
-
-    .divider {
-        position: relative;
-        text-align: center;
-        margin: 2rem 0;
-    }
-
-    .divider::before {
-        content: '';
-        position: absolute;
-        top: 50%;
-        left: 0;
-        right: 0;
-        height: 1px;
-        background: var(--border-color);
-    }
-
-    .divider span {
-        background: var(--bg-card);
-        color: var(--text-muted);
-        padding: 0 1rem;
-        font-size: 0.9rem;
-    }
-
-    .register-link {
-        text-align: center;
-        color: var(--text-secondary);
-        margin-bottom: 1rem;
-    }
-
-    .register-link a {
-        color: var(--accent-primary);
-        text-decoration: none;
-        font-weight: 600;
-        transition: all 0.3s ease;
-        position: relative;
-    }
-
-    .register-link a::after {
-        content: '';
-        position: absolute;
-        width: 0;
-        height: 2px;
-        bottom: -2px;
-        left: 50%;
-        background: var(--primary-gradient);
-        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-        transform: translateX(-50%);
-    }
-
-    .register-link a:hover {
-        color: var(--accent-secondary);
-    }
-
-    .register-link a:hover::after {
-        width: 100%;
     }
 
     .alert {
@@ -303,41 +177,28 @@
     }
 
     .alert-danger {
-        background: rgba(255, 71, 87, 0.1);
+        background: rgba(255, 71, 87, 0.12);
         color: var(--accent-danger);
         border-left: 4px solid var(--accent-danger);
     }
 
-    .alert-success {
-        background: rgba(46, 213, 115, 0.1);
-        color: var(--accent-success);
-        border-left: 4px solid var(--accent-success);
+    .register-link {
+        text-align: center;
+        color: var(--text-secondary);
     }
 
-    /* Animation for form elements */
-    .login-card > * {
-        animation: slideInUp 0.6s cubic-bezier(0.4, 0, 0.2, 1);
-        animation-fill-mode: both;
+    .register-link a {
+        color: var(--accent-primary);
+        text-decoration: none;
+        font-weight: 600;
     }
 
-    .login-card > *:nth-child(1) { animation-delay: 0.1s; }
-    .login-card > *:nth-child(2) { animation-delay: 0.2s; }
-    .login-card > *:nth-child(3) { animation-delay: 0.3s; }
-    .login-card > *:nth-child(4) { animation-delay: 0.4s; }
-    .login-card > *:nth-child(5) { animation-delay: 0.5s; }
-
-    @keyframes slideInUp {
-        from {
-            opacity: 0;
-            transform: translateY(30px);
-        }
-        to {
-            opacity: 1;
-            transform: translateY(0);
-        }
+    .field-error {
+        color: #ff8f98;
+        font-size: 0.9rem;
+        margin-top: 0.5rem;
     }
 
-    /* Responsive Design */
     @media (max-width: 576px) {
         .login-card {
             padding: 2rem 1.5rem;
@@ -346,11 +207,6 @@
 
         .login-header h1 {
             font-size: 2rem;
-        }
-
-        .form-floating .form-control,
-        .login-btn {
-            height: 55px;
         }
     }
 </style>
@@ -363,66 +219,52 @@
             <div class="login-card">
                 <div class="login-header">
                     <h1>Welcome Back</h1>
-                    <p>Sign in to continue your fitness journey</p>
+                    <p>Sign in with your Django account to continue your fitness journey.</p>
                 </div>
 
-                {% if error %}
-                <div class="alert alert-danger" role="alert">
-                    <i class="fas fa-exclamation-circle me-2"></i>{{ error }}
-                </div>
+                {% if messages %}
+                    {% for message in messages %}
+                        <div class="alert alert-danger" role="alert">
+                            <i class="fas fa-exclamation-circle me-2"></i>{{ message }}
+                        </div>
+                    {% endfor %}
                 {% endif %}
 
-                {% if msg %}
-                <div class="alert alert-success" role="alert">
-                    <i class="fas fa-check-circle me-2"></i>{{ msg }}
-                </div>
+                {% if form.non_field_errors %}
+                    {% for error in form.non_field_errors %}
+                        <div class="alert alert-danger" role="alert">
+                            <i class="fas fa-exclamation-circle me-2"></i>{{ error }}
+                        </div>
+                    {% endfor %}
                 {% endif %}
 
-                <form action="/login" method="POST" novalidate>
+                <form action="{% url 'login' %}" method="post" novalidate>
                     {% csrf_token %}
-                    
+                    {% if next_url %}
+                        <input type="hidden" name="next" value="{{ next_url }}">
+                    {% endif %}
+
                     <div class="form-floating">
-                        <input 
-                            type="text" 
-                            class="form-control" 
-                            id="username" 
-                            name="u_username" 
-                            placeholder="Username"
-                            required
-                            autocomplete="username"
-                        >
-                        <label for="username">
+                        {{ form.username }}
+                        <label for="{{ form.username.id_for_label }}">
                             <i class="fas fa-user me-2"></i>Username
                         </label>
+                        {% for error in form.username.errors %}
+                            <div class="field-error">{{ error }}</div>
+                        {% endfor %}
                     </div>
 
                     <div class="form-floating">
-                        <input 
-                            type="password" 
-                            class="form-control" 
-                            id="password" 
-                            name="u_password" 
-                            placeholder="Password"
-                            required
-                            autocomplete="current-password"
-                        >
-                        <label for="password">
+                        {{ form.password }}
+                        <label for="{{ form.password.id_for_label }}">
                             <i class="fas fa-lock me-2"></i>Password
                         </label>
-                        <button type="button" class="password-toggle" onclick="togglePassword()">
+                        <button type="button" class="password-toggle" id="password-toggle" aria-label="Show password">
                             <i class="fas fa-eye" id="password-eye"></i>
                         </button>
-                    </div>
-
-                    <div class="form-check">
-                        <input 
-                            class="form-check-input" 
-                            type="checkbox" 
-                            id="showPassword"
-                        >
-                        <label class="form-check-label" for="showPassword">
-                            Remember me
-                        </label>
+                        {% for error in form.password.errors %}
+                            <div class="field-error">{{ error }}</div>
+                        {% endfor %}
                     </div>
 
                     <button type="submit" class="login-btn">
@@ -431,7 +273,7 @@
                 </form>
 
                 <div class="register-link">
-                    <p>Don't have an account? <a href="/new_registration">Create one here</a></p>
+                    <p>Don't have an account? <a href="{% url 'register' %}{% if next_url %}?next={{ next_url|urlencode }}{% endif %}">Create one here</a></p>
                 </div>
             </div>
         </div>
@@ -441,60 +283,25 @@
 
 {% block extra_js %}
 <script>
-    function togglePassword() {
-        const passwordInput = document.getElementById('password');
-        const passwordEye = document.getElementById('password-eye');
-        
-        if (passwordInput.type === 'password') {
-            passwordInput.type = 'text';
-            passwordEye.classList.remove('fa-eye');
-            passwordEye.classList.add('fa-eye-slash');
-        } else {
-            passwordInput.type = 'password';
-            passwordEye.classList.remove('fa-eye-slash');
-            passwordEye.classList.add('fa-eye');
-        }
+document.addEventListener('DOMContentLoaded', function() {
+    const passwordInput = document.getElementById('password');
+    const passwordToggle = document.getElementById('password-toggle');
+    const passwordEye = document.getElementById('password-eye');
+
+    if (passwordToggle && passwordInput) {
+        passwordToggle.addEventListener('click', function() {
+            const showPassword = passwordInput.type === 'password';
+            passwordInput.type = showPassword ? 'text' : 'password';
+            passwordEye.classList.toggle('fa-eye', !showPassword);
+            passwordEye.classList.toggle('fa-eye-slash', showPassword);
+        });
     }
+});
 
-    // Form validation
-    document.addEventListener('DOMContentLoaded', function() {
-        const form = document.querySelector('form');
-        const inputs = form.querySelectorAll('input[required]');
-
-        inputs.forEach(input => {
-            input.addEventListener('invalid', function(e) {
-                e.preventDefault();
-                this.classList.add('is-invalid');
-            });
-
-            input.addEventListener('input', function() {
-                if (this.validity.valid) {
-                    this.classList.remove('is-invalid');
-                    this.classList.add('is-valid');
-                }
-            });
-        });
-
-        // Enhanced form submission
-        form.addEventListener('submit', function(e) {
-            let isValid = true;
-            
-            inputs.forEach(input => {
-                if (!input.validity.valid) {
-                    input.classList.add('is-invalid');
-                    isValid = false;
-                }
-            });
-
-            if (!isValid) {
-                e.preventDefault();
-                const firstInvalid = form.querySelector('.is-invalid');
-                if (firstInvalid) {
-                    firstInvalid.focus();
-                    firstInvalid.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                }
-            }
-        });
-    });
+window.addEventListener('pageshow', function(event) {
+    if (event.persisted) {
+        window.location.reload();
+    }
+});
 </script>
 {% endblock %}

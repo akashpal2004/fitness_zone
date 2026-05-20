@@ -1,0 +1,500 @@
+{% extends 'parent.html' %}
+
+{% block title %}Membership Plans - fitnessZone{% endblock %}
+
+{% block extra_css %}
+<style>
+    .membership-page {
+        min-height: 100vh;
+        padding: 8rem 0 4rem;
+        position: relative;
+        overflow: hidden;
+        background:
+            radial-gradient(circle at 10% 20%, rgba(79, 172, 254, 0.12) 0%, transparent 35%),
+            radial-gradient(circle at 85% 15%, rgba(240, 147, 251, 0.14) 0%, transparent 32%),
+            radial-gradient(circle at 50% 75%, rgba(102, 126, 234, 0.12) 0%, transparent 38%);
+    }
+
+    .membership-page::before {
+        content: '';
+        position: absolute;
+        inset: 0;
+        background-image:
+            linear-gradient(rgba(255, 255, 255, 0.035) 1px, transparent 1px),
+            linear-gradient(90deg, rgba(255, 255, 255, 0.035) 1px, transparent 1px);
+        background-size: 56px 56px;
+        mask-image: radial-gradient(circle at center, black 45%, transparent 90%);
+        pointer-events: none;
+    }
+
+    .membership-hero {
+        position: relative;
+        z-index: 1;
+        text-align: center;
+        margin-bottom: 4rem;
+    }
+
+    .membership-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.6rem;
+        padding: 0.7rem 1.15rem;
+        border-radius: 999px;
+        border: 1px solid rgba(255, 255, 255, 0.16);
+        background: rgba(255, 255, 255, 0.06);
+        color: #d9e8ff;
+        font-weight: 700;
+        letter-spacing: 0.04em;
+        text-transform: uppercase;
+        font-size: 0.82rem;
+        margin-bottom: 1.5rem;
+        backdrop-filter: blur(14px);
+    }
+
+    .membership-title {
+        font-size: clamp(2.7rem, 5vw, 4.8rem);
+        font-weight: 800;
+        line-height: 1;
+        margin-bottom: 1rem;
+    }
+
+    .membership-title .accent {
+        background: linear-gradient(135deg, #8ad4ff 0%, #d49bff 50%, #ffd166 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+    }
+
+    .membership-subtitle {
+        max-width: 760px;
+        margin: 0 auto;
+        color: var(--text-secondary);
+        font-size: 1.08rem;
+    }
+
+    .membership-grid {
+        position: relative;
+        z-index: 1;
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 1.75rem;
+        margin-bottom: 4rem;
+    }
+
+    .membership-card {
+        position: relative;
+        padding: 2rem;
+        border-radius: 1.8rem;
+        background: rgba(255, 255, 255, 0.06);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(18px);
+        box-shadow: var(--shadow-lg);
+        transition: transform 0.35s ease, box-shadow 0.35s ease, border-color 0.35s ease;
+        overflow: hidden;
+    }
+
+    .membership-card::before {
+        content: '';
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(160deg, rgba(255, 255, 255, 0.09), transparent 45%);
+        pointer-events: none;
+    }
+
+    .membership-card:hover {
+        transform: translateY(-10px);
+        border-color: rgba(255, 255, 255, 0.22);
+        box-shadow: 0 22px 60px rgba(0, 0, 0, 0.45);
+    }
+
+    .membership-card.popular {
+        background: linear-gradient(180deg, rgba(102, 126, 234, 0.18), rgba(255, 255, 255, 0.07));
+        border-color: rgba(138, 212, 255, 0.25);
+        transform: translateY(-10px);
+    }
+
+    .popular-pill {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.45rem;
+        padding: 0.45rem 0.8rem;
+        border-radius: 999px;
+        background: rgba(255, 209, 102, 0.16);
+        color: #ffd166;
+        font-size: 0.82rem;
+        font-weight: 700;
+        margin-bottom: 1rem;
+    }
+
+    .plan-name {
+        font-size: 1.7rem;
+        font-weight: 700;
+        margin-bottom: 0.4rem;
+    }
+
+    .plan-tagline {
+        color: var(--text-secondary);
+        margin-bottom: 1.5rem;
+        min-height: 3rem;
+    }
+
+    .plan-price {
+        display: flex;
+        align-items: flex-end;
+        gap: 0.35rem;
+        margin-bottom: 1.4rem;
+    }
+
+    .plan-price strong {
+        font-size: 3rem;
+        line-height: 1;
+        font-family: 'Space Grotesk', sans-serif;
+    }
+
+    .plan-price span {
+        color: var(--text-secondary);
+        margin-bottom: 0.35rem;
+    }
+
+    .plan-meta {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.65rem;
+        margin-bottom: 1.35rem;
+    }
+
+    .plan-meta span {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.35rem;
+        padding: 0.45rem 0.75rem;
+        border-radius: 999px;
+        background: rgba(255, 255, 255, 0.07);
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        color: #d9e8ff;
+        font-size: 0.84rem;
+        font-weight: 600;
+    }
+
+    .plan-features {
+        list-style: none;
+        margin: 0 0 1.8rem;
+        padding: 0;
+    }
+
+    .plan-features li {
+        display: flex;
+        align-items: flex-start;
+        gap: 0.8rem;
+        color: #eef3ff;
+        margin-bottom: 0.95rem;
+    }
+
+    .plan-features i {
+        color: #7bed9f;
+        margin-top: 0.18rem;
+    }
+
+    .plan-benefit {
+        margin-bottom: 1.5rem;
+        padding: 1rem 1.1rem;
+        border-radius: 1.1rem;
+        background: rgba(138, 212, 255, 0.1);
+        border: 1px solid rgba(138, 212, 255, 0.16);
+        color: #eef6ff;
+    }
+
+    .plan-benefit strong {
+        display: block;
+        margin-bottom: 0.3rem;
+        font-size: 0.95rem;
+    }
+
+    .plan-benefit p {
+        margin: 0;
+        color: var(--text-secondary);
+        font-size: 0.94rem;
+    }
+
+    .plan-button {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.6rem;
+        width: 100%;
+        padding: 0.95rem 1.2rem;
+        border-radius: 999px;
+        text-decoration: none;
+        color: white;
+        background: var(--primary-gradient);
+        font-weight: 700;
+        transition: transform 0.3s ease, box-shadow 0.3s ease, filter 0.3s ease;
+    }
+
+    .plan-button:hover {
+        color: white;
+        transform: translateY(-3px);
+        box-shadow: var(--shadow-glow);
+        filter: brightness(1.08);
+    }
+
+    .membership-benefits {
+        position: relative;
+        z-index: 1;
+        padding: 2rem;
+        border-radius: 1.8rem;
+        background: rgba(255, 255, 255, 0.05);
+        border: 1px solid rgba(255, 255, 255, 0.09);
+        backdrop-filter: blur(16px);
+        margin-bottom: 2rem;
+    }
+
+    .benefits-title {
+        font-size: 1.8rem;
+        margin-bottom: 1.2rem;
+    }
+
+    .benefits-grid {
+        display: grid;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: 1rem;
+    }
+
+    .benefit-tile {
+        padding: 1.25rem;
+        border-radius: 1.2rem;
+        background: rgba(255, 255, 255, 0.04);
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        text-align: center;
+    }
+
+    .benefit-tile i {
+        font-size: 1.35rem;
+        margin-bottom: 0.8rem;
+        color: #8ad4ff;
+    }
+
+    .benefit-tile h3 {
+        font-size: 1rem;
+        margin-bottom: 0.35rem;
+    }
+
+    .benefit-tile p {
+        color: var(--text-secondary);
+        margin: 0;
+        font-size: 0.92rem;
+    }
+
+    .membership-bottom {
+        position: relative;
+        z-index: 1;
+        text-align: center;
+        padding: 2.5rem 1.5rem;
+        border-radius: 1.8rem;
+        background: linear-gradient(135deg, rgba(102, 126, 234, 0.18), rgba(245, 87, 108, 0.14));
+        border: 1px solid rgba(255, 255, 255, 0.12);
+        box-shadow: var(--shadow-lg);
+    }
+
+    .membership-bottom h2 {
+        font-size: clamp(1.8rem, 3vw, 2.7rem);
+        margin-bottom: 0.8rem;
+    }
+
+    .membership-bottom p {
+        max-width: 680px;
+        margin: 0 auto 1.5rem;
+        color: var(--text-secondary);
+    }
+
+    .membership-actions {
+        display: flex;
+        justify-content: center;
+        gap: 1rem;
+        flex-wrap: wrap;
+    }
+
+    .membership-actions a {
+        min-width: 210px;
+    }
+
+    @media (max-width: 991.98px) {
+        .membership-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .membership-card.popular {
+            transform: none;
+        }
+
+        .benefits-grid {
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+    }
+
+    @media (max-width: 576px) {
+        .membership-page {
+            padding-top: 7rem;
+        }
+
+        .membership-card,
+        .membership-benefits,
+        .membership-bottom {
+            padding: 1.5rem;
+        }
+
+        .benefits-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .plan-price strong {
+            font-size: 2.4rem;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<section class="membership-page">
+    <div class="container">
+        <div class="membership-hero" data-aos="fade-up">
+            <div class="membership-badge">
+                <i class="fas fa-bolt"></i>
+                Flexible Plans
+            </div>
+            <h1 class="membership-title">Choose The <span class="accent">Membership</span> That Matches Your Momentum</h1>
+            <p class="membership-subtitle">
+                Pick the schedule that works for you with Monthly, Quarterly, and Yearly plans built around flexible access, better value, and real progress support.
+            </p>
+        </div>
+
+        <div class="membership-grid">
+            <article class="membership-card" data-aos="fade-up" data-aos-delay="100">
+                <h2 class="plan-name">Monthly</h2>
+                <p class="plan-tagline">A flexible plan for members who want full access now without a long-term commitment.</p>
+                <div class="plan-price">
+                    <strong>Rs 999</strong>
+                    <span>/ month</span>
+                </div>
+                <div class="plan-meta">
+                    <span><i class="fas fa-calendar-alt"></i>Renew every 30 days</span>
+                    <span><i class="fas fa-unlock-alt"></i>Maximum flexibility</span>
+                </div>
+                <ul class="plan-features">
+                    <li><i class="fas fa-check-circle"></i><span>Unlimited gym floor and cardio access</span></li>
+                    <li><i class="fas fa-check-circle"></i><span>One fitness assessment with BMI guidance</span></li>
+                    <li><i class="fas fa-check-circle"></i><span>Starter workout routine from our trainers</span></li>
+                    <li><i class="fas fa-check-circle"></i><span>Locker room and shower access</span></li>
+                </ul>
+                <div class="plan-benefit">
+                    <strong>Benefit</strong>
+                    <p>Perfect if you want to get started immediately and keep your options open month to month.</p>
+                </div>
+                <a href="{% url 'join_membership' 'monthly' %}" class="plan-button">
+                    <i class="fas fa-user-plus"></i>
+                    Join Monthly
+                </a>
+            </article>
+
+            <article class="membership-card popular" data-aos="fade-up" data-aos-delay="200">
+                <div class="popular-pill">
+                    <i class="fas fa-star"></i>
+                    Most Popular
+                </div>
+                <h2 class="plan-name">Quarterly</h2>
+                <p class="plan-tagline">Our most popular option for members who want stronger momentum, added support, and better savings.</p>
+                <div class="plan-price">
+                    <strong>Rs 2,499</strong>
+                    <span>/ 3 months</span>
+                </div>
+                <div class="plan-meta">
+                    <span><i class="fas fa-tags"></i>Save Rs 498</span>
+                    <span><i class="fas fa-fire"></i>Best balance of value</span>
+                </div>
+                <ul class="plan-features">
+                    <li><i class="fas fa-check-circle"></i><span>Everything in the Monthly plan</span></li>
+                    <li><i class="fas fa-check-circle"></i><span>Personalized workout update every 4 weeks</span></li>
+                    <li><i class="fas fa-check-circle"></i><span>One nutrition consultation each month</span></li>
+                    <li><i class="fas fa-check-circle"></i><span>Priority booking for group classes</span></li>
+                </ul>
+                <div class="plan-benefit">
+                    <strong>Benefit</strong>
+                    <p>Great for building consistency fast while paying less than renewing every month.</p>
+                </div>
+                <a href="{% url 'join_membership' 'quarterly' %}" class="plan-button">
+                    <i class="fas fa-fire"></i>
+                    Choose Quarterly
+                </a>
+            </article>
+
+            <article class="membership-card" data-aos="fade-up" data-aos-delay="300">
+                <h2 class="plan-name">Yearly</h2>
+                <p class="plan-tagline">The best long-term value for members ready to commit to a full year of transformation.</p>
+                <div class="plan-price">
+                    <strong>Rs 8,999</strong>
+                    <span>/ year</span>
+                </div>
+                <div class="plan-meta">
+                    <span><i class="fas fa-piggy-bank"></i>Save Rs 2,989</span>
+                    <span><i class="fas fa-trophy"></i>Best annual value</span>
+                </div>
+                <ul class="plan-features">
+                    <li><i class="fas fa-check-circle"></i><span>Everything in the Quarterly plan</span></li>
+                    <li><i class="fas fa-check-circle"></i><span>Quarterly full-body progress review with a trainer</span></li>
+                    <li><i class="fas fa-check-circle"></i><span>Exclusive access to member transformation challenges</span></li>
+                    <li><i class="fas fa-check-circle"></i><span>Two complimentary guest passes during the year</span></li>
+                </ul>
+                <div class="plan-benefit">
+                    <strong>Benefit</strong>
+                    <p>Ideal if you want the biggest savings, deeper accountability, and a plan that supports lasting change.</p>
+                </div>
+                <a href="{% url 'join_membership' 'yearly' %}" class="plan-button">
+                    <i class="fas fa-rocket"></i>
+                    Choose Yearly
+                </a>
+            </article>
+        </div>
+
+        <section class="membership-benefits" data-aos="fade-up" data-aos-delay="100">
+            <h2 class="benefits-title">Every Membership Includes</h2>
+            <div class="benefits-grid">
+                <div class="benefit-tile">
+                    <i class="fas fa-clock"></i>
+                    <h3>Long Hours</h3>
+                    <p>Train when it fits your day with wide weekly access.</p>
+                </div>
+                <div class="benefit-tile">
+                    <i class="fas fa-dumbbell"></i>
+                    <h3>Modern Equipment</h3>
+                    <p>Strength, cardio, and functional tools in one place.</p>
+                </div>
+                <div class="benefit-tile">
+                    <i class="fas fa-users"></i>
+                    <h3>Supportive Coaches</h3>
+                    <p>Friendly trainers who help you stay safe and consistent.</p>
+                </div>
+                <div class="benefit-tile">
+                    <i class="fas fa-chart-line"></i>
+                    <h3>Visible Progress</h3>
+                    <p>Track attendance, body metrics, and momentum over time.</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="membership-bottom" data-aos="zoom-in">
+            <h2>Not Sure Which Plan Fits You Best?</h2>
+            <p>
+                Start with the plan that feels manageable today. You can always level up once your routine, confidence, and goals become clearer.
+            </p>
+            <div class="membership-actions">
+                <a href="{% url 'join_membership' 'quarterly' %}" class="btn btn-primary">
+                    <i class="fas fa-credit-card me-2"></i>Join Membership
+                </a>
+                <a href="{% url 'contact' %}" class="btn btn-outline-primary">
+                    <i class="fas fa-envelope me-2"></i>Ask About Plans
+                </a>
+            </div>
+        </section>
+    </div>
+</section>
+{% endblock %}

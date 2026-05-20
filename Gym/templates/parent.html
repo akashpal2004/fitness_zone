@@ -6,19 +6,19 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     
-    <title>{% block title %}FitnessPro - Transform Your Body, Transform Your Life{% endblock %}</title>
+    <title>{% block title %}fitnessZone - Transform Your Body, Transform Your Life{% endblock %}</title>
     
     <!-- Preload Critical Resources -->
-    <link rel="preload" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&display=swap" as="style">
+    <link rel="preload" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500;600;700;800;900&family=Poppins:wght@300;400;500;600;700;800&display=swap" as="style">
     <link rel="preload" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" as="style">
     
     <!-- Meta Tags -->
-    <meta name="description" content="Transform your body and mind with FitnessPro. Modern gym with expert trainers, quality equipment, and personalized fitness programs.">
+    <meta name="description" content="Transform your body and mind with fitnessZone. Modern gym with expert trainers, quality equipment, and personalized fitness programs.">
     <meta name="keywords" content="fitness, gym, training, workout, health, nutrition, personal trainer">
-    <meta name="author" content="FitnessPro">
+    <meta name="author" content="fitnessZone">
     
     <!-- Open Graph Tags -->
-    <meta property="og:title" content="FitnessPro - Premier Fitness Center">
+    <meta property="og:title" content="fitnessZone - Premier Fitness Center">
     <meta property="og:description" content="Join thousands who have transformed their lives with our expert fitness programs">
     <meta property="og:type" content="website">
     
@@ -28,39 +28,48 @@
     <!-- External Stylesheets -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" integrity="sha512-Avb2QiuDEEvB4bZJYdft2mNjVShBftLdPG8FJ0V7irTLQ8Uo0qcPxh4Plq7G5tGm0rU+1SPhVotteLpBERwTkw==" crossorigin="anonymous">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500;600;700;800;900&family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
     
     <!-- Custom CSS -->
     <style>
         :root {
-            --primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            --secondary-gradient: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
-            --accent-gradient: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
-            --dark-gradient: linear-gradient(135deg, #0c0c0c 0%, #1a1a1a 100%);
-            
-            --bg-primary: #0a0a0a;
-            --bg-secondary: #111111;
-            --bg-tertiary: #1a1a1a;
+            --font-body: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            --font-heading: 'Montserrat', 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+
+            --primary-gradient: linear-gradient(135deg, #ff6b6b 0%, #ff3b3b 38%, #8f1111 100%);
+            --secondary-gradient: linear-gradient(135deg, #ff8a8a 0%, #ff5757 42%, #7a0d0d 100%);
+            --accent-gradient: linear-gradient(135deg, #ffb0b0 0%, #ff5757 42%, #5f0909 100%);
+            --dark-gradient: linear-gradient(135deg, #050505 0%, #0f0f0f 48%, #1c1c1c 100%);
+
+            --bg-primary: #0f0f0f;
+            --bg-secondary: #1c1c1c;
+            --bg-tertiary: #232323;
             --bg-card: rgba(255, 255, 255, 0.05);
+            --bg-card-hover: rgba(255, 255, 255, 0.08);
             
             --text-primary: #ffffff;
-            --text-secondary: #b3b3b3;
-            --text-muted: #666666;
-            
-            --accent-primary: #667eea;
-            --accent-secondary: #764ba2;
-            --accent-danger: #ff4757;
-            --accent-success: #2ed573;
-            --accent-warning: #ffa502;
-            
-            --border-color: rgba(255, 255, 255, 0.1);
-            --border-hover: rgba(255, 255, 255, 0.2);
-            
-            --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.3);
-            --shadow-md: 0 8px 32px rgba(0, 0, 0, 0.4);
-            --shadow-lg: 0 16px 64px rgba(0, 0, 0, 0.5);
-            --shadow-glow: 0 0 40px rgba(102, 126, 234, 0.3);
+            --text-secondary: #bdbdbd;
+            --text-muted: #7a7a7a;
+
+            --accent-primary: #ff3b3b;
+            --accent-secondary: #ff5757;
+            --accent-danger: #ff3b3b;
+            --accent-success: #31d07b;
+            --accent-warning: #ffaf45;
+
+            --success-gradient: linear-gradient(135deg, #31d07b 0%, #159b64 100%);
+            --warning-gradient: linear-gradient(135deg, #ffb347 0%, #ff7a18 100%);
+            --danger-gradient: linear-gradient(135deg, #ff6b6b 0%, #981010 100%);
+
+            --border-color: rgba(255, 255, 255, 0.08);
+            --border-hover: rgba(255, 91, 91, 0.32);
+
+            --shadow-sm: 0 10px 24px rgba(0, 0, 0, 0.22);
+            --shadow-md: 0 18px 48px rgba(0, 0, 0, 0.36);
+            --shadow-lg: 0 30px 78px rgba(0, 0, 0, 0.46);
+            --shadow-glow: 0 0 28px rgba(255, 59, 59, 0.28);
+            --shadow-glow-danger: 0 0 34px rgba(255, 59, 59, 0.26);
             
             --blur-sm: blur(8px);
             --blur-md: blur(16px);
@@ -78,8 +87,11 @@
         }
 
         body {
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-            background: var(--bg-primary);
+            font-family: var(--font-body);
+            background:
+                radial-gradient(circle at top left, rgba(255, 59, 59, 0.14) 0%, transparent 24%),
+                radial-gradient(circle at 82% 12%, rgba(255, 87, 87, 0.1) 0%, transparent 22%),
+                linear-gradient(180deg, #0f0f0f 0%, #121212 42%, #090909 100%);
             color: var(--text-primary);
             line-height: 1.6;
             overflow-x: hidden;
@@ -107,14 +119,14 @@
 
         /* Selection */
         ::selection {
-            background: rgba(102, 126, 234, 0.3);
+            background: rgba(255, 59, 59, 0.28);
             color: var(--text-primary);
         }
 
         /* Typography */
         h1, h2, h3, h4, h5, h6 {
-            font-family: 'Space Grotesk', sans-serif;
-            font-weight: 600;
+            font-family: var(--font-heading);
+            font-weight: 700;
             line-height: 1.2;
         }
 
@@ -134,7 +146,7 @@
         }
 
         .navbar-brand {
-            font-family: 'Space Grotesk', sans-serif;
+            font-family: var(--font-heading);
             font-size: 1.75rem;
             font-weight: 700;
             background: var(--primary-gradient);
@@ -185,6 +197,12 @@
             position: relative;
         }
 
+        .user-actions {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
         .user-icon {
             width: 42px;
             height: 42px;
@@ -228,6 +246,23 @@
         .user-icon i {
             position: relative;
             z-index: 1;
+        }
+
+        .logout-link {
+            background: rgba(255, 59, 59, 0.1);
+            border: 1px solid rgba(255, 59, 59, 0.24);
+            color: #ffb0b0;
+            text-decoration: none;
+            padding: 0.55rem 1rem;
+            border-radius: 999px;
+            font-weight: 600;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .logout-link:hover {
+            color: white;
+            background: rgba(255, 59, 59, 0.88);
+            transform: translateY(-2px);
         }
 
         /* Mobile Menu */
@@ -348,7 +383,7 @@
         .form-control:focus {
             background: var(--bg-card);
             border-color: var(--accent-primary);
-            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+            box-shadow: 0 0 0 3px rgba(255, 59, 59, 0.14);
             color: var(--text-primary);
         }
 
@@ -512,6 +547,11 @@
                 width: 38px;
                 height: 38px;
             }
+
+            .logout-link {
+                padding: 0.5rem 0.875rem;
+                font-size: 0.9rem;
+            }
         }
 
         /* Loading Animation */
@@ -545,10 +585,9 @@
 
         /* Custom Utility Classes */
         .gradient-text {
-            background: var(--primary-gradient);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
+            background: none;
+            color: #ffb6b6;
+            -webkit-text-fill-color: currentColor;
         }
 
         .glow-on-hover {
@@ -561,6 +600,443 @@
     </style>
     
     {% block extra_css %}{% endblock %}
+
+    <style>
+        /* Premium Black + Red theme overrides loaded after page CSS */
+        h1, h2, h3, h4, h5, h6,
+        .navbar-brand,
+        .hero-title,
+        .section-title,
+        .healthy-title,
+        .trainer-name,
+        .contact-title,
+        .form-title,
+        .membership-title,
+        .plan-name,
+        .benefits-title,
+        .payment-title,
+        .main-title,
+        .workout-title,
+        .exercise-name,
+        .change-password-title,
+        .diet-plan-title,
+        .profile-name,
+        .cta-title,
+        .registration-header h1,
+        .login-header h1,
+        .admin-title,
+        .meal-header,
+        .day-number {
+            font-family: var(--font-heading) !important;
+            letter-spacing: -0.03em;
+        }
+
+        body,
+        p,
+        a,
+        li,
+        span,
+        small,
+        label,
+        button,
+        input,
+        textarea,
+        select,
+        .form-control,
+        .form-select,
+        .navbar-nav .nav-link,
+        .logout-link,
+        .section-description,
+        .hero-subtitle,
+        .hero-description,
+        .trainer-bio,
+        .plan-tagline,
+        .payment-subtitle,
+        .contact-subtitle,
+        .change-password-subtitle,
+        .diet-plan-subtitle,
+        .profile-username,
+        .profile-id,
+        .photo-hint,
+        .meal-content {
+            font-family: var(--font-body) !important;
+        }
+
+        .navbar,
+        .navbar.scrolled {
+            background: rgba(10, 10, 10, 0.78) !important;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+            box-shadow: 0 18px 42px rgba(0, 0, 0, 0.32);
+        }
+
+        .navbar-nav .nav-link::before,
+        .footer::before,
+        .footer h6::after,
+        .glass-card::before,
+        .feature-card::before,
+        .trainer-card::before,
+        .contact-form::before,
+        .contact-form-container::before,
+        .bmi-calculator::before,
+        .exercise-card::before,
+        .exercise-display::before,
+        .profile-card::before,
+        .cta-card::before {
+            background: var(--primary-gradient) !important;
+        }
+
+        .btn-primary,
+        .cta-primary,
+        .submit-button,
+        .calculate-button,
+        .plan-button,
+        .pay-button,
+        .login-btn,
+        .btn-admin-login,
+        .submit-btn,
+        .upload-btn,
+        .cta-btn {
+            background: var(--primary-gradient) !important;
+            border: none !important;
+            color: #ffffff !important;
+            box-shadow: 0 16px 30px rgba(255, 59, 59, 0.16);
+        }
+
+        .btn-primary:hover,
+        .cta-primary:hover,
+        .submit-button:hover,
+        .calculate-button:hover,
+        .plan-button:hover,
+        .pay-button:hover,
+        .login-btn:hover,
+        .btn-admin-login:hover,
+        .submit-btn:hover,
+        .upload-btn:hover,
+        .cta-btn:hover {
+            box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.04), 0 0 28px rgba(255, 59, 59, 0.24) !important;
+            filter: brightness(1.06);
+        }
+
+        .btn-outline-primary,
+        .cta-secondary,
+        .back-link,
+        .logout-link {
+            border-color: rgba(255, 59, 59, 0.28) !important;
+        }
+
+        .btn-outline-primary:hover,
+        .cta-secondary:hover {
+            background: rgba(255, 59, 59, 0.12) !important;
+            box-shadow: 0 0 24px rgba(255, 59, 59, 0.2) !important;
+        }
+
+        .feature-card:hover,
+        .trainer-card:hover,
+        .membership-card:hover,
+        .payment-card:hover,
+        .plan-summary:hover,
+        .payment-summary:hover,
+        .contact-form-container:hover,
+        .exercise-card:hover,
+        .exercise-display:hover,
+        .meal-plan-card:hover,
+        .profile-card:hover,
+        .profile-info:hover,
+        .stat-card:hover,
+        .cta-card:hover {
+            border-color: rgba(255, 59, 59, 0.24) !important;
+            box-shadow: 0 24px 54px rgba(0, 0, 0, 0.42), 0 0 30px rgba(255, 59, 59, 0.16) !important;
+        }
+
+        .glass-card,
+        .feature-card,
+        .trainer-card,
+        .contact-form,
+        .contact-form-container,
+        .membership-card,
+        .membership-benefits,
+        .payment-card,
+        .plan-summary,
+        .payment-summary,
+        .login-card,
+        .admin-login-card,
+        .registration-card,
+        .change-password-card,
+        .meal-plan-card,
+        .exercise-card,
+        .exercise-display,
+        .profile-card,
+        .profile-info,
+        .stat-card,
+        .cta-card,
+        .bmi-calculator {
+            background: linear-gradient(180deg, rgba(31, 31, 31, 0.92), rgba(16, 16, 16, 0.9)) !important;
+            border: 1px solid rgba(255, 255, 255, 0.08) !important;
+            box-shadow: 0 20px 48px rgba(0, 0, 0, 0.38), inset 0 1px 0 rgba(255, 255, 255, 0.03) !important;
+        }
+
+        .hero-badge,
+        .section-badge,
+        .contact-badge,
+        .membership-badge,
+        .payment-badge,
+        .exercise-category,
+        .popular-pill,
+        .plan-meta span,
+        .plan-benefit,
+        .payment-feedback,
+        .calorie-info {
+            background: rgba(255, 59, 59, 0.1) !important;
+            border-color: rgba(255, 59, 59, 0.22) !important;
+            color: #ffe2e2 !important;
+            box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.03);
+        }
+
+        .membership-page {
+            background:
+                radial-gradient(circle at 10% 18%, rgba(255, 59, 59, 0.18) 0%, transparent 32%),
+                radial-gradient(circle at 86% 16%, rgba(143, 17, 17, 0.18) 0%, transparent 28%),
+                radial-gradient(circle at 50% 78%, rgba(255, 87, 87, 0.12) 0%, transparent 36%),
+                linear-gradient(180deg, rgba(15, 15, 15, 1), rgba(22, 22, 22, 1)) !important;
+        }
+
+        .membership-card.popular,
+        .membership-bottom {
+            background: linear-gradient(180deg, rgba(255, 59, 59, 0.16), rgba(255, 255, 255, 0.06)) !important;
+            border-color: rgba(255, 59, 59, 0.22) !important;
+        }
+
+        .payment-section,
+        .contact-page,
+        .login-section,
+        .registration-section {
+            background:
+                radial-gradient(circle at 18% 18%, rgba(255, 59, 59, 0.12) 0%, transparent 30%),
+                radial-gradient(circle at 84% 18%, rgba(143, 17, 17, 0.12) 0%, transparent 28%),
+                linear-gradient(180deg, rgba(15, 15, 15, 1), rgba(22, 22, 22, 1)) !important;
+        }
+
+        .change-password-section::before,
+        .diet-plan-section::before,
+        .workout-background::before {
+            background:
+                radial-gradient(circle at 22% 78%, rgba(255, 59, 59, 0.13) 0%, transparent 48%),
+                radial-gradient(circle at 80% 22%, rgba(143, 17, 17, 0.13) 0%, transparent 48%) !important;
+        }
+
+        .contact-image-overlay {
+            background: linear-gradient(45deg, rgba(255, 59, 59, 0.18), rgba(143, 17, 17, 0.24)) !important;
+        }
+
+        .plan-features li,
+        .summary-list li,
+        .payment-meta strong,
+        .back-link,
+        .trainer-specialty {
+            color: #ff8f8f !important;
+        }
+
+        .plan-features i,
+        .summary-list i,
+        .benefit-tile i {
+            color: #ff6b6b !important;
+        }
+
+        .feature-icon,
+        .exercise-icon,
+        .info-icon,
+        .cta-icon,
+        .admin-icon,
+        .day-number {
+            background: var(--primary-gradient) !important;
+            box-shadow: 0 16px 28px rgba(255, 59, 59, 0.16);
+        }
+
+        .floating-element {
+            color: rgba(255, 59, 59, 0.15) !important;
+        }
+
+        .workout-background {
+            background: linear-gradient(135deg, #070707 0%, #140707 45%, #0f0f0f 100%) !important;
+        }
+
+        .bg-orb:nth-child(1) {
+            background: radial-gradient(circle, rgba(255, 59, 59, 0.42), transparent) !important;
+        }
+
+        .bg-orb:nth-child(2) {
+            background: radial-gradient(circle, rgba(143, 17, 17, 0.34), transparent) !important;
+        }
+
+        .bg-orb:nth-child(3) {
+            background: radial-gradient(circle, rgba(255, 87, 87, 0.22), transparent) !important;
+        }
+
+        .particle {
+            background: linear-gradient(45deg, rgba(255, 59, 59, 0.42), rgba(143, 17, 17, 0.42)) !important;
+        }
+
+        .workout-title {
+            text-shadow: 0 0 30px rgba(255, 59, 59, 0.28) !important;
+        }
+
+        .exercise-category::before {
+            background: linear-gradient(90deg, transparent, rgba(255, 59, 59, 0.25), transparent) !important;
+        }
+
+        .exercise-display::after,
+        .exercise-card::after {
+            background: radial-gradient(circle, rgba(255, 59, 59, 0.12) 0%, transparent 70%) !important;
+        }
+
+        .exercise-image:hover {
+            border-color: rgba(255, 59, 59, 0.45) !important;
+            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.48), 0 0 72px rgba(255, 59, 59, 0.26) !important;
+        }
+
+        .profile-header {
+            background: linear-gradient(135deg, #210505 0%, #ff3b3b 34%, #8f1111 100%) !important;
+        }
+
+        .profile-avatar:hover,
+        .profile-avatar-container:focus-visible .profile-avatar {
+            box-shadow: 0 0 0 4px rgba(255, 255, 255, 0.18), 0 0 32px rgba(255, 59, 59, 0.28) !important;
+        }
+
+        .profile-avatar-container:hover .profile-avatar-edit-badge,
+        .profile-avatar-container:focus-visible .profile-avatar-edit-badge {
+            background: rgba(255, 59, 59, 0.95) !important;
+        }
+
+        .theme-switcher {
+            background: linear-gradient(180deg, rgba(28, 28, 28, 0.94), rgba(15, 15, 15, 0.94)) !important;
+            border-color: rgba(255, 59, 59, 0.18) !important;
+        }
+
+        .action-btn.danger,
+        .alert-danger,
+        .form-message.error {
+            border-color: rgba(255, 59, 59, 0.3) !important;
+        }
+
+        .action-btn.danger {
+            color: #ff9b9b !important;
+            background: rgba(255, 59, 59, 0.08) !important;
+        }
+
+        .action-btn.danger:hover {
+            background: rgba(255, 59, 59, 0.92) !important;
+            color: #ffffff !important;
+            box-shadow: var(--shadow-glow-danger) !important;
+        }
+
+        .form-control:focus,
+        .bmi-input:focus,
+        .contact-form-container .form-control:focus,
+        .registration-card .form-control:focus,
+        .change-password-card .form-control:focus,
+        .form-floating .form-control:focus {
+            box-shadow: 0 0 0 3px rgba(255, 59, 59, 0.14) !important;
+            border-color: rgba(255, 59, 59, 0.55) !important;
+        }
+
+        .password-toggle:hover,
+        .input-icon.button:hover {
+            color: var(--accent-primary) !important;
+            background: rgba(255, 59, 59, 0.08) !important;
+        }
+
+        select.custom-select,
+        .custom-select {
+            -webkit-appearance: none !important;
+            -moz-appearance: none !important;
+            appearance: none !important;
+            background: var(--bg-secondary) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath fill='%23ff3b3b' d='M8 11L3 6h10l-5 5z'/%3E%3C/svg%3E") no-repeat calc(100% - 1rem) 50% / 14px 14px !important;
+            padding-right: 3rem !important;
+        }
+
+        select.custom-select::-ms-expand {
+            display: none;
+        }
+
+        .gradient-text,
+        .navbar-brand,
+        .healthy-title,
+        .contact-title,
+        .change-password-title,
+        .diet-plan-title,
+        .login-header h1,
+        .registration-header h1,
+        .admin-title,
+        .membership-title .accent,
+        .main-title,
+        .workout-title,
+        .stat-number,
+        .stat-icon {
+            background: none !important;
+            color: #ffb6b6 !important;
+            -webkit-text-fill-color: currentColor !important;
+        }
+
+        @supports ((-webkit-background-clip: text) and (-webkit-text-fill-color: transparent)) {
+            .gradient-text,
+            .healthy-title,
+            .contact-title,
+            .change-password-title,
+            .diet-plan-title,
+            .login-header h1,
+            .registration-header h1,
+            .admin-title,
+            .workout-title,
+            .stat-number,
+            .stat-icon {
+                background: linear-gradient(135deg, #ffffff 0%, #ff9c9c 28%, #ff3b3b 68%, #870d0d 100%) !important;
+                -webkit-background-clip: text !important;
+                -webkit-text-fill-color: transparent !important;
+                background-clip: text !important;
+                color: transparent !important;
+            }
+
+            .navbar-brand {
+                background: linear-gradient(90deg, #ffffff 0%, #ff8a8a 32%, #ff3b3b 72%, #7f0707 100%) !important;
+                -webkit-background-clip: text !important;
+                -webkit-text-fill-color: transparent !important;
+                background-clip: text !important;
+                color: transparent !important;
+            }
+
+            .membership-title .accent {
+                background: linear-gradient(135deg, #ffffff 0%, #ffadad 24%, #ff5757 60%, #7a0909 100%) !important;
+                -webkit-background-clip: text !important;
+                -webkit-text-fill-color: transparent !important;
+                background-clip: text !important;
+                color: transparent !important;
+            }
+
+            .main-title {
+                background: linear-gradient(135deg, #ffffff 0%, #ff8f8f 20%, #ff3b3b 56%, #770606 100%) !important;
+                -webkit-background-clip: text !important;
+                -webkit-text-fill-color: transparent !important;
+                background-clip: text !important;
+                color: transparent !important;
+            }
+        }
+
+        @keyframes textGlow {
+            0% { filter: brightness(1) drop-shadow(0 0 10px rgba(255, 59, 59, 0.26)); }
+            100% { filter: brightness(1.16) drop-shadow(0 0 30px rgba(255, 59, 59, 0.54)); }
+        }
+
+        @keyframes titleGlow {
+            0% { text-shadow: 0 0 20px rgba(255, 59, 59, 0.24); }
+            100% { text-shadow: 0 0 40px rgba(255, 59, 59, 0.46); }
+        }
+
+        @keyframes backgroundPulse {
+            0%, 100% { opacity: 0; }
+            50% { opacity: 0.35; }
+        }
+    </style>
 </head>
 
 <body>
@@ -573,7 +1049,7 @@
     <nav class="navbar navbar-expand-lg navbar-dark fixed-top" id="mainNavbar">
         <div class="container">
             <a class="navbar-brand" href="/">
-                <i class="fas fa-dumbbell me-2"></i>FitnessPro
+                <i class="fas fa-dumbbell me-2"></i>fitnessZone
             </a>
             
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" 
@@ -589,12 +1065,22 @@
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="/login" data-page="profile">
+                        <a class="nav-link" href="/membership" data-page="membership">
+                            <i class="fas fa-id-card me-1"></i>Membership
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/exercises/" data-page="exercises">
+                            <i class="fas fa-dumbbell me-1"></i>Exercises
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% if request.user.is_authenticated and request.user.is_staff %}/admin_portal{% elif request.user.is_authenticated %}/profile_page{% else %}/login{% endif %}" data-page="profile">
                             <i class="fas fa-user me-1"></i>My Profile
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="/admin_login" data-page="admin">
+                        <a class="nav-link" href="{% if request.user.is_authenticated and request.user.is_staff %}/admin_portal{% else %}/admin_login{% endif %}" data-page="admin">
                             <i class="fas fa-cog me-1"></i>Admin
                         </a>
                     </li>
@@ -606,9 +1092,18 @@
                 </ul>
                 
                 <div class="user-icon-container">
-                    <a href="/login" class="user-icon" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Login / Register">
-                        <i class="fas fa-user"></i>
-                    </a>
+                    <div class="user-actions">
+                        {% if request.user.is_authenticated %}
+                        <a href="/logout" class="logout-link">Logout</a>
+                        <a href="{% if request.user.is_staff %}/admin_portal{% else %}/profile_page{% endif %}" class="user-icon" data-bs-toggle="tooltip" data-bs-placement="bottom" title="{% if request.user.is_staff %}Admin Dashboard{% else %}My Profile{% endif %}">
+                            <i class="fas fa-user"></i>
+                        </a>
+                        {% else %}
+                        <a href="/login" class="user-icon" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Login / Register">
+                            <i class="fas fa-user"></i>
+                        </a>
+                        {% endif %}
+                    </div>
                 </div>
             </div>
         </div>
@@ -622,60 +1117,33 @@
     <!-- Footer -->
     <footer class="footer">
         <div class="container">
-            <div class="row g-4">
-                <div class="col-lg-4 col-md-6">
+            <div class="row g-4 justify-content-center">
+                <div class="col-lg-6 col-md-6">
                     <div class="footer-section">
                         <h6>
-                            <i class="fas fa-dumbbell me-2 gradient-text"></i>FitnessPro
+                            <i class="fas fa-dumbbell me-2 gradient-text"></i>fitnessZone
                         </h6>
                         <p class="text-secondary mb-4">
                             Transform your body and mind with our comprehensive fitness programs. Join thousands who have already started their transformation journey with us.
                         </p>
                         <div class="social-links">
-                            <a href="https://www.facebook.com/fahadali1078" class="glow-on-hover" data-bs-toggle="tooltip" title="Facebook">
+                            <a href="https://www.facebook.com/suraj.pal.786504/" class="glow-on-hover" data-bs-toggle="tooltip" title="Facebook">
                                 <i class="fab fa-facebook-f"></i>
                             </a>
-                            <a href="https://x.com/FahadAli_0x" class="glow-on-hover" data-bs-toggle="tooltip" title="Twitter">
-                                <i class="fab fa-twitter"></i>
-                            </a>
-                            <a href="https://www.instagram.com/fahad_ali1078/" class="glow-on-hover" data-bs-toggle="tooltip" title="Instagram">
+                            <a href="https://www.instagram.com/suraj___1383/" class="glow-on-hover" data-bs-toggle="tooltip" title="Instagram">
                                 <i class="fab fa-instagram"></i>
                             </a>
-                            <a href="https://www.linkedin.com/in/fahadali1078/" class="glow-on-hover" data-bs-toggle="tooltip" title="LinkedIn">
+                            <a href="https://www.linkedin.com/in/suraj2003pal/" class="glow-on-hover" data-bs-toggle="tooltip" title="LinkedIn">
                                 <i class="fab fa-linkedin-in"></i>
                             </a>
-                            <a href="#" class="glow-on-hover" data-bs-toggle="tooltip" title="Github">
+                            <a href="https://github.com/suraj9193" class="glow-on-hover" data-bs-toggle="tooltip" title="Github">
                                 <i class="fab fa-github"></i>
                             </a>
                         </div>
                     </div>
                 </div>
                 
-                <div class="col-lg-2 col-md-6">
-                    <div class="footer-section">
-                        <h6>Quick Links</h6>
-                        <ul class="list-unstyled">
-                            <li class="mb-2"><a href="#home"><i class="fas fa-angle-right me-2"></i>Home</a></li>
-                            <li class="mb-2"><a href="#about"><i class="fas fa-angle-right me-2"></i>About</a></li>
-                            <li class="mb-2"><a href="#services"><i class="fas fa-angle-right me-2"></i>Services</a></li>
-                            <li class="mb-2"><a href="#trainers"><i class="fas fa-angle-right me-2"></i>Trainers</a></li>
-                            <li class="mb-2"><a href="#contact"><i class="fas fa-angle-right me-2"></i>Contact</a></li>
-                        </ul>
-                    </div>
-                </div>
                 
-                <div class="col-lg-3 col-md-6">
-                    <div class="footer-section">
-                        <h6>Services</h6>
-                        <ul class="list-unstyled">
-                            <li class="mb-2"><a href="#"><i class="fas fa-angle-right me-2"></i>Personal Training</a></li>
-                            <li class="mb-2"><a href="#"><i class="fas fa-angle-right me-2"></i>Group Classes</a></li>
-                            <li class="mb-2"><a href="#"><i class="fas fa-angle-right me-2"></i>Nutrition Coaching</a></li>
-                            <li class="mb-2"><a href="#"><i class="fas fa-angle-right me-2"></i>Fitness Assessment</a></li>
-                            <li class="mb-2"><a href="#"><i class="fas fa-angle-right me-2"></i>Online Training</a></li>
-                        </ul>
-                    </div>
-                </div>
                 
                 <div class="col-lg-3 col-md-6">
                     <div class="footer-section">
@@ -683,19 +1151,19 @@
                         <div class="contact-info">
                             <p class="mb-2">
                                 <i class="fas fa-map-marker-alt me-2 gradient-text"></i>
-                                Lahore, Pakistan
+                                Dehradun, Uttarakhand, India
                             </p>
                             <p class="mb-2">
                                 <i class="fas fa-phone me-2 gradient-text"></i>
-                                <a href="tel:+923270688791">+92 327 0688791</a>
+                                <a href="tel:+919193961014">+91 9193961014</a>
                             </p>
                             <p class="mb-2">
                                 <i class="fas fa-envelope me-2 gradient-text"></i>
-                                <a href="mailto:fahad1078397@gmail.com">fahad1078397@gmail.com</a>
+                                <a href="mailto:pal68675@gmail.com">pal68675@gmail.com</a>
                             </p>
                             <p class="mb-2">
                                 <i class="fas fa-clock me-2 gradient-text"></i>
-                                Mon-Sun: 5:00 AM - 11:00 PM
+                                Mon-Sat: 5:00 AM - 11:00 PM
                             </p>
                         </div>
                     </div>
@@ -706,14 +1174,8 @@
         <div class="copyright">
             <div class="container">
                 <div class="row align-items-center">
-                    <div class="col-md-6 text-center text-md-start">
-                        <p class="mb-0">&copy; 2025 FitnessPro. All Rights Reserved.</p>
-                    </div>
-                    <div class="col-md-6 text-center text-md-end">
-                        <p class="mb-0">
-                            Developed with <i class="fas fa-heart text-danger"></i> by 
-                            <a href="https://fahad-ali-github.github.io/FAHAD-ALI-Portfolio/" target="_blank">FAHAD ALI</a>
-                        </p>
+                    <div class="col-md-12 text-center">
+                        <p class="mb-0">&copy; 2026 fitnessZone. All Rights Reserved.</p>
                     </div>
                 </div>
             </div>
