@@ -28,7 +28,7 @@ SECRET_KEY = os.environ.get('SECRET_KEY', 'django-insecure-186xzg1_rr0i5uez_c*in
 DEBUG = False
 
 # Add your PythonAnywhere domain to allowed hosts
-ALLOWED_HOSTS = ['akashpal.pythonanywhere.com', 'localhost', '127.0.0.1']
+ALLOWED_HOSTS = ['fitnessZone.pythonanywhere.com', 'localhost', '127.0.0.1']
 
 
 # Application definition
