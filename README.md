@@ -7,7 +7,10 @@ FitnessZone is a template-driven Django gym management application built around 
 
 The project uses Django's built-in authentication system, stores data in SQLite by default, and combines a custom admin portal (`/admin_portal`) with the standard Django admin site (`/admin/`).
 
-> Note: the codebase currently contains both `FitnessZone` and `FitnessPro` branding strings in templates and messages, but they refer to the same application.
+## Live Demo
+
+🔗 [View Live Project](https://akashpal.pythonanywhere.com/)
+
 
 ## Project Description
 
